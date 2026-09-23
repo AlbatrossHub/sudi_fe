@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Customer sign in</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Sora:wght@500;600;700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#E3E8F0;font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased;color:#1A2032}
+.nm-up{box-shadow:6px 6px 14px #C4CCDA,-6px -6px 14px #FFFFFF}
+.nm-up-s{box-shadow:3px 3px 8px #C6CEDC,-3px -3px 8px #FFFFFF}
+.nm-in{box-shadow:inset 5px 5px 11px #C4CCDA,inset -5px -5px 11px #FFFFFF}
+.nm-in-s{box-shadow:inset 2px 2px 5px #C7CFDD,inset -2px -2px 5px #FFFFFF}
+.nm-acc{box-shadow:5px 6px 14px rgba(9,70,64,.30),-4px -4px 10px #FFFFFF}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
+.disp{font-family:'Sora',system-ui,sans-serif}
+a{color:#0E6F66;text-decoration:none}a:hover{color:#0A554E}
+button{font:inherit;color:inherit;border:0;background:none;padding:0;cursor:pointer}
+input{font:inherit;color:inherit;border:0;background:none;outline:none;width:100%}
+.filled::placeholder{color:#1A2032;opacity:1}
+.hint::placeholder{color:#79839A;opacity:1}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; padding: 72px 28px 32px; display: flex; flex-direction: column;">
+
+  <div style="display: flex; flex-direction: column; align-items: center; gap: 18px; margin-bottom: 44px;">
+    <div class="nm-up" style="width: 84px; height: 84px; border-radius: 28px; background: #E3E8F0; display: flex; align-items: center; justify-content: center;">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#0E6F66" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h10l4 6-9 12L3 9l4-6Z"></path><path d="M3 9h18M7 3l2 6 3 12 3-12 2-6"></path></svg>
+    </div>
+    <div style="text-align: center;">
+      <h1 class="disp" style="margin: 0 0 7px; font-size: 27px; font-weight: 700; letter-spacing: -0.01em;">Send your jangad</h1>
+      <p style="margin: 0; font-size: 14px; color: #586178; line-height: 1.55;">Photograph the slip, pick a pickup address,<br>and we collect it.</p>
+    </div>
+  </div>
+
+  <label style="display: block;">
+    <span style="display: block; font-size: 12px; font-weight: 700; color: #586178; margin-bottom: 9px;">Mobile number</span>
+    <span class="nm-in" style="display: flex; align-items: center; gap: 12px; padding: 16px 18px; border-radius: 18px;">
+      <span class="mono" style="font-size: 15px; font-weight: 600; color: #4C5568;">+91</span>
+      <span style="width: 1px; height: 20px; background: #C9D1DF;"></span>
+      <input class="filled mono" type="tel" placeholder="98765 43210" style="font-size: 16px; font-weight: 600; letter-spacing: 0.04em;">
+    </span>
+  </label>
+
+  <a href="Cust-02-Otp.dc.html" class="nm-acc" style="display: flex; align-items: center; justify-content: center; gap: 10px; height: 56px; border-radius: 19px; background: #0E6F66; color: #FFFFFF; font-size: 16px; font-weight: 700; margin-top: 20px;">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 11.6c0 4-3.8 7.2-8.5 7.2a9.7 9.7 0 0 1-2.7-.4L4 20l1.5-3.6a6.8 6.8 0 0 1-2-4.8C3.5 7.6 7.3 4.4 12 4.4s8.5 3.2 8.5 7.2Z"></path></svg>
+    Send code on WhatsApp
+  </a>
+
+  <div class="nm-in" style="display: flex; gap: 12px; padding: 16px 18px; border-radius: 18px; margin-top: 24px;">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#0E6F66" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 1px;" aria-hidden="true"><path d="M20.5 11.6c0 4-3.8 7.2-8.5 7.2a9.7 9.7 0 0 1-2.7-.4L4 20l1.5-3.6a6.8 6.8 0 0 1-2-4.8C3.5 7.6 7.3 4.4 12 4.4s8.5 3.2 8.5 7.2Z"></path></svg>
+    <div>
+      <div style="font-size: 13px; font-weight: 700; color: #0A554E; margin-bottom: 3px;">The code comes on WhatsApp</div>
+      <div style="font-size: 12px; color: #586178; line-height: 1.5;">Not by SMS. Check that the number you type has WhatsApp on it.</div>
+    </div>
+  </div>
+
+  <div style="flex-grow: 1;"></div>
+
+  <div style="text-align: center; font-size: 12px; color: #586178; line-height: 1.6;">New here? The same number signs you up.</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,1912 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sudi — neumorphism UI preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Sora:wght@500;600;700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:#D6DCE6;color:#1A2032;font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.nm-up{box-shadow:6px 6px 14px #C4CCDA,-6px -6px 14px #FFFFFF}
+.nm-up-s{box-shadow:3px 3px 8px #C6CEDC,-3px -3px 8px #FFFFFF}
+.nm-in{box-shadow:inset 5px 5px 11px #C4CCDA,inset -5px -5px 11px #FFFFFF}
+.nm-in-s{box-shadow:inset 2px 2px 5px #C7CFDD,inset -2px -2px 5px #FFFFFF}
+.nm-acc{box-shadow:5px 6px 14px rgba(1,87,155,.32),-4px -4px 10px #FFFFFF}
+.nm-flat{box-shadow:none}
+.d-up{box-shadow:6px 6px 14px #1A1D24,-6px -6px 14px #303541}
+.d-up-s{box-shadow:3px 3px 8px #1B1E26,-3px -3px 8px #2F343F}
+.d-in{box-shadow:inset 5px 5px 11px #1A1D24,inset -5px -5px 11px #303541}
+.d-in-s{box-shadow:inset 2px 2px 5px #1B1E26,inset -2px -2px 5px #2F343F}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
+.disp{font-family:'Sora',system-ui,sans-serif}
+.slip{font-family:'IBM Plex Mono',monospace;color:#3E3524}
+a{color:#01579B;text-decoration:none}
+button{font:inherit;color:inherit;border:0;background:none;padding:0;cursor:default}
+input,textarea{font:inherit;color:inherit;border:0;background:none;outline:none;width:100%;resize:none}
+.filled::placeholder{color:#1A2032;opacity:1}
+.hint::placeholder{color:#79839A;opacity:1}
+
+.top{position:sticky;top:0;z-index:10;background:rgba(214,220,230,.92);backdrop-filter:blur(10px);border-bottom:1px solid #C3CBD9;padding:14px 40px;display:flex;align-items:center;gap:28px;flex-wrap:wrap}
+.top h1{margin:0;font-family:'Sora',sans-serif;font-size:17px;font-weight:700;letter-spacing:-0.01em;white-space:nowrap}
+.top nav{display:flex;gap:6px;flex-wrap:wrap;flex-grow:1}
+.top nav a{padding:7px 12px;border-radius:11px;font-size:12px;font-weight:700;color:#4C5568}
+.top nav a:hover{background:#E3E8F0;color:#01579B}
+.top .meta{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#6B7487;white-space:nowrap}
+
+main{padding:0 40px 120px}
+.lede{max-width:760px;padding:56px 0 8px}
+.lede h2{margin:0 0 14px;font-family:'Sora',sans-serif;font-size:34px;font-weight:700;letter-spacing:-0.02em}
+.lede p{margin:0 0 12px;font-size:15px;line-height:1.7;color:#4C5568}
+.lede code{font-family:'IBM Plex Mono',monospace;font-size:13px;background:#E3E8F0;padding:2px 6px;border-radius:6px}
+
+section{padding-top:64px}
+.sec{max-width:760px;margin-bottom:26px}
+.sec h2{margin:0 0 8px;font-family:'Sora',sans-serif;font-size:25px;font-weight:700;letter-spacing:-0.01em}
+.sec p{margin:0;font-size:14px;line-height:1.65;color:#586178}
+.rail{display:flex;gap:34px;overflow-x:auto;padding:8px 0 26px;align-items:flex-start;scrollbar-width:thin}
+.board{margin:0;flex-shrink:0}
+.frame{background:#E3E8F0;border-radius:34px;overflow:hidden;box-shadow:0 22px 48px rgba(40,52,78,.22)}
+figcaption{padding-top:14px;display:flex;flex-direction:column;gap:4px;max-width:390px}
+.lbl{font-size:14px;font-weight:700}
+.api{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#01579B;word-break:break-word}
+.src{font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8A93A5}
+</style>
+</head>
+<body>
+<div class="top">
+  <h1>Sudi — UI preview</h1>
+  <nav><a href="#foundations">Foundations</a>
+<a href="#field-in">getting in</a>
+<a href="#field-pickup">collecting a jangad</a>
+<a href="#field-deliver">deliveries, where two phones collide</a>
+<a href="#field-jobwork">job work</a>
+<a href="#field-queue">the queue, and the states nobody designs</a>
+<a href="#customer">one job, done offline</a></nav>
+  <span class="meta">23 screens · field + customer</span>
+</div>
+<main>
+  <div class="lede">
+    <h2>Neumorphic screens for the two Flutter flavors</h2>
+    <p>Drawn against <code>docs/FLUTTER_INTEGRATION_BRIEF.md</code> and the two frozen OpenAPI documents. Every screen names the call behind it. Scroll each row sideways.</p>
+    <p>The design rule that runs through all of it: depth is carried by shadow, <strong>state is never carried by shadow</strong>. Queued, synced, someone-else and blocked are saturated chips with real contrast, because a soft neumorphic shadow disappears in Surat daylight.</p>
+  </div>
+<section id="foundations">
+<header class="sec">
+<h2>Foundations</h2>
+<p>One ground, two accents, and a state layer that survives daylight.</p>
+</header>
+<div class="rail">
+<figure class="board">
+<div class="frame"><div style="width: 1240px; height: 1300px; box-sizing: border-box; padding: 56px 56px 48px; display: flex; flex-direction: column; gap: 34px;">
+
+  <div style="display: flex; align-items: flex-end; gap: 24px;">
+    <div style="flex-grow: 1;">
+      <h1 class="disp" style="margin: 0 0 8px; font-size: 42px; font-weight: 700; letter-spacing: -0.02em;">Sudi Soft UI</h1>
+      <p style="margin: 0; font-size: 16px; color: #586178; max-width: 620px;">Neumorphic foundations for the field and customer Flutter flavors. One ground, two accents, and a state layer that stays legible when the shadows do not.</p>
+    </div>
+    <div style="display: flex; gap: 14px;">
+      <div class="nm-up" style="padding: 14px 18px; border-radius: 18px; display: flex; align-items: center; gap: 12px;">
+        <span style="width: 26px; height: 26px; border-radius: 9px; background: #03A9F4;"></span>
+        <div><div style="font-size: 13px; font-weight: 700;">Field</div><div class="mono" style="font-size: 11px; color: #586178;">#01579B</div></div>
+      </div>
+      <div class="nm-up" style="padding: 14px 18px; border-radius: 18px; display: flex; align-items: center; gap: 12px;">
+        <span style="width: 26px; height: 26px; border-radius: 9px; background: #0E6F66;"></span>
+        <div><div style="font-size: 13px; font-weight: 700;">Customer</div><div class="mono" style="font-size: 11px; color: #586178;">#0E6F66</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px;">
+
+    <div class="nm-up" style="padding: 30px 32px; border-radius: 26px; display: flex; flex-direction: column; gap: 22px;">
+      <div style="font-size: 13px; font-weight: 800; letter-spacing: 0.09em; text-transform: uppercase; color: #586178;">Elevation</div>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px;">
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div class="nm-up" style="height: 76px; border-radius: 20px; background: #E3E8F0;"></div>
+          <div style="font-size: 14px; font-weight: 700;">Raised</div>
+          <div class="mono" style="font-size: 11px; line-height: 1.6; color: #586178;">6px 6px 14px #C4CCDA<br>-6px -6px 14px #FFFFFF</div>
+          <div style="font-size: 12px; color: #586178;">Cards, list rows, secondary buttons. Convex means tappable.</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div class="nm-in" style="height: 76px; border-radius: 20px; background: #E3E8F0;"></div>
+          <div style="font-size: 14px; font-weight: 700;">Inset</div>
+          <div class="mono" style="font-size: 11px; line-height: 1.6; color: #586178;">inset 5px 5px 11px #C4CCDA<br>inset -5px -5px 11px #FFFFFF</div>
+          <div style="font-size: 12px; color: #586178;">Text fields, segmented tracks, the status strip. Never tappable on its own.</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div class="nm-in-s" style="height: 76px; border-radius: 20px; background: #DDE3EC;"></div>
+          <div style="font-size: 14px; font-weight: 700;">Pressed / selected</div>
+          <div class="mono" style="font-size: 11px; line-height: 1.6; color: #586178;">inset 2px 2px 5px #C7CFDD<br>inset -2px -2px 5px #FFFFFF</div>
+          <div style="font-size: 12px; color: #586178;">The active tab, a ticked checkbox, a button under the thumb.</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div class="nm-flat" style="height: 76px; border-radius: 20px; background: #DCE1EA; border: 1px dashed #BEC7D6;"></div>
+          <div style="font-size: 14px; font-weight: 700;">Flat / blocked</div>
+          <div class="mono" style="font-size: 11px; line-height: 1.6; color: #586178;">box-shadow: none<br>ink drops to #79839A</div>
+          <div style="font-size: 12px; color: #586178;">Disabled controls lose their shadow entirely, and always carry a reason.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nm-up" style="padding: 30px 32px; border-radius: 26px; display: flex; flex-direction: column; gap: 20px;">
+      <div style="font-size: 13px; font-weight: 800; letter-spacing: 0.09em; text-transform: uppercase; color: #586178;">Type</div>
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+        <div style="display: flex; align-items: baseline; gap: 16px;">
+          <div class="disp" style="font-size: 30px; font-weight: 700; letter-spacing: -0.02em; flex-grow: 1;">Mahidharpura round</div>
+          <div class="mono" style="font-size: 11px; color: #586178; white-space: nowrap;">Sora 700 / 30</div>
+        </div>
+        <div style="display: flex; align-items: baseline; gap: 16px;">
+          <div style="font-size: 17px; font-weight: 700; flex-grow: 1;">Kiran Gems Pvt Ltd</div>
+          <div class="mono" style="font-size: 11px; color: #586178; white-space: nowrap;">Manrope 700 / 17</div>
+        </div>
+        <div style="display: flex; align-items: baseline; gap: 16px;">
+          <div style="font-size: 14px; color: #586178; flex-grow: 1;">12, Mahidharpura, Surat 395003</div>
+          <div class="mono" style="font-size: 11px; color: #586178; white-space: nowrap;">Manrope 400 / 14</div>
+        </div>
+        <div style="display: flex; align-items: baseline; gap: 16px;">
+          <div class="mono" style="font-size: 15px; font-weight: 600; letter-spacing: 0.02em; flex-grow: 1;">WH/IN/00042 &middot; 7.85 ct &middot; 24 pcs</div>
+          <div class="mono" style="font-size: 11px; color: #586178; white-space: nowrap;">Plex Mono 600 / 15</div>
+        </div>
+      </div>
+      <div style="height: 1px; background: #CFD6E2;"></div>
+      <div style="font-size: 13px; color: #586178; line-height: 1.6;">References, carats, pieces, hours and timestamps are monospaced so a column of figures lines up and a mistyped digit is visible. Never round a carat figure on the device.</div>
+    </div>
+
+    <div class="nm-up" style="padding: 30px 32px; border-radius: 26px; display: flex; flex-direction: column; gap: 20px;">
+      <div style="font-size: 13px; font-weight: 800; letter-spacing: 0.09em; text-transform: uppercase; color: #586178;">State colour</div>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <span style="display: inline-flex; align-items: center; gap: 7px; padding: 7px 13px; border-radius: 12px; background: #D5E8DE; color: #1B6B48; font-size: 13px; font-weight: 700;">Synced</span>
+          <span style="font-size: 13px; color: #586178; flex-grow: 1;">The server has it. The office can see it.</span>
+          <span class="mono" style="font-size: 11px; color: #586178;">#1B6B48</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <span style="display: inline-flex; align-items: center; gap: 7px; padding: 7px 13px; border-radius: 12px; background: #F3E2C4; color: #7A4A00; font-size: 13px; font-weight: 700;">Queued</span>
+          <span style="font-size: 13px; color: #586178; flex-grow: 1;">Captured on this phone, not yet sent.</span>
+          <span class="mono" style="font-size: 11px; color: #586178;">#7A4A00</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <span style="display: inline-flex; align-items: center; gap: 7px; padding: 7px 13px; border-radius: 12px; background: #E2DEF2; color: #57479B; font-size: 13px; font-weight: 700;">Someone else</span>
+          <span style="font-size: 13px; color: #586178; flex-grow: 1;">A lost race. Information, never an error.</span>
+          <span class="mono" style="font-size: 11px; color: #586178;">#57479B</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <span style="display: inline-flex; align-items: center; gap: 7px; padding: 7px 13px; border-radius: 12px; background: #F3DAD8; color: #8E2A25; font-size: 13px; font-weight: 700;">Needs you</span>
+          <span style="font-size: 13px; color: #586178; flex-grow: 1;">Dropped for good. A person must act.</span>
+          <span class="mono" style="font-size: 11px; color: #586178;">#8E2A25</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <span style="display: inline-flex; align-items: center; gap: 7px; padding: 7px 13px; border-radius: 12px; background: #D7DCE6; color: #4C5568; font-size: 13px; font-weight: 700;">Blocked</span>
+          <span style="font-size: 13px; color: #586178; flex-grow: 1;">Needs a connection. The tap never queues.</span>
+          <span class="mono" style="font-size: 11px; color: #586178;">#4C5568</span>
+        </div>
+      </div>
+      <div style="height: 1px; background: #CFD6E2;"></div>
+      <div style="font-size: 13px; color: #586178; line-height: 1.6;">State is never carried by the surface. A soft shadow disappears in Surat daylight; a saturated chip does not.</div>
+    </div>
+
+    <div class="nm-up" style="padding: 30px 32px; border-radius: 26px; display: flex; flex-direction: column; gap: 22px;">
+      <div style="font-size: 13px; font-weight: 800; letter-spacing: 0.09em; text-transform: uppercase; color: #586178;">Controls</div>
+      <div style="display: flex; gap: 14px; align-items: center;">
+        <button class="nm-acc" style="flex-grow: 1; height: 52px; border-radius: 18px; background: #03A9F4; color: #06283D; font-size: 15px; font-weight: 700;">Confirm pickup</button>
+        <button class="nm-up" style="height: 52px; padding: 0 22px; border-radius: 18px; background: #E3E8F0; font-size: 15px; font-weight: 700; color: #3D4658;">Cancel</button>
+      </div>
+      <div style="display: flex; gap: 14px; align-items: center;">
+        <button class="nm-flat" style="flex-grow: 1; height: 52px; border-radius: 18px; background: #DCE1EA; color: #79839A; font-size: 15px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 9px;" disabled="">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2.2"></rect><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"></path></svg>
+          Finish job work
+        </button>
+        <span style="font-size: 12px; font-weight: 700; color: #4C5568; width: 96px; line-height: 1.4;">Needs a connection</span>
+      </div>
+      <div class="nm-in" style="display: flex; padding: 6px; border-radius: 18px; gap: 6px;">
+        <span class="nm-up-s" style="flex-grow: 1; text-align: center; padding: 11px 0; border-radius: 13px; background: #E8ECF3; font-size: 14px; font-weight: 700; color: #01579B;">To collect</span>
+        <span style="flex-grow: 1; text-align: center; padding: 11px 0; border-radius: 13px; font-size: 14px; font-weight: 600; color: #586178;">Collected today</span>
+      </div>
+      <label style="display: block;">
+        <span style="display: block; font-size: 12px; font-weight: 700; color: #586178; margin-bottom: 8px;">Receiver name</span>
+        <span class="nm-in" style="display: block; padding: 15px 18px; border-radius: 16px;"><input class="filled" type="text" placeholder="Rakesh Mehta" style="font-size: 15px; font-weight: 600;"></span>
+      </label>
+      <div style="display: flex; gap: 22px; align-items: center;">
+        <span style="display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600;">
+          <span class="nm-in-s" style="width: 26px; height: 26px; border-radius: 9px; background: #03A9F4; display: flex; align-items: center; justify-content: center;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+          </span>Selected</span>
+        <span style="display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; color: #586178;">
+          <span class="nm-in-s" style="width: 26px; height: 26px; border-radius: 9px; background: #E3E8F0;"></span>Not selected</span>
+        <span style="display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; color: #586178;">
+          <span class="nm-in" style="width: 52px; height: 28px; border-radius: 14px; display: flex; align-items: center; padding: 0 3px;"><span class="nm-up-s" style="width: 22px; height: 22px; border-radius: 50%; background: #E8ECF3;"></span></span>Toggle</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="nm-up" style="padding: 30px 32px; border-radius: 26px; display: flex; flex-direction: column; gap: 20px;">
+    <div style="font-size: 13px; font-weight: 800; letter-spacing: 0.09em; text-transform: uppercase; color: #586178;">Offline semantics &mdash; the screen says which one before the tap</div>
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 26px;">
+      <div class="nm-in" style="padding: 22px 24px; border-radius: 20px; display: flex; flex-direction: column; gap: 10px;">
+        <span style="align-self: flex-start; padding: 6px 12px; border-radius: 11px; background: #D5E8DE; color: #1B6B48; font-size: 12px; font-weight: 800;">Works offline</span>
+        <div style="font-size: 15px; font-weight: 700;">Indistinguishable from online, plus a queued marker.</div>
+        <div style="font-size: 13px; color: #586178; line-height: 1.6;">Confirm and cancel pickup, take and release, mark delivered, timer, department transfer, jangad submit.</div>
+      </div>
+      <div class="nm-in" style="padding: 22px 24px; border-radius: 20px; display: flex; flex-direction: column; gap: 10px;">
+        <span style="align-self: flex-start; padding: 6px 12px; border-radius: 11px; background: #F3E2C4; color: #7A4A00; font-size: 12px; font-weight: 800;">Degrades</span>
+        <div style="font-size: 15px; font-weight: 700;">Readable from cache, and labelled as possibly stale.</div>
+        <div style="font-size: 13px; color: #586178; line-height: 1.6;">Worklists, jangad pages already fetched, saved pickup addresses. The age of the data is always on screen.</div>
+      </div>
+      <div class="nm-in" style="padding: 22px 24px; border-radius: 20px; display: flex; flex-direction: column; gap: 10px;">
+        <span style="align-self: flex-start; padding: 6px 12px; border-radius: 11px; background: #D7DCE6; color: #4C5568; font-size: 12px; font-weight: 800;">Blocked</span>
+        <div style="font-size: 15px; font-weight: 700;">Disabled with a reason. The tap never enters a queue that cannot succeed.</div>
+        <div style="font-size: 13px; color: #586178; line-height: 1.6;">Finish job work, first-ever sign in. Nothing else.</div>
+      </div>
+    </div>
+  </div>
+
+</div></div>
+<figcaption><span class="lbl">Soft UI foundations</span><span class="src">Main.dc.html</span></figcaption>
+</figure>
+</div>
+</section>
+<section id="field-in">
+<header class="sec">
+<h2>Field app — getting in</h2>
+<p>The first sign in is the only thing in the app that needs a connection.</p>
+</header>
+<div class="rail">
+<figure class="board">
+<div class="frame"><div style="width: 390px; height: 844px; box-sizing: border-box; padding: 64px 28px 32px; display: flex; flex-direction: column;">
+
+  <div style="display: flex; flex-direction: column; align-items: center; gap: 18px; margin-bottom: 44px;">
+    <div class="nm-up" style="width: 84px; height: 84px; border-radius: 28px; background: #E3E8F0; display: flex; align-items: center; justify-content: center;">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#01579B" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h10l4 6-9 12L3 9l4-6Z"></path><path d="M3 9h18M7 3l2 6 3 12 3-12 2-6"></path></svg>
+    </div>
+    <div style="text-align: center;">
+      <h1 class="disp" style="margin: 0 0 6px; font-size: 27px; font-weight: 700; letter-spacing: -0.01em;">Sudi Field</h1>
+      <p style="margin: 0; font-size: 14px; color: #586178;">Pickups, deliveries and job work</p>
+    </div>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 18px;">
+    <label style="display: block;">
+      <span style="display: block; font-size: 12px; font-weight: 700; color: #586178; margin-bottom: 9px;">Login</span>
+      <span class="nm-in" style="display: flex; align-items: center; gap: 12px; padding: 16px 18px; border-radius: 18px;">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#79839A" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8.5" r="3.6"></circle><path d="M4.8 20a7.4 7.4 0 0 1 14.4 0"></path></svg>
+        <input class="filled" type="text" placeholder="rakesh.m" style="font-size: 15px; font-weight: 600;">
+      </span>
+    </label>
+    <label style="display: block;">
+      <span style="display: block; font-size: 12px; font-weight: 700; color: #586178; margin-bottom: 9px;">Password</span>
+      <span class="nm-in" style="display: flex; align-items: center; gap: 12px; padding: 16px 18px; border-radius: 18px;">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#79839A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2.2"></rect><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"></path></svg>
+        <input class="filled" type="password" placeholder="123456789" style="font-size: 15px; font-weight: 600; letter-spacing: 0.18em;">
+      </span>
+    </label>
+    <a href="Field-03-Pickups.dc.html" class="nm-acc" style="display: flex; align-items: center; justify-content: center; height: 56px; border-radius: 19px; background: #03A9F4; color: #06283D; font-size: 16px; font-weight: 700; margin-top: 6px;">Sign in</a>
+  </div>
+
+  <div class="nm-in" style="display: flex; gap: 12px; padding: 16px 18px; border-radius: 18px; margin-top: 26px;">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#4C5568" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 1px;" aria-hidden="true"><path d="M3 6l18 18"></path><path d="M4.8 11.2a12 12 0 0 1 4.4-2.6M14.8 8.6a12 12 0 0 1 4.4 2.6"></path><path d="M8.2 15a7 7 0 0 1 3.1-1.7"></path><circle cx="12" cy="19" r="1.1" fill="#4C5568" stroke="none"></circle></svg>
+    <div>
+      <div style="font-size: 13px; font-weight: 700; color: #4C5568; margin-bottom: 3px;">The first sign in needs a connection</div>
+      <div style="font-size: 12px; color: #586178; line-height: 1.5;">After that the app opens, unlocks and records work with no signal at all.</div>
+    </div>
+  </div>
+
+  <div style="flex-grow: 1;"></div>
+
+  <div style="text-align: center; display: flex; flex-direction: column; gap: 6px;">
+    <div style="font-size: 12px; color: #586178;">Accounts are created by your administrator.</div>
+    <div class="mono" style="font-size: 11px; color: #79839A;">device 8f2c&hellip;a41 &middot; v1.0.3+14</div>
+  </div>
+
+</div></div>
+<figcaption><span class="lbl">Sign in</span><span class="api">POST /auth/login</span><span class="src">Field-01-SignIn.dc.html</span></figcaption>
+</figure>
+<figure class="board">
+<div class="frame"><div style="width: 390px; height: 844px; box-sizing: border-box; padding: 72px 34px 38px; display: flex; flex-direction: column; align-items: center;">
+
+  <div style="text-align: center; margin-bottom: 34px;">
+    <h1 class="disp" style="margin: 0 0 8px; font-size: 25px; font-weight: 700;">Welcome back, Rakesh</h1>
+    <p style="margin: 0; font-size: 14px; color: #586178;">Enter your PIN to unlock</p>
+  </div>
+
+  <div style="display: flex; gap: 16px; margin-bottom: 20px;">
+    <span class="nm-in-s" style="width: 17px; height: 17px; border-radius: 50%; background: #03A9F4;"></span>
+    <span class="nm-in-s" style="width: 17px; height: 17px; border-radius: 50%; background: #03A9F4;"></span>
+    <span class="nm-in" style="width: 17px; height: 17px; border-radius: 50%; background: #E3E8F0;"></span>
+    <span class="nm-in" style="width: 17px; height: 17px; border-radius: 50%; background: #E3E8F0;"></span>
+  </div>
+
+  <div style="display: flex; align-items: center; gap: 9px; padding: 8px 14px; border-radius: 13px; background: #D5E8DE; margin-bottom: 38px;">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1B6B48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+    <span style="font-size: 12px; font-weight: 700; color: #1B6B48;">Works without a connection</span>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; width: 100%;">
+    <button class="nm-up" style="height: 74px; border-radius: 24px; font-size: 25px; font-weight: 600;">1</button>
+    <button class="nm-up" style="height: 74px; border-radius: 24px; font-size: 25px; font-weight: 600;">2</button>
+    <button class="nm-up" style="height: 74px; border-radius: 24px; font-size: 25px; font-weight: 600;">3</button>
+    <button class="nm-up" style="height: 74px; border-radius: 24px; font-size: 25px; font-weight: 600;">4</button>
+    <button class="nm-up" style="height: 74px; border-radius: 24px; font-size: 25px; font-weight: 600;">5</button>
+    <button class="nm-up" style="height: 74px; border-radius: 24px; font-size: 25px; font-weight: 600;">6</button>
+    <button class="nm-up" style="height: 74px; border-radius: 24px; font-size: 25px; font-weight: 600;">7</button>
+    <button class="nm-in-s" style="height: 74px; border-radius: 24px; font-size: 25px; font-weight: 600; background: #DDE3EC; color: #01579B;">8</button>
+    <button class="nm-up" style="height: 74px; border-radius: 24px; font-size: 25px; font-weight: 600;">9</button>
+    <button class="nm-up" style="height: 74px; border-radius: 24px; display: flex; align-items: center; justify-content: center;" aria-label="Unlock with fingerprint">
+      <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="#01579B" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M12 4.5a7.5 7.5 0 0 0-7.5 7.5v2"></path><path d="M19.5 12a7.5 7.5 0 0 0-3.4-6.3"></path><path d="M8 12a4 4 0 0 1 8 0v3.5"></path><path d="M12 12v5.5"></path><path d="M16 18.6v.9"></path><path d="M6.6 17.2A7.5 7.5 0 0 0 7.4 19"></path></svg>
+    </button>
+    <button class="nm-up" style="height: 74px; border-radius: 24px; font-size: 25px; font-weight: 600;">0</button>
+    <button class="nm-up" style="height: 74px; border-radius: 24px; display: flex; align-items: center; justify-content: center;" aria-label="Delete">
+      <svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="#586178" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 5.5H9.5L3.5 12l6 6.5H20a1.5 1.5 0 0 0 1.5-1.5V7a1.5 1.5 0 0 0-1.5-1.5Z"></path><path d="M12.5 9.5l5 5M17.5 9.5l-5 5"></path></svg>
+    </button>
+  </div>
+
+  <div style="flex-grow: 1;"></div>
+  <a href="Field-01-SignIn.dc.html" style="font-size: 13px; font-weight: 700;">Sign in with password instead</a>
+
+</div></div>
+<figcaption><span class="lbl">Unlock offline</span><span class="api">local PIN, never sent</span><span class="src">Field-02-Unlock.dc.html</span></figcaption>
+</figure>
+<figure class="board">
+<div class="frame"><div style="width: 390px; height: 844px; box-sizing: border-box; padding: 26px 20px 0; display: flex; flex-direction: column; gap: 14px;">
+
+  <div style="display: flex; align-items: center; gap: 12px;">
+    <div style="flex-grow: 1;">
+      <h1 class="disp" style="margin: 0 0 2px; font-size: 26px; font-weight: 700; letter-spacing: -0.01em;">Pickups</h1>
+      <p style="margin: 0; font-size: 13px; color: #586178;">Thursday, 23 September</p>
+    </div>
+    <a href="Field-15-NeedsAttention.dc.html" class="nm-up" style="width: 44px; height: 44px; border-radius: 15px; display: flex; align-items: center; justify-content: center;" aria-label="Account and devices">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3D4658" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8.5" r="3.6"></circle><path d="M4.8 20a7.4 7.4 0 0 1 14.4 0"></path></svg>
+    </a>
+  </div>
+
+  <div class="nm-in" style="display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-radius: 16px;">
+    <span style="width: 9px; height: 9px; border-radius: 50%; background: #1B6B48; box-shadow: 0 0 0 3px rgba(27,107,72,.18);"></span>
+    <span style="font-size: 12px; font-weight: 700; color: #1B6B48;">Online</span>
+    <span style="width: 1px; height: 13px; background: #C9D1DF;"></span>
+    <span style="font-size: 12px; color: #586178; flex-grow: 1;">Synced 2 min ago</span>
+    <a href="Field-14-Outbox.dc.html" class="nm-up-s" style="display: flex; align-items: center; gap: 6px; padding: 6px 11px; border-radius: 12px; background: #F3E2C4; color: #7A4A00; font-size: 12px; font-weight: 800;">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.2V12l3.2 1.9"></path></svg>
+      3 queued
+    </a>
+  </div>
+
+  <div class="nm-in" style="display: flex; padding: 5px; border-radius: 17px; gap: 5px;">
+    <span class="nm-up-s" style="flex-grow: 1; text-align: center; padding: 11px 0; border-radius: 13px; background: #E8ECF3; font-size: 13px; font-weight: 800; color: #01579B;">To collect &middot; 7</span>
+    <a href="Field-04-Pickups-Offline.dc.html" style="flex-grow: 1; text-align: center; padding: 11px 0; border-radius: 13px; font-size: 13px; font-weight: 700; color: #586178;">Collected today &middot; 4</a>
+  </div>
+
+  <div style="flex-grow: 1; overflow: hidden; display: flex; flex-direction: column; gap: 13px;">
+
+    <a href="Field-05-PickupDetail.dc.html" class="nm-up" style="display: block; padding: 16px 18px; border-radius: 22px; flex-shrink: 0;">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 9px;">
+        <span class="mono" style="font-size: 13px; font-weight: 600; color: #01579B;">WH/IN/00042</span>
+        <span style="flex-grow: 1;"></span>
+        <span style="display: flex; align-items: center; gap: 5px; padding: 5px 9px; border-radius: 10px; background: #D7DCE6; color: #4C5568; font-size: 11px; font-weight: 800;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="2.4"></rect><path d="m5 17 4.5-5 3 3.2 2.6-2.6L19 17"></path></svg>
+          2 pages
+        </span>
+      </div>
+      <div style="font-size: 17px; font-weight: 700; margin-bottom: 7px;">Kiran Gems</div>
+      <div style="display: flex; gap: 8px; align-items: flex-start; margin-bottom: 13px;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#79839A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 2px;" aria-hidden="true"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"></path><circle cx="12" cy="10" r="2.6"></circle></svg>
+        <span style="font-size: 13px; color: #586178; line-height: 1.5;">12, Mahidharpura, Surat 395003</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 7px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#79839A" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.2V12l3.2 1.9"></path></svg>
+        <span class="mono" style="font-size: 12px; font-weight: 600; color: #586178;">10:00</span>
+        <span style="flex-grow: 1;"></span>
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#01579B" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg>
+      </div>
+    </a>
+
+    <a href="Field-05-PickupDetail.dc.html" class="nm-up" style="display: block; padding: 16px 18px; border-radius: 22px; flex-shrink: 0;">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 9px;">
+        <span class="mono" style="font-size: 13px; font-weight: 600; color: #01579B;">WH/IN/00043</span>
+        <span style="flex-grow: 1;"></span>
+        <span style="display: flex; align-items: center; gap: 5px; padding: 5px 9px; border-radius: 10px; background: #D7DCE6; color: #4C5568; font-size: 11px; font-weight: 800;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="2.4"></rect><path d="m5 17 4.5-5 3 3.2 2.6-2.6L19 17"></path></svg>
+          1 page
+        </span>
+      </div>
+      <div style="font-size: 17px; font-weight: 700; margin-bottom: 7px;">Shree Ramkrishna Exports</div>
+      <div style="display: flex; gap: 8px; align-items: flex-start; margin-bottom: 13px;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#79839A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 2px;" aria-hidden="true"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"></path><circle cx="12" cy="10" r="2.6"></circle></svg>
+        <span style="font-size: 13px; color: #586178; line-height: 1.5;">Plot 7, Varachha Main Road, Surat</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 7px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#79839A" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.2V12l3.2 1.9"></path></svg>
+        <span class="mono" style="font-size: 12px; font-weight: 600; color: #586178;">11:30</span>
+        <span style="flex-grow: 1;"></span>
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#01579B" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg>
+      </div>
+    </a>
+
+    <a href="Field-05-PickupDetail.dc.html" class="nm-up" style="display: block; padding: 16px 18px; border-radius: 22px; flex-shrink: 0;">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 9px;">
+        <span class="mono" style="font-size: 13px; font-weight: 600; color: #01579B;">WH/IN/00045</span>
+        <span style="flex-grow: 1;"></span>
+        <span style="padding: 5px 9px; border-radius: 10px; background: #E2DEF2; color: #57479B; font-size: 11px; font-weight: 800;">New number</span>
+      </div>
+      <div style="font-size: 17px; font-weight: 700; margin-bottom: 7px; color: #4C5568;">Not yet on the office records</div>
+      <div style="display: flex; gap: 8px; align-items: flex-start; margin-bottom: 13px;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#79839A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 2px;" aria-hidden="true"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"></path><circle cx="12" cy="10" r="2.6"></circle></svg>
+        <span style="font-size: 13px; color: #586178; line-height: 1.5;">Shop 14, Bhagal, Surat &middot; <span class="mono">98765 43210</span></span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 7px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#79839A" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.2V12l3.2 1.9"></path></svg>
+        <span class="mono" style="font-size: 12px; font-weight: 600; color: #586178;">13:15</span>
+        <span style="flex-grow: 1;"></span>
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#01579B" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg>
+      </div>
+    </a>
+
+    <div class="nm-up" style="padding: 16px 18px; border-radius: 22px; flex-shrink: 0;">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 9px;">
+        <span class="mono" style="font-size: 13px; font-weight: 600; color: #01579B;">WH/IN/00046</span>
+        <span style="flex-grow: 1;"></span>
+        <span style="padding: 5px 9px; border-radius: 10px; background: #D7DCE6; color: #4C5568; font-size: 11px; font-weight: 800;">1 page</span>
+      </div>
+      <div style="font-size: 17px; font-weight: 700;">Dharmanandan Diamonds</div>
+    </div>
+
+  </div>
+
+  <div style="padding: 12px 0 20px; flex-shrink: 0;">
+    <div class="nm-up" style="display: flex; padding: 8px; border-radius: 24px; gap: 7px;">
+      <span class="nm-in-s" style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 11px 0; border-radius: 18px; background: #DDE3EC; color: #01579B;">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 20.5 7.5v9L12 21l-8.5-4.5v-9L12 3Z"></path><path d="M3.5 7.5 12 12l8.5-4.5M12 12v9"></path></svg>
+        <span style="font-size: 11px; font-weight: 800;">Pickups</span>
+      </span>
+      <a href="Field-08-Deliveries.dc.html" style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 11px 0; border-radius: 18px; color: #586178;">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7.5h10v9H3z"></path><path d="M13 10.5h4l3.2 3.2v2.8H13z"></path><circle cx="7" cy="18" r="1.9"></circle><circle cx="17" cy="18" r="1.9"></circle></svg>
+        <span style="font-size: 11px; font-weight: 700;">Deliveries</span>
+      </a>
+      <a href="Field-11-JobWork.dc.html" style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 11px 0; border-radius: 18px; color: #586178;">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13.5" r="7"></circle><path d="M12 10v3.8l2.4 1.4M9.5 3.5h5"></path></svg>
+        <span style="font-size: 11px; font-weight: 700;">Job work</span>
+      </a>
+    </div>
+  </div>
+
+</div></div>
+<figcaption><span class="lbl">Pickups, online</span><span class="api">GET /sync/pull — scope pickup</span><span class="src">Field-03-Pickups.dc.html</span></figcaption>
+</figure>
+<figure class="board">
+<div class="frame"><div style="width: 390px; height: 844px; box-sizing: border-box; padding: 26px 20px 0; display: flex; flex-direction: column; gap: 14px;">
+
+  <div style="display: flex; align-items: center; gap: 12px;">
+    <div style="flex-grow: 1;">
+      <h1 class="disp" style="margin: 0 0 2px; font-size: 26px; font-weight: 700; letter-spacing: -0.01em;">Pickups</h1>
+      <p style="margin: 0; font-size: 13px; color: #586178;">Thursday, 23 September</p>
+    </div>
+    <a href="Field-15-NeedsAttention.dc.html" class="nm-up" style="width: 44px; height: 44px; border-radius: 15px; display: flex; align-items: center; justify-content: center;" aria-label="Account and devices">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3D4658" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8.5" r="3.6"></circle><path d="M4.8 20a7.4 7.4 0 0 1 14.4 0"></path></svg>
+    </a>
+  </div>
+
+  <div class="nm-in" style="display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-radius: 16px;">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4C5568" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 6.5l17 17"></path><path d="M4.8 11.2a12 12 0 0 1 4.4-2.6M14.8 8.6a12 12 0 0 1 4.4 2.6"></path><path d="M8.2 15a7 7 0 0 1 3.1-1.7"></path><circle cx="12" cy="19" r="1.1" fill="#4C5568" stroke="none"></circle></svg>
+    <span style="font-size: 12px; font-weight: 700; color: #4C5568;">Offline</span>
+    <span style="width: 1px; height: 13px; background: #C9D1DF;"></span>
+    <span style="font-size: 12px; color: #586178; flex-grow: 1;">Synced 14 min ago</span>
+    <a href="Field-14-Outbox.dc.html" class="nm-up-s" style="display: flex; align-items: center; gap: 6px; padding: 6px 11px; border-radius: 12px; background: #F3E2C4; color: #7A4A00; font-size: 12px; font-weight: 800;">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.2V12l3.2 1.9"></path></svg>
+      3 queued
+    </a>
+  </div>
+
+  <div class="nm-in" style="display: flex; padding: 5px; border-radius: 17px; gap: 5px;">
+    <a href="Field-03-Pickups.dc.html" style="flex-grow: 1; text-align: center; padding: 11px 0; border-radius: 13px; font-size: 13px; font-weight: 700; color: #586178;">To collect &middot; 5</a>
+    <span class="nm-up-s" style="flex-grow: 1; text-align: center; padding: 11px 0; border-radius: 13px; background: #E8ECF3; font-size: 13px; font-weight: 800; color: #01579B;">Collected today &middot; 6</span>
+  </div>
+
+  <div style="flex-grow: 1; overflow: hidden; display: flex; flex-direction: column; gap: 13px;">
+
+    <a href="Field-14-Outbox.dc.html" class="nm-up" style="display: block; padding: 16px 18px; border-radius: 22px; flex-shrink: 0;">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 9px;">
+        <span class="mono" style="font-size: 13px; font-weight: 600; color: #01579B;">WH/IN/00042</span>
+        <span style="flex-grow: 1;"></span>
+        <span style="display: flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: 11px; background: #F3E2C4; color: #7A4A00; font-size: 11px; font-weight: 800;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.2V12l3.2 1.9"></path></svg>
+          Queued
+        </span>
+      </div>
+      <div style="font-size: 17px; font-weight: 700; margin-bottom: 7px;">Kiran Gems</div>
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1B6B48" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+        <span style="font-size: 13px; color: #3D4658; font-weight: 600;">Collected <span class="mono">10:04</span> &middot; 2 pages</span>
+      </div>
+      <div class="nm-in-s" style="display: flex; align-items: center; gap: 8px; padding: 9px 12px; border-radius: 13px;">
+        <span style="font-size: 12px; color: #7A4A00; font-weight: 700; flex-grow: 1;">Sends when you are back online</span>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7A4A00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg>
+      </div>
+    </a>
+
+    <a href="Field-14-Outbox.dc.html" class="nm-up" style="display: block; padding: 16px 18px; border-radius: 22px; flex-shrink: 0;">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 9px;">
+        <span class="mono" style="font-size: 13px; font-weight: 600; color: #01579B;">WH/IN/00043</span>
+        <span style="flex-grow: 1;"></span>
+        <span style="display: flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: 11px; background: #F3E2C4; color: #7A4A00; font-size: 11px; font-weight: 800;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.2V12l3.2 1.9"></path></svg>
+          Queued
+        </span>
+      </div>
+      <div style="font-size: 17px; font-weight: 700; margin-bottom: 7px;">Shree Ramkrishna Exports</div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1B6B48" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+        <span style="font-size: 13px; color: #3D4658; font-weight: 600;">Collected <span class="mono">11:32</span> &middot; 1 page</span>
+      </div>
+    </a>
+
+    <div class="nm-up" style="padding: 16px 18px; border-radius: 22px; flex-shrink: 0;">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 9px;">
+        <span class="mono" style="font-size: 13px; font-weight: 600; color: #01579B;">WH/IN/00039</span>
+        <span style="flex-grow: 1;"></span>
+        <span style="display: flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: 11px; background: #D5E8DE; color: #1B6B48; font-size: 11px; font-weight: 800;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+          Synced
+        </span>
+      </div>
+      <div style="font-size: 17px; font-weight: 700; margin-bottom: 7px;">Laxmi Diamond</div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1B6B48" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+        <span style="font-size: 13px; color: #3D4658; font-weight: 600;">Collected <span class="mono">09:12</span> &middot; 3 pages</span>
+      </div>
+    </div>
+
+    <div class="nm-up" style="padding: 16px 18px; border-radius: 22px; flex-shrink: 0;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span class="mono" style="font-size: 13px; font-weight: 600; color: #01579B;">WH/IN/00037</span>
+        <span style="flex-grow: 1;"></span>
+        <span style="padding: 5px 10px; border-radius: 11px; background: #D5E8DE; color: #1B6B48; font-size: 11px; font-weight: 800;">Synced</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="padding: 12px 0 20px; flex-shrink: 0;">
+    <div class="nm-up" style="display: flex; padding: 8px; border-radius: 24px; gap: 7px;">
+      <span class="nm-in-s" style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 11px 0; border-radius: 18px; background: #DDE3EC; color: #01579B;">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 20.5 7.5v9L12 21l-8.5-4.5v-9L12 3Z"></path><path d="M3.5 7.5 12 12l8.5-4.5M12 12v9"></path></svg>
+        <span style="font-size: 11px; font-weight: 800;">Pickups</span>
+      </span>
+      <a href="Field-08-Deliveries.dc.html" style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 11px 0; border-radius: 18px; color: #586178;">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7.5h10v9H3z"></path><path d="M13 10.5h4l3.2 3.2v2.8H13z"></path><circle cx="7" cy="18" r="1.9"></circle><circle cx="17" cy="18" r="1.9"></circle></svg>
+        <span style="font-size: 11px; font-weight: 700;">Deliveries</span>
+      </a>
+      <a href="Field-11-JobWork.dc.html" style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 11px 0; border-radius: 18px; color: #586178;">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13.5" r="7"></circle><path d="M12 10v3.8l2.4 1.4M9.5 3.5h5"></path></svg>
+        <span style="font-size: 11px; font-weight: 700;">Job work</span>
+      </a>
+    </div>
+  </div>
+
+</div></div>
+<figcaption><span class="lbl">Pickups, offline</span><span class="api">cache + outbox, optimistic</span><span class="src">Field-04-Pickups-Offline.dc.html</span></figcaption>
+</figure>
+</div>
+</section>
+<section id="field-pickup">
+<header class="sec">
+<h2>Field app — collecting a jangad</h2>
+<p>Both actions queue offline. The pages go up before the intent does.</p>
+</header>
+<div class="rail">
+<figure class="board">
+<div class="frame"><div style="width: 390px; height: 844px; box-sizing: border-box; padding: 22px 20px 0; display: flex; flex-direction: column; gap: 13px;">
+
+  <div style="display: flex; align-items: center; gap: 12px;">
+    <a href="Field-03-Pickups.dc.html" class="nm-up" style="width: 44px; height: 44px; border-radius: 15px; display: flex; align-items: center; justify-content: center;" aria-label="Back to pickups">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3D4658" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+    </a>
+    <div style="flex-grow: 1;">
+      <div class="mono" style="font-size: 15px; font-weight: 600; color: #01579B;">WH/IN/00042</div>
+      <div style="font-size: 12px; color: #586178;">To collect &middot; scheduled <span class="mono">10:00</span></div>
+    </div>
+    <a href="Field-05-PickupDetail.dc.html" class="nm-up" style="width: 44px; height: 44px; border-radius: 15px; display: flex; align-items: center; justify-content: center;" aria-label="Call the customer">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#01579B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 3.5h3l1.5 4-2 1.6a12 12 0 0 0 5.9 5.9l1.6-2 4 1.5v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.5 5.7 2 2 0 0 1 6.5 3.5Z"></path></svg>
+    </a>
+  </div>
+
+  <div class="nm-in" style="padding: 14px; border-radius: 22px; display: flex; flex-direction: column; align-items: center; gap: 11px;">
+    <div style="width: 200px; height: 248px; border-radius: 6px; background: #FBF6E9; box-shadow: 0 6px 16px rgba(72,64,40,.22); transform: rotate(-1.1deg); box-sizing: border-box; padding: 12px 13px; display: flex; flex-direction: column; gap: 7px;">
+      <div class="slip" style="font-size: 9px; letter-spacing: 0.14em; text-align: center; font-weight: 600; border-bottom: 1px solid #C9BD9C; padding-bottom: 5px;">JANGAD &middot; SUDI</div>
+      <div class="slip" style="font-size: 9px; display: flex; justify-content: space-between;"><span>KIRAN GEMS</span><span>23/09</span></div>
+      <div style="display: grid; grid-template-columns: 16px 1fr 26px 30px; gap: 3px 4px; font-size: 8px;" class="slip">
+        <span style="border-bottom: 1px solid #DCD3BE;">SR</span><span style="border-bottom: 1px solid #DCD3BE;">SIZE</span><span style="border-bottom: 1px solid #DCD3BE;">PCS</span><span style="border-bottom: 1px solid #DCD3BE;">CTS</span>
+        <span>1</span><span>0.30-0.35</span><span>24</span><span>7.85</span>
+        <span>2</span><span>0.18-0.22</span><span>61</span><span>12.40</span>
+        <span>3</span><span>0.40-0.45</span><span>12</span><span>5.10</span>
+        <span>4</span><span>0.25-0.30</span><span>38</span><span>10.25</span>
+        <span>5</span><span>0.50-0.55</span><span>8</span><span>4.32</span>
+      </div>
+      <div style="flex-grow: 1;"></div>
+      <div class="slip" style="font-size: 8px; border-top: 1px solid #C9BD9C; padding-top: 5px; display: flex; justify-content: space-between;"><span>TOTAL</span><span>143 / 39.92</span></div>
+      <svg width="70" height="26" viewBox="0 0 70 26" fill="none" stroke="#2F3C6E" stroke-width="1.3" stroke-linecap="round" aria-hidden="true"><path d="M3 19c6-11 9 2 13-6s6 9 11-1 8 6 13-2 9 5 14-1"></path></svg>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <span class="nm-up-s" style="width: 8px; height: 8px; border-radius: 50%; background: #03A9F4;"></span>
+      <span class="nm-in-s" style="width: 8px; height: 8px; border-radius: 50%; background: #D5DBE5;"></span>
+      <span style="font-size: 12px; font-weight: 700; color: #586178;">Page 1 of 2</span>
+    </div>
+  </div>
+
+  <div class="nm-up" style="padding: 15px 17px; border-radius: 20px; display: flex; flex-direction: column; gap: 12px;">
+    <div style="display: flex; align-items: center; gap: 11px;">
+      <span class="nm-in-s" style="width: 38px; height: 38px; border-radius: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#01579B" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8.5" r="3.6"></circle><path d="M4.8 20a7.4 7.4 0 0 1 14.4 0"></path></svg>
+      </span>
+      <div style="flex-grow: 1;">
+        <div style="font-size: 16px; font-weight: 700;">Kiran Gems</div>
+        <div class="mono" style="font-size: 12px; color: #586178;">98765 43210</div>
+      </div>
+    </div>
+    <div style="height: 1px; background: #D3DAE5;"></div>
+    <div style="display: flex; align-items: flex-start; gap: 11px;">
+      <span class="nm-in-s" style="width: 38px; height: 38px; border-radius: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#01579B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"></path><circle cx="12" cy="10" r="2.6"></circle></svg>
+      </span>
+      <div style="flex-grow: 1;">
+        <div style="font-size: 14px; font-weight: 600; line-height: 1.45;">12, Mahidharpura<br>Surat 395003</div>
+      </div>
+      <a href="Field-05-PickupDetail.dc.html" class="nm-up-s" style="padding: 8px 12px; border-radius: 12px; font-size: 12px; font-weight: 700; color: #01579B; align-self: center;">Maps</a>
+    </div>
+  </div>
+
+  <div style="flex-grow: 1;"></div>
+
+  <div style="display: flex; flex-direction: column; gap: 11px; padding-bottom: 22px;">
+    <div style="display: flex; align-items: center; gap: 7px; justify-content: center;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1B6B48" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+      <span style="font-size: 12px; font-weight: 700; color: #1B6B48;">Both actions work offline</span>
+    </div>
+    <a href="Field-06-ConfirmPickup.dc.html" class="nm-acc" style="display: flex; align-items: center; justify-content: center; gap: 10px; height: 56px; border-radius: 19px; background: #03A9F4; color: #06283D; font-size: 16px; font-weight: 700;">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8.5h3l1.4-2h7.2L17 8.5h3a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1Z"></path><circle cx="12" cy="13.2" r="3.2"></circle></svg>
+      Confirm pickup
+    </a>
+    <a href="Field-07-CancelPickup.dc.html" class="nm-up" style="display: flex; align-items: center; justify-content: center; height: 52px; border-radius: 18px; font-size: 15px; font-weight: 700; color: #4C5568;">Cannot collect</a>
+  </div>
+
+</div></div>
+<figcaption><span class="lbl">Receipt and jangad</span><span class="api">GET /pickups/{id}/jangad/{page}</span><span class="src">Field-05-PickupDetail.dc.html</span></figcaption>
+</figure>
+<figure class="board">
+<div class="frame"><div style="width: 390px; height: 844px; box-sizing: border-box; padding: 22px 20px 0; display: flex; flex-direction: column; gap: 16px;">
+
+  <div style="display: flex; align-items: center; gap: 12px;">
+    <a href="Field-05-PickupDetail.dc.html" class="nm-up" style="width: 44px; height: 44px; border-radius: 15px; display: flex; align-items: center; justify-content: center;" aria-label="Back">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3D4658" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+    </a>
+    <div style="flex-grow: 1;">
+      <h1 class="disp" style="margin: 0 0 2px; font-size: 21px; font-weight: 700;">Confirm pickup</h1>
+      <div class="mono" style="font-size: 12px; color: #586178;">WH/IN/00042 &middot; Kiran Gems</div>
+    </div>
+  </div>
+
+  <div>
+    <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 11px;">
+      <span style="font-size: 13px; font-weight: 800; color: #3D4658;">Jangad pages</span>
+      <span style="font-size: 12px; color: #586178; flex-grow: 1;">in the order you photograph them</span>
+    </div>
+    <div style="display: flex; gap: 12px;">
+      <div style="width: 96px;">
+        <div class="nm-in" style="height: 124px; border-radius: 18px; padding: 8px; box-sizing: border-box; display: flex; align-items: center; justify-content: center;">
+          <div style="width: 74px; height: 106px; border-radius: 4px; background: #FBF6E9; box-shadow: 0 3px 8px rgba(72,64,40,.2); box-sizing: border-box; padding: 6px; display: flex; flex-direction: column; gap: 3px;">
+            <div class="slip" style="font-size: 5px; letter-spacing: .1em; text-align: center; border-bottom: 1px solid #C9BD9C; padding-bottom: 2px;">JANGAD</div>
+            <div style="height: 1.5px; background: #D8CEB4; width: 90%;"></div>
+            <div style="height: 1.5px; background: #D8CEB4; width: 74%;"></div>
+            <div style="height: 1.5px; background: #D8CEB4; width: 86%;"></div>
+            <div style="height: 1.5px; background: #D8CEB4; width: 62%;"></div>
+            <div style="height: 1.5px; background: #D8CEB4; width: 80%;"></div>
+          </div>
+        </div>
+        <div class="mono" style="font-size: 11px; color: #586178; text-align: center; margin-top: 7px;">1 &middot; 312 KB</div>
+      </div>
+      <div style="width: 96px;">
+        <div class="nm-in" style="height: 124px; border-radius: 18px; padding: 8px; box-sizing: border-box; display: flex; align-items: center; justify-content: center;">
+          <div style="width: 74px; height: 106px; border-radius: 4px; background: #FBF6E9; box-shadow: 0 3px 8px rgba(72,64,40,.2); box-sizing: border-box; padding: 6px; display: flex; flex-direction: column; gap: 3px;">
+            <div class="slip" style="font-size: 5px; letter-spacing: .1em; text-align: center; border-bottom: 1px solid #C9BD9C; padding-bottom: 2px;">PAGE 2</div>
+            <div style="height: 1.5px; background: #D8CEB4; width: 68%;"></div>
+            <div style="height: 1.5px; background: #D8CEB4; width: 88%;"></div>
+            <div style="height: 1.5px; background: #D8CEB4; width: 55%;"></div>
+          </div>
+        </div>
+        <div class="mono" style="font-size: 11px; color: #586178; text-align: center; margin-top: 7px;">2 &middot; 287 KB</div>
+      </div>
+      <button class="nm-up" style="width: 96px; height: 124px; border-radius: 18px; background: #E3E8F0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 9px;">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#01579B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8.5h3l1.4-2h7.2L17 8.5h3a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1Z"></path><circle cx="12" cy="13.2" r="3.2"></circle></svg>
+        <span style="font-size: 12px; font-weight: 800; color: #01579B;">Add page</span>
+      </button>
+    </div>
+    <div class="mono" style="font-size: 11px; color: #79839A; margin-top: 9px;">1800 px long edge &middot; q80 &middot; kept until the office has it</div>
+  </div>
+
+  <div class="nm-up" style="display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 18px;">
+    <span class="nm-in-s" style="width: 38px; height: 38px; border-radius: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1B6B48" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"></path><circle cx="12" cy="10" r="2.6"></circle></svg>
+    </span>
+    <div style="flex-grow: 1;">
+      <div style="font-size: 14px; font-weight: 700;">Location attached</div>
+      <div class="mono" style="font-size: 11px; color: #586178;">21.1907, 72.8248 &middot; &plusmn;12 m</div>
+    </div>
+    <span class="nm-in" style="width: 52px; height: 28px; border-radius: 14px; display: flex; align-items: center; justify-content: flex-end; padding: 0 3px; box-sizing: border-box;">
+      <span class="nm-up-s" style="width: 22px; height: 22px; border-radius: 50%; background: #03A9F4;"></span>
+    </span>
+  </div>
+
+  <label style="display: block;">
+    <span style="display: block; font-size: 13px; font-weight: 800; color: #3D4658; margin-bottom: 10px;">Note <span style="font-weight: 600; color: #79839A;">optional</span></span>
+    <span class="nm-in" style="display: block; padding: 14px 16px; border-radius: 18px;">
+      <textarea class="hint" rows="2" placeholder="Anything the office should know"  style="font-size: 14px;"></textarea>
+    </span>
+  </label>
+
+  <div style="flex-grow: 1;"></div>
+
+  <div style="display: flex; flex-direction: column; gap: 12px; padding-bottom: 22px;">
+    <div class="nm-in" style="display: flex; align-items: center; gap: 10px; padding: 12px 15px; border-radius: 16px;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#586178" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.2V12l3.2 1.9"></path></svg>
+      <span style="font-size: 12px; color: #586178; flex-grow: 1;">Recorded at <span class="mono" style="font-weight: 600; color: #3D4658;">10:04</span>, not when it sends</span>
+    </div>
+    <a href="Field-04-Pickups-Offline.dc.html" class="nm-acc" style="display: flex; align-items: center; justify-content: center; gap: 10px; height: 56px; border-radius: 19px; background: #03A9F4; color: #06283D; font-size: 16px; font-weight: 700;">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+      Confirm pickup
+    </a>
+  </div>
+
+</div></div>
+<figcaption><span class="lbl">Confirm pickup</span><span class="api">POST /uploads then /pickups/{id}/confirm</span><span class="src">Field-06-ConfirmPickup.dc.html</span></figcaption>
+</figure>
+<figure class="board">
+<div class="frame"><div style="width: 390px; height: 844px; box-sizing: border-box; padding: 22px 20px 0; display: flex; flex-direction: column;">
+
+  <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 26px;">
+    <a href="Field-05-PickupDetail.dc.html" class="nm-up" style="width: 44px; height: 44px; border-radius: 15px; display: flex; align-items: center; justify-content: center;" aria-label="Back">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3D4658" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+    </a>
+    <div style="flex-grow: 1;">
+      <h1 class="disp" style="margin: 0 0 2px; font-size: 21px; font-weight: 700;">Cannot collect</h1>
+      <div class="mono" style="font-size: 12px; color: #586178;">WH/IN/00042 &middot; Kiran Gems</div>
+    </div>
+  </div>
+
+  <div style="font-size: 13px; font-weight: 800; color: #3D4658; margin-bottom: 12px;">Reason <span style="color: #8E2A25;">required</span></div>
+
+  <div style="display: flex; flex-direction: column; gap: 11px;">
+    <button class="nm-in-s" style="display: flex; align-items: center; gap: 13px; padding: 16px 17px; border-radius: 18px; background: #DDE3EC; text-align: left; width: 100%;">
+      <span class="nm-up-s" style="width: 22px; height: 22px; border-radius: 50%; background: #03A9F4; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+      </span>
+      <span style="font-size: 15px; font-weight: 700;">Customer not available</span>
+    </button>
+    <button class="nm-up" style="display: flex; align-items: center; gap: 13px; padding: 16px 17px; border-radius: 18px; text-align: left; width: 100%;">
+      <span class="nm-in-s" style="width: 22px; height: 22px; border-radius: 50%; background: #E3E8F0; flex-shrink: 0;"></span>
+      <span style="font-size: 15px; font-weight: 600; color: #3D4658;">Parcel not ready</span>
+    </button>
+    <button class="nm-up" style="display: flex; align-items: center; gap: 13px; padding: 16px 17px; border-radius: 18px; text-align: left; width: 100%;">
+      <span class="nm-in-s" style="width: 22px; height: 22px; border-radius: 50%; background: #E3E8F0; flex-shrink: 0;"></span>
+      <span style="font-size: 15px; font-weight: 600; color: #3D4658;">Address wrong or unreachable</span>
+    </button>
+    <button class="nm-up" style="display: flex; align-items: center; gap: 13px; padding: 16px 17px; border-radius: 18px; text-align: left; width: 100%;">
+      <span class="nm-in-s" style="width: 22px; height: 22px; border-radius: 50%; background: #E3E8F0; flex-shrink: 0;"></span>
+      <span style="font-size: 15px; font-weight: 600; color: #3D4658;">Something else</span>
+    </button>
+  </div>
+
+  <label style="display: block; margin-top: 22px;">
+    <span style="display: block; font-size: 13px; font-weight: 800; color: #3D4658; margin-bottom: 10px;">Detail <span style="font-weight: 600; color: #79839A;">optional</span></span>
+    <span class="nm-in" style="display: block; padding: 14px 16px; border-radius: 18px;">
+      <textarea class="hint" rows="3" placeholder="Shop shut, neighbour says back at 4" style="font-size: 14px;"></textarea>
+    </span>
+  </label>
+
+  <div class="nm-in" style="display: flex; gap: 11px; padding: 15px 16px; border-radius: 18px; margin-top: 22px;">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8E2A25" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 1px;" aria-hidden="true"><path d="M12 4.5 2.8 20h18.4L12 4.5Z"></path><path d="M12 10.2v4.1"></path><circle cx="12" cy="17" r=".95" fill="#8E2A25" stroke="none"></circle></svg>
+    <div style="font-size: 13px; color: #3D4658; line-height: 1.55;">Cancelling closes the receipt. The office is told, and the customer has to book again.</div>
+  </div>
+
+  <div style="flex-grow: 1;"></div>
+
+  <div style="display: flex; flex-direction: column; gap: 11px; padding-bottom: 22px;">
+    <div style="display: flex; align-items: center; gap: 7px; justify-content: center;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1B6B48" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+      <span style="font-size: 12px; font-weight: 700; color: #1B6B48;">Works offline</span>
+    </div>
+    <a href="Field-03-Pickups.dc.html" class="nm-up" style="display: flex; align-items: center; justify-content: center; gap: 10px; height: 56px; border-radius: 19px; background: #E3E8F0; color: #8E2A25; font-size: 16px; font-weight: 700;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4.5 2.8 20h18.4L12 4.5Z"></path><path d="M12 10.2v4.1"></path><circle cx="12" cy="17" r=".95" fill="currentColor" stroke="none"></circle></svg>Cancel this pickup</a>
+    <a href="Field-05-PickupDetail.dc.html" class="nm-up" style="display: flex; align-items: center; justify-content: center; height: 52px; border-radius: 18px; font-size: 15px; font-weight: 700; color: #4C5568;">Go back</a>
+  </div>
+
+</div></div>
+<figcaption><span class="lbl">Cannot collect</span><span class="api">POST /pickups/{id}/cancel</span><span class="src">Field-07-CancelPickup.dc.html</span></figcaption>
+</figure>
+</div>
+</section>
+<section id="field-deliver">
+<header class="sec">
+<h2>Field app — deliveries, where two phones collide</h2>
+<p>Taking a parcel is the highest-conflict intent in the system. A 409 is information, not an error dialog.</p>
+</header>
+<div class="rail">
+<figure class="board">
+<div class="frame"><div style="width: 390px; height: 844px; box-sizing: border-box; padding: 26px 20px 0; display: flex; flex-direction: column; gap: 13px;">
+
+  <div style="display: flex; align-items: center; gap: 12px;">
+    <div style="flex-grow: 1;">
+      <h1 class="disp" style="margin: 0 0 2px; font-size: 26px; font-weight: 700; letter-spacing: -0.01em;">Deliveries</h1>
+      <p style="margin: 0; font-size: 13px; color: #586178;">2 selected</p>
+    </div>
+    <a href="Field-10-Conflict.dc.html" class="nm-up" style="width: 44px; height: 44px; border-radius: 15px; display: flex; align-items: center; justify-content: center;" aria-label="Refresh">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#3D4658" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.6-5.9"></path><path d="M20 4.5V10h-5.5"></path></svg>
+    </a>
+  </div>
+
+  <div class="nm-in" style="display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-radius: 16px;">
+    <span style="width: 9px; height: 9px; border-radius: 50%; background: #1B6B48; box-shadow: 0 0 0 3px rgba(27,107,72,.18);"></span>
+    <span style="font-size: 12px; font-weight: 700; color: #1B6B48;">Online</span>
+    <span style="width: 1px; height: 13px; background: #C9D1DF;"></span>
+    <span style="font-size: 12px; color: #586178; flex-grow: 1;">Synced just now</span>
+    <a href="Field-14-Outbox.dc.html" class="nm-up-s" style="padding: 6px 11px; border-radius: 12px; background: #D5E8DE; color: #1B6B48; font-size: 12px; font-weight: 800;">Nothing queued</a>
+  </div>
+
+  <div class="nm-in" style="display: flex; padding: 5px; border-radius: 17px; gap: 4px;">
+    <span class="nm-up-s" style="flex-grow: 1; text-align: center; padding: 10px 0; border-radius: 13px; background: #E8ECF3; font-size: 12px; font-weight: 800; color: #01579B;">Awaiting 9</span>
+    <a href="Field-09-Deliver.dc.html" style="flex-grow: 1; text-align: center; padding: 10px 0; border-radius: 13px; font-size: 12px; font-weight: 700; color: #586178;">Out with me 3</a>
+    <a href="Field-10-Conflict.dc.html" style="flex-grow: 1; text-align: center; padding: 10px 0; border-radius: 13px; font-size: 12px; font-weight: 700; color: #586178;">Done today 5</a>
+  </div>
+
+  <div style="flex-grow: 1; overflow: hidden; display: flex; flex-direction: column; gap: 12px;">
+
+    <div class="nm-in-s" style="display: flex; gap: 13px; padding: 15px 16px; border-radius: 22px; background: #DCE2EB; flex-shrink: 0;">
+      <span class="nm-up-s" style="width: 25px; height: 25px; border-radius: 9px; background: #03A9F4; flex-shrink: 0; display: flex; align-items: center; justify-content: center; margin-top: 2px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+      </span>
+      <div style="flex-grow: 1;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+          <span class="mono" style="font-size: 12px; font-weight: 600; color: #01579B;">WH/OUT/00031</span>
+          <span style="flex-grow: 1;"></span>
+          <span class="mono" style="font-size: 11px; color: #79839A;">from WH/IN/00042</span>
+        </div>
+        <div style="font-size: 16px; font-weight: 700; margin-bottom: 5px;">Kiran Gems</div>
+        <div style="font-size: 13px; color: #586178; line-height: 1.45; margin-bottom: 8px;">12, Mahidharpura, Surat 395003</div>
+        <div class="mono" style="font-size: 12px; font-weight: 600; color: #3D4658;">143 pcs &middot; 39.92 ct</div>
+      </div>
+    </div>
+
+    <div class="nm-in-s" style="display: flex; gap: 13px; padding: 15px 16px; border-radius: 22px; background: #DCE2EB; flex-shrink: 0;">
+      <span class="nm-up-s" style="width: 25px; height: 25px; border-radius: 9px; background: #03A9F4; flex-shrink: 0; display: flex; align-items: center; justify-content: center; margin-top: 2px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+      </span>
+      <div style="flex-grow: 1;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+          <span class="mono" style="font-size: 12px; font-weight: 600; color: #01579B;">WH/OUT/00033</span>
+          <span style="flex-grow: 1;"></span>
+          <span class="mono" style="font-size: 11px; color: #79839A;">from WH/IN/00039</span>
+        </div>
+        <div style="font-size: 16px; font-weight: 700; margin-bottom: 5px;">Laxmi Diamond</div>
+        <div style="font-size: 13px; color: #586178; line-height: 1.45; margin-bottom: 8px;">A-402, Diamond World, Katargam</div>
+        <div class="mono" style="font-size: 12px; font-weight: 600; color: #3D4658;">61 pcs &middot; 12.40 ct</div>
+      </div>
+    </div>
+
+    <div class="nm-up" style="display: flex; gap: 13px; padding: 15px 16px; border-radius: 22px; flex-shrink: 0;">
+      <span class="nm-in-s" style="width: 25px; height: 25px; border-radius: 9px; background: #E3E8F0; flex-shrink: 0; margin-top: 2px;"></span>
+      <div style="flex-grow: 1;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+          <span class="mono" style="font-size: 12px; font-weight: 600; color: #01579B;">WH/OUT/00034</span>
+          <span style="flex-grow: 1;"></span>
+          <span class="mono" style="font-size: 11px; color: #79839A;">from WH/IN/00041</span>
+        </div>
+        <div style="font-size: 16px; font-weight: 700; margin-bottom: 5px;">Dharmanandan Diamonds</div>
+        <div style="font-size: 13px; color: #586178; line-height: 1.45; margin-bottom: 8px;">Gate 3, Sachin GIDC, Surat</div>
+        <div class="mono" style="font-size: 12px; font-weight: 600; color: #3D4658;">8 pcs &middot; 4.32 ct</div>
+      </div>
+    </div>
+
+    <div class="nm-up" style="display: flex; gap: 13px; padding: 15px 16px; border-radius: 22px; flex-shrink: 0;">
+      <span class="nm-in-s" style="width: 25px; height: 25px; border-radius: 9px; background: #E3E8F0; flex-shrink: 0; margin-top: 2px;"></span>
+      <div style="flex-grow: 1;">
+        <div class="mono" style="font-size: 12px; font-weight: 600; color: #01579B; margin-bottom: 6px;">WH/OUT/00036</div>
+        <div style="font-size: 16px; font-weight: 700;">Shree Ramkrishna Exports</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="padding: 12px 0 22px; flex-shrink: 0; display: flex; flex-direction: column; gap: 10px;">
+    <div style="display: flex; align-items: center; gap: 8px; justify-content: center;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7A4A00" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.2V12l3.2 1.9"></path></svg>
+      <span style="font-size: 12px; font-weight: 700; color: #7A4A00;">Someone else may take these first</span>
+    </div>
+    <div style="display: flex; gap: 11px;">
+      <button class="nm-up" style="height: 56px; padding: 0 20px; border-radius: 19px; font-size: 15px; font-weight: 700; color: #4C5568;">Clear</button>
+      <a href="Field-09-Deliver.dc.html" class="nm-acc" style="flex-grow: 1; display: flex; align-items: center; justify-content: center; gap: 10px; height: 56px; border-radius: 19px; background: #03A9F4; color: #06283D; font-size: 16px; font-weight: 700;">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7.5h10v9H3z"></path><path d="M13 10.5h4l3.2 3.2v2.8H13z"></path><circle cx="7" cy="18" r="1.9"></circle><circle cx="17" cy="18" r="1.9"></circle></svg>
+        Take 2 out
+      </a>
+    </div>
+  </div>
+
+</div></div>
+<figcaption><span class="lbl">Take parcels out</span><span class="api">POST /deliveries/take</span><span class="src">Field-08-Deliveries.dc.html</span></figcaption>
+</figure>
+<figure class="board">
+<div class="frame"><div style="width: 390px; height: 844px; box-sizing: border-box; padding: 22px 20px 0; display: flex; flex-direction: column; gap: 15px;">
+
+  <div style="display: flex; align-items: center; gap: 12px;">
+    <a href="Field-08-Deliveries.dc.html" class="nm-up" style="width: 44px; height: 44px; border-radius: 15px; display: flex; align-items: center; justify-content: center;" aria-label="Back">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3D4658" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+    </a>
+    <div style="flex-grow: 1;">
+      <h1 class="disp" style="margin: 0 0 2px; font-size: 21px; font-weight: 700;">Proof of delivery</h1>
+      <div class="mono" style="font-size: 12px; color: #586178;">WH/OUT/00031 &middot; Kiran Gems</div>
+    </div>
+  </div>
+
+  <label style="display: block;">
+    <span style="display: block; font-size: 13px; font-weight: 800; color: #3D4658; margin-bottom: 10px;">Who received it <span style="color: #8E2A25;">required</span></span>
+    <span class="nm-in" style="display: flex; align-items: center; gap: 12px; padding: 16px 18px; border-radius: 18px;">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#79839A" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8.5" r="3.6"></circle><path d="M4.8 20a7.4 7.4 0 0 1 14.4 0"></path></svg>
+      <input class="filled" type="text" placeholder="Jayesh Patel" style="font-size: 15px; font-weight: 600;">
+    </span>
+  </label>
+
+  <div>
+    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+      <span style="font-size: 13px; font-weight: 800; color: #3D4658;">Signature <span style="color: #8E2A25;">required</span></span>
+      <span style="flex-grow: 1;"></span>
+      <button class="nm-up-s" style="padding: 7px 13px; border-radius: 12px; font-size: 12px; font-weight: 700; color: #4C5568;">Clear</button>
+    </div>
+    <div class="nm-in" style="height: 150px; border-radius: 20px; display: flex; align-items: center; justify-content: center;">
+      <svg width="280" height="96" viewBox="0 0 280 96" fill="none" stroke="#1F2A4D" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-label="A signature drawn on screen"><path d="M18 66c10-30 16-40 22-38s2 40 9 42 12-30 19-30 5 22 12 22 11-18 18-26"></path><path d="M104 40c14 4 22-6 28-14s-2-12-9-5-9 28-2 38 24 4 33-8"></path><path d="M162 58c8-18 14-28 20-26s3 26 9 26 12-16 18-22"></path><path d="M212 50c12 2 24-2 34-10"></path><path d="M148 74c30 6 62 6 92-2"></path></svg>
+    </div>
+  </div>
+
+  <div>
+    <div style="font-size: 13px; font-weight: 800; color: #3D4658; margin-bottom: 10px;">Photos <span style="font-weight: 600; color: #79839A;">optional</span></div>
+    <div style="display: flex; gap: 11px;">
+      <button class="nm-up" style="width: 78px; height: 78px; border-radius: 20px; background: #E3E8F0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#01579B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8.5h3l1.4-2h7.2L17 8.5h3a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1Z"></path><circle cx="12" cy="13.2" r="3.2"></circle></svg>
+        <span style="font-size: 11px; font-weight: 800; color: #01579B;">Add</span>
+      </button>
+      <div class="nm-in" style="flex-grow: 1; border-radius: 20px; display: flex; align-items: center; padding: 0 16px;">
+        <span style="font-size: 12px; color: #586178; line-height: 1.5;">A signature already evidences the handover.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="nm-up" style="display: flex; align-items: center; gap: 12px; padding: 13px 16px; border-radius: 18px;">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1B6B48" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;" aria-hidden="true"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"></path><circle cx="12" cy="10" r="2.6"></circle></svg>
+    <span style="font-size: 13px; font-weight: 600; color: #3D4658; flex-grow: 1;">Location attached</span>
+    <span class="mono" style="font-size: 11px; color: #586178;">&plusmn;8 m</span>
+  </div>
+
+  <div style="flex-grow: 1;"></div>
+
+  <div style="display: flex; flex-direction: column; gap: 12px; padding-bottom: 22px;">
+    <div class="nm-in" style="display: flex; gap: 11px; padding: 13px 15px; border-radius: 16px;">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#7A4A00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 1px;" aria-hidden="true"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.2V12l3.2 1.9"></path></svg>
+      <span style="font-size: 12px; color: #586178; line-height: 1.5;">Offline the signature goes up first, then the delivery. Both stay queued until they do.</span>
+    </div>
+    <a href="Field-10-Conflict.dc.html" class="nm-acc" style="display: flex; align-items: center; justify-content: center; gap: 10px; height: 56px; border-radius: 19px; background: #03A9F4; color: #06283D; font-size: 16px; font-weight: 700;">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+      Mark delivered
+    </a>
+  </div>
+
+</div></div>
+<figcaption><span class="lbl">Proof of delivery</span><span class="api">POST /deliveries/{id}/deliver</span><span class="src">Field-09-Deliver.dc.html</span></figcaption>
+</figure>
+<figure class="board">
+<div class="frame"><div style="width: 390px; height: 844px; box-sizing: border-box; padding: 26px 20px 0; display: flex; flex-direction: column; gap: 13px;">
+
+  <div style="display: flex; align-items: center; gap: 12px;">
+    <div style="flex-grow: 1;">
+      <h1 class="disp" style="margin: 0 0 2px; font-size: 26px; font-weight: 700; letter-spacing: -0.01em;">Deliveries</h1>
+      <p style="margin: 0; font-size: 13px; color: #586178;">3 out with you</p>
+    </div>
+    <a href="Field-08-Deliveries.dc.html" class="nm-up" style="width: 44px; height: 44px; border-radius: 15px; display: flex; align-items: center; justify-content: center;" aria-label="Refresh">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#3D4658" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.6-5.9"></path><path d="M20 4.5V10h-5.5"></path></svg>
+    </a>
+  </div>
+
+  <div class="nm-in" style="display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-radius: 16px;">
+    <span style="width: 9px; height: 9px; border-radius: 50%; background: #1B6B48; box-shadow: 0 0 0 3px rgba(27,107,72,.18);"></span>
+    <span style="font-size: 12px; font-weight: 700; color: #1B6B48;">Online</span>
+    <span style="width: 1px; height: 13px; background: #C9D1DF;"></span>
+    <span style="font-size: 12px; color: #586178; flex-grow: 1;">Queue flushed just now</span>
+    <a href="Field-14-Outbox.dc.html" class="nm-up-s" style="padding: 6px 11px; border-radius: 12px; background: #D5E8DE; color: #1B6B48; font-size: 12px; font-weight: 800;">All sent</a>
+  </div>
+
+  <div style="flex-grow: 1; overflow: hidden; display: flex; flex-direction: column; gap: 12px;">
+
+    <div class="nm-up" style="padding: 16px 17px; border-radius: 22px; flex-shrink: 0;">
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 7px;">
+        <span class="mono" style="font-size: 12px; font-weight: 600; color: #57479B;">WH/OUT/00033</span>
+        <span style="flex-grow: 1;"></span>
+        <span style="padding: 5px 10px; border-radius: 11px; background: #E2DEF2; color: #57479B; font-size: 11px; font-weight: 800;">Someone else</span>
+      </div>
+      <div style="font-size: 16px; font-weight: 700; margin-bottom: 12px; color: #4C5568;">Laxmi Diamond</div>
+      <div class="nm-in-s" style="display: flex; gap: 12px; padding: 14px 15px; border-radius: 17px; background: #DFDCEC; margin-bottom: 12px;">
+        <span style="width: 34px; height: 34px; border-radius: 12px; background: #57479B; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: #FFFFFF; font-size: 13px; font-weight: 800;">R</span>
+        <div style="flex-grow: 1;">
+          <div style="font-size: 14px; font-weight: 700; color: #3A2F6B; margin-bottom: 3px;">Rakesh took this at <span class="mono">09:12</span></div>
+          <div style="font-size: 12px; color: #574C7E; line-height: 1.5;">Your tap at <span class="mono">09:11</span> did not land. Nothing else in your queue was held up.</div>
+        </div>
+      </div>
+      <button class="nm-up-s" style="width: 100%; padding: 12px 0; border-radius: 15px; font-size: 14px; font-weight: 700; color: #4C5568;">Got it</button>
+    </div>
+
+    <div class="nm-up" style="display: flex; gap: 13px; padding: 15px 16px; border-radius: 22px; flex-shrink: 0;">
+      <span style="width: 34px; height: 34px; border-radius: 12px; background: #DCE2EB; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#01579B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7.5h10v9H3z"></path><path d="M13 10.5h4l3.2 3.2v2.8H13z"></path><circle cx="7" cy="18" r="1.9"></circle><circle cx="17" cy="18" r="1.9"></circle></svg>
+      </span>
+      <div style="flex-grow: 1;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 5px;">
+          <span class="mono" style="font-size: 12px; font-weight: 600; color: #01579B;">WH/OUT/00031</span>
+          <span style="flex-grow: 1;"></span>
+          <span style="padding: 5px 10px; border-radius: 11px; background: #D5E8DE; color: #1B6B48; font-size: 11px; font-weight: 800;">Out with you</span>
+        </div>
+        <div style="font-size: 16px; font-weight: 700; margin-bottom: 5px;">Kiran Gems</div>
+        <div style="font-size: 13px; color: #586178;">Since <span class="mono">09:14</span> &middot; 12, Mahidharpura</div>
+      </div>
+    </div>
+
+    <a href="Field-09-Deliver.dc.html" class="nm-up" style="display: flex; gap: 13px; padding: 15px 16px; border-radius: 22px; flex-shrink: 0;">
+      <span style="width: 34px; height: 34px; border-radius: 12px; background: #DCE2EB; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#01579B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7.5h10v9H3z"></path><path d="M13 10.5h4l3.2 3.2v2.8H13z"></path><circle cx="7" cy="18" r="1.9"></circle><circle cx="17" cy="18" r="1.9"></circle></svg>
+      </span>
+      <div style="flex-grow: 1;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 5px;">
+          <span class="mono" style="font-size: 12px; font-weight: 600; color: #01579B;">WH/OUT/00034</span>
+          <span style="flex-grow: 1;"></span>
+          <span style="padding: 5px 10px; border-radius: 11px; background: #D5E8DE; color: #1B6B48; font-size: 11px; font-weight: 800;">Out with you</span>
+        </div>
+        <div style="font-size: 16px; font-weight: 700; margin-bottom: 5px;">Dharmanandan Diamonds</div>
+        <div style="font-size: 13px; color: #586178;">Since <span class="mono">09:14</span> &middot; Sachin GIDC</div>
+      </div>
+    </a>
+
+  </div>
+
+  <div style="padding: 12px 0 20px; flex-shrink: 0;">
+    <div class="nm-up" style="display: flex; padding: 8px; border-radius: 24px; gap: 7px;">
+      <a href="Field-03-Pickups.dc.html" style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 11px 0; border-radius: 18px; color: #586178;">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 20.5 7.5v9L12 21l-8.5-4.5v-9L12 3Z"></path><path d="M3.5 7.5 12 12l8.5-4.5M12 12v9"></path></svg>
+        <span style="font-size: 11px; font-weight: 700;">Pickups</span>
+      </a>
+      <span class="nm-in-s" style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 11px 0; border-radius: 18px; background: #DDE3EC; color: #01579B;">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7.5h10v9H3z"></path><path d="M13 10.5h4l3.2 3.2v2.8H13z"></path><circle cx="7" cy="18" r="1.9"></circle><circle cx="17" cy="18" r="1.9"></circle></svg>
+        <span style="font-size: 11px; font-weight: 800;">Deliveries</span>
+      </span>
+      <a href="Field-11-JobWork.dc.html" style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 11px 0; border-radius: 18px; color: #586178;">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13.5" r="7"></circle><path d="M12 10v3.8l2.4 1.4M9.5 3.5h5"></path></svg>
+        <span style="font-size: 11px; font-weight: 700;">Job work</span>
+      </a>
+    </div>
+  </div>
+
+</div></div>
+<figcaption><span class="lbl">Lost the race</span><span class="api">409 ALREADY_TAKEN</span><span class="src">Field-10-Conflict.dc.html</span></figcaption>
+</figure>
+</div>
+</section>
+<section id="field-jobwork">
+<header class="sec">
+<h2>Field app — job work</h2>
+<p>Everything here queues except finishing, which runs the stock chain in Odoo.</p>
+</header>
+<div class="rail">
+<figure class="board">
+<div class="frame"><div style="width: 390px; height: 844px; box-sizing: border-box; padding: 26px 20px 0; display: flex; flex-direction: column; gap: 13px;">
+
+  <div style="display: flex; align-items: center; gap: 12px;">
+    <div style="flex-grow: 1;">
+      <h1 class="disp" style="margin: 0 0 2px; font-size: 26px; font-weight: 700; letter-spacing: -0.01em;">Job work</h1>
+      <p style="margin: 0; font-size: 13px; color: #586178;">6 receipts in progress</p>
+    </div>
+    <a href="Field-15-NeedsAttention.dc.html" class="nm-up" style="width: 44px; height: 44px; border-radius: 15px; display: flex; align-items: center; justify-content: center;" aria-label="Account">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3D4658" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8.5" r="3.6"></circle><path d="M4.8 20a7.4 7.4 0 0 1 14.4 0"></path></svg>
+    </a>
+  </div>
+
+  <div class="nm-in" style="display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-radius: 16px;">
+    <span style="width: 9px; height: 9px; border-radius: 50%; background: #1B6B48; box-shadow: 0 0 0 3px rgba(27,107,72,.18);"></span>
+    <span style="font-size: 12px; font-weight: 700; color: #1B6B48;">Online</span>
+    <span style="width: 1px; height: 13px; background: #C9D1DF;"></span>
+    <span style="font-size: 12px; color: #586178; flex-grow: 1;">Synced 40 s ago</span>
+    <a href="Field-14-Outbox.dc.html" class="nm-up-s" style="padding: 6px 11px; border-radius: 12px; background: #F3E2C4; color: #7A4A00; font-size: 12px; font-weight: 800;">1 queued</a>
+  </div>
+
+  <div class="nm-up" style="padding: 18px; border-radius: 24px; flex-shrink: 0;">
+    <div style="display: flex; align-items: center; gap: 9px; margin-bottom: 13px;">
+      <span style="width: 8px; height: 8px; border-radius: 50%; background: #1B6B48; box-shadow: 0 0 0 4px rgba(27,107,72,.16);"></span>
+      <span style="font-size: 12px; font-weight: 800; color: #1B6B48; letter-spacing: 0.05em; text-transform: uppercase;">Running</span>
+      <span style="flex-grow: 1;"></span>
+      <span class="mono" style="font-size: 12px; font-weight: 600; color: #01579B;">WH/IN/00042</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 16px;">
+      <div class="nm-in" style="width: 128px; height: 128px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; gap: 2px;">
+        <span class="mono" style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em;">01:24</span>
+        <span class="mono" style="font-size: 12px; color: #586178;">:06</span>
+      </div>
+      <div style="flex-grow: 1;">
+        <div style="font-size: 17px; font-weight: 700; margin-bottom: 6px;">Kiran Gems</div>
+        <div style="display: flex; align-items: center; gap: 7px; margin-bottom: 12px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#79839A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V6.5L12 3l8 3.5V20"></path><path d="M4 20h16M9.5 20v-4.5h5V20"></path></svg>
+          <span style="font-size: 13px; font-weight: 600; color: #586178;">Polishing</span>
+        </div>
+        <div class="mono" style="font-size: 12px; color: #586178;">4.25 h booked today</div>
+      </div>
+    </div>
+    <div style="display: flex; gap: 10px; margin-top: 16px;">
+      <button class="nm-up" style="flex-grow: 1; height: 50px; border-radius: 17px; font-size: 15px; font-weight: 700; color: #8E2A25; display: flex; align-items: center; justify-content: center; gap: 9px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="6.5" y="6.5" width="11" height="11" rx="2"></rect></svg>
+        Stop timer
+      </button>
+      <a href="Field-13-FinishBlocked.dc.html" class="nm-up" style="width: 50px; height: 50px; border-radius: 17px; display: flex; align-items: center; justify-content: center;" aria-label="Open receipt">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#01579B" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg>
+      </a>
+    </div>
+  </div>
+
+  <div style="flex-grow: 1; overflow: hidden; display: flex; flex-direction: column; gap: 12px;">
+
+    <a href="Field-13-FinishBlocked.dc.html" class="nm-up" style="display: flex; align-items: center; gap: 13px; padding: 15px 16px; border-radius: 22px; flex-shrink: 0;">
+      <div style="flex-grow: 1;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+          <span class="mono" style="font-size: 12px; font-weight: 600; color: #01579B;">WH/IN/00039</span>
+          <span style="flex-grow: 1;"></span>
+          <span style="padding: 4px 9px; border-radius: 10px; background: #D7DCE6; color: #4C5568; font-size: 11px; font-weight: 800;">Cutting</span>
+        </div>
+        <div style="font-size: 16px; font-weight: 700; margin-bottom: 5px;">Laxmi Diamond</div>
+        <div class="mono" style="font-size: 12px; color: #586178;">2.75 h &middot; 61 pcs &middot; 12.40 ct</div>
+      </div>
+      <button class="nm-up-s" style="width: 46px; height: 46px; border-radius: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;" aria-label="Start timer">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="#01579B" stroke="none" aria-hidden="true"><path d="M8 5.5v13l11-6.5Z"></path></svg>
+      </button>
+    </a>
+
+    <a href="Field-12-Department.dc.html" class="nm-up" style="display: flex; align-items: center; gap: 13px; padding: 15px 16px; border-radius: 22px; flex-shrink: 0;">
+      <div style="flex-grow: 1;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+          <span class="mono" style="font-size: 12px; font-weight: 600; color: #01579B;">WH/IN/00041</span>
+          <span style="flex-grow: 1;"></span>
+          <span style="padding: 4px 9px; border-radius: 10px; background: #F3E2C4; color: #7A4A00; font-size: 11px; font-weight: 800;">Move queued</span>
+        </div>
+        <div style="font-size: 16px; font-weight: 700; margin-bottom: 5px;">Dharmanandan Diamonds</div>
+        <div class="mono" style="font-size: 12px; color: #586178;">1.50 h &middot; Cutting to Polishing</div>
+      </div>
+      <button class="nm-up-s" style="width: 46px; height: 46px; border-radius: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;" aria-label="Start timer">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="#01579B" stroke="none" aria-hidden="true"><path d="M8 5.5v13l11-6.5Z"></path></svg>
+      </button>
+    </a>
+
+    <div class="nm-up" style="padding: 15px 16px; border-radius: 22px; flex-shrink: 0;">
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+        <span class="mono" style="font-size: 12px; font-weight: 600; color: #01579B;">WH/IN/00045</span>
+        <span style="flex-grow: 1;"></span>
+        <span style="padding: 4px 9px; border-radius: 10px; background: #D7DCE6; color: #4C5568; font-size: 11px; font-weight: 800;">Boiling</span>
+      </div>
+      <div style="font-size: 16px; font-weight: 700;">Shree Ramkrishna Exports</div>
+    </div>
+
+  </div>
+
+  <div style="padding: 12px 0 20px; flex-shrink: 0;">
+    <div class="nm-up" style="display: flex; padding: 8px; border-radius: 24px; gap: 7px;">
+      <a href="Field-03-Pickups.dc.html" style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 11px 0; border-radius: 18px; color: #586178;">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 20.5 7.5v9L12 21l-8.5-4.5v-9L12 3Z"></path><path d="M3.5 7.5 12 12l8.5-4.5M12 12v9"></path></svg>
+        <span style="font-size: 11px; font-weight: 700;">Pickups</span>
+      </a>
+      <a href="Field-08-Deliveries.dc.html" style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 11px 0; border-radius: 18px; color: #586178;">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7.5h10v9H3z"></path><path d="M13 10.5h4l3.2 3.2v2.8H13z"></path><circle cx="7" cy="18" r="1.9"></circle><circle cx="17" cy="18" r="1.9"></circle></svg>
+        <span style="font-size: 11px; font-weight: 700;">Deliveries</span>
+      </a>
+      <span class="nm-in-s" style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 11px 0; border-radius: 18px; background: #DDE3EC; color: #01579B;">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13.5" r="7"></circle><path d="M12 10v3.8l2.4 1.4M9.5 3.5h5"></path></svg>
+        <span style="font-size: 11px; font-weight: 800;">Job work</span>
+      </span>
+    </div>
+  </div>
+
+</div></div>
+<figcaption><span class="lbl">Job work and timer</span><span class="api">POST /jobwork/{id}/timer</span><span class="src">Field-11-JobWork.dc.html</span></figcaption>
+</figure>
+<figure class="board">
+<div class="frame"><div style="width: 390px; height: 844px; box-sizing: border-box; padding: 22px 20px 0; display: flex; flex-direction: column;">
+
+  <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 22px;">
+    <a href="Field-11-JobWork.dc.html" class="nm-up" style="width: 44px; height: 44px; border-radius: 15px; display: flex; align-items: center; justify-content: center;" aria-label="Back">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3D4658" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+    </a>
+    <div style="flex-grow: 1;">
+      <h1 class="disp" style="margin: 0 0 2px; font-size: 21px; font-weight: 700;">Move department</h1>
+      <div class="mono" style="font-size: 12px; color: #586178;">WH/IN/00041 &middot; Dharmanandan</div>
+    </div>
+  </div>
+
+  <div class="nm-in" style="display: flex; align-items: center; gap: 14px; padding: 18px; border-radius: 22px; margin-bottom: 24px;">
+    <div style="flex-grow: 1;">
+      <div style="font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #79839A; margin-bottom: 5px;">Now in</div>
+      <div style="font-size: 17px; font-weight: 700;">Cutting</div>
+    </div>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#79839A" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"></path></svg>
+    <div style="flex-grow: 1; text-align: right;">
+      <div style="font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #79839A; margin-bottom: 5px;">Moving to</div>
+      <div style="font-size: 17px; font-weight: 700; color: #01579B;">Polishing</div>
+    </div>
+  </div>
+
+  <div style="font-size: 13px; font-weight: 800; color: #3D4658; margin-bottom: 12px;">Departments</div>
+
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <button class="nm-up" style="display: flex; align-items: center; gap: 13px; padding: 15px 17px; border-radius: 18px; width: 100%; text-align: left;">
+      <span class="nm-in-s" style="width: 22px; height: 22px; border-radius: 50%; background: #E3E8F0; flex-shrink: 0;"></span>
+      <span style="font-size: 15px; font-weight: 600; color: #3D4658; flex-grow: 1;">Cutting</span>
+      <span class="mono" style="font-size: 11px; color: #79839A;">now</span>
+    </button>
+    <button class="nm-in-s" style="display: flex; align-items: center; gap: 13px; padding: 15px 17px; border-radius: 18px; background: #DDE3EC; width: 100%; text-align: left;">
+      <span class="nm-up-s" style="width: 22px; height: 22px; border-radius: 50%; background: #03A9F4; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+      </span>
+      <span style="font-size: 15px; font-weight: 700; flex-grow: 1;">Polishing</span>
+    </button>
+    <button class="nm-up" style="display: flex; align-items: center; gap: 13px; padding: 15px 17px; border-radius: 18px; width: 100%; text-align: left;">
+      <span class="nm-in-s" style="width: 22px; height: 22px; border-radius: 50%; background: #E3E8F0; flex-shrink: 0;"></span>
+      <span style="font-size: 15px; font-weight: 600; color: #3D4658; flex-grow: 1;">Boiling</span>
+    </button>
+    <button class="nm-up" style="display: flex; align-items: center; gap: 13px; padding: 15px 17px; border-radius: 18px; width: 100%; text-align: left;">
+      <span class="nm-in-s" style="width: 22px; height: 22px; border-radius: 50%; background: #E3E8F0; flex-shrink: 0;"></span>
+      <span style="font-size: 15px; font-weight: 600; color: #3D4658; flex-grow: 1;">Assortment</span>
+    </button>
+    <button class="nm-up" style="display: flex; align-items: center; gap: 13px; padding: 15px 17px; border-radius: 18px; width: 100%; text-align: left;">
+      <span class="nm-in-s" style="width: 22px; height: 22px; border-radius: 50%; background: #E3E8F0; flex-shrink: 0;"></span>
+      <span style="font-size: 15px; font-weight: 600; color: #3D4658; flex-grow: 1;">Final checking</span>
+    </button>
+  </div>
+
+  <div class="nm-in" style="display: flex; gap: 11px; padding: 15px 16px; border-radius: 18px; margin-top: 22px;">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#586178" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 1px;" aria-hidden="true"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.2V12l3.2 1.9"></path></svg>
+    <div style="font-size: 12px; color: #586178; line-height: 1.55;">A running timer is banked against <strong style="color: #3D4658;">Cutting</strong> before the move.</div>
+  </div>
+
+  <div style="flex-grow: 1;"></div>
+
+  <div style="display: flex; flex-direction: column; gap: 11px; padding-bottom: 22px;">
+    <div style="display: flex; align-items: center; gap: 7px; justify-content: center;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1B6B48" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+      <span style="font-size: 12px; font-weight: 700; color: #1B6B48;">Works offline</span>
+    </div>
+    <a href="Field-11-JobWork.dc.html" class="nm-acc" style="display: flex; align-items: center; justify-content: center; height: 56px; border-radius: 19px; background: #03A9F4; color: #06283D; font-size: 16px; font-weight: 700;">Move to Polishing</a>
+  </div>
+
+</div></div>
+<figcaption><span class="lbl">Move department</span><span class="api">POST /jobwork/{id}/department</span><span class="src">Field-12-Department.dc.html</span></figcaption>
+</figure>
+<figure class="board">
+<div class="frame"><div style="width: 390px; height: 844px; box-sizing: border-box; padding: 22px 20px 0; display: flex; flex-direction: column; gap: 14px;">
+
+  <div style="display: flex; align-items: center; gap: 12px;">
+    <a href="Field-11-JobWork.dc.html" class="nm-up" style="width: 44px; height: 44px; border-radius: 15px; display: flex; align-items: center; justify-content: center;" aria-label="Back">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3D4658" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+    </a>
+    <div style="flex-grow: 1;">
+      <div class="mono" style="font-size: 15px; font-weight: 600; color: #01579B;">WH/IN/00039</div>
+      <div style="font-size: 12px; color: #586178;">Laxmi Diamond &middot; Cutting</div>
+    </div>
+    <a href="Field-12-Department.dc.html" class="nm-up" style="width: 44px; height: 44px; border-radius: 15px; display: flex; align-items: center; justify-content: center;" aria-label="Move department">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#01579B" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"></path></svg>
+    </a>
+  </div>
+
+  <div class="nm-in" style="display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-radius: 16px;">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4C5568" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 6.5l17 17"></path><path d="M4.8 11.2a12 12 0 0 1 4.4-2.6M14.8 8.6a12 12 0 0 1 4.4 2.6"></path><path d="M8.2 15a7 7 0 0 1 3.1-1.7"></path><circle cx="12" cy="19" r="1.1" fill="#4C5568" stroke="none"></circle></svg>
+    <span style="font-size: 12px; font-weight: 700; color: #4C5568;">Offline</span>
+    <span style="width: 1px; height: 13px; background: #C9D1DF;"></span>
+    <span style="font-size: 12px; color: #586178; flex-grow: 1;">Synced 6 min ago</span>
+  </div>
+
+  <div style="display: flex; gap: 11px;">
+    <div class="nm-up" style="flex-grow: 1; padding: 14px 16px; border-radius: 19px;">
+      <div style="font-size: 11px; font-weight: 800; letter-spacing: 0.07em; text-transform: uppercase; color: #79839A; margin-bottom: 6px;">Booked</div>
+      <div class="mono" style="font-size: 19px; font-weight: 600;">2.75 h</div>
+    </div>
+    <div class="nm-up" style="flex-grow: 1; padding: 14px 16px; border-radius: 19px;">
+      <div style="font-size: 11px; font-weight: 800; letter-spacing: 0.07em; text-transform: uppercase; color: #79839A; margin-bottom: 6px;">Total</div>
+      <div class="mono" style="font-size: 19px; font-weight: 600;">61 / 12.40</div>
+    </div>
+  </div>
+
+  <div class="nm-up" style="padding: 16px 17px; border-radius: 22px; flex-grow: 1; overflow: hidden;">
+    <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 12px;">
+      <span style="font-size: 13px; font-weight: 800; color: #3D4658;">Items</span>
+      <span style="font-size: 12px; color: #79839A; flex-grow: 1;">entered by the office</span>
+      <span style="padding: 4px 9px; border-radius: 9px; background: #D7DCE6; color: #4C5568; font-size: 10px; font-weight: 800;">READ ONLY</span>
+    </div>
+    <div style="display: grid; grid-template-columns: 20px 1fr 42px 52px; gap: 0 8px; font-size: 12px;">
+      <span class="mono" style="font-size: 10px; font-weight: 600; color: #79839A; padding-bottom: 8px; border-bottom: 1px solid #D3DAE5;">SR</span>
+      <span class="mono" style="font-size: 10px; font-weight: 600; color: #79839A; padding-bottom: 8px; border-bottom: 1px solid #D3DAE5;">SIZE</span>
+      <span class="mono" style="font-size: 10px; font-weight: 600; color: #79839A; padding-bottom: 8px; border-bottom: 1px solid #D3DAE5; text-align: right;">PCS</span>
+      <span class="mono" style="font-size: 10px; font-weight: 600; color: #79839A; padding-bottom: 8px; border-bottom: 1px solid #D3DAE5; text-align: right;">CTS</span>
+
+      <span class="mono" style="padding: 10px 0; color: #79839A;">1</span>
+      <span style="padding: 10px 0; font-weight: 600;">0.30&ndash;0.35</span>
+      <span class="mono" style="padding: 10px 0; text-align: right; font-weight: 600;">24</span>
+      <span class="mono" style="padding: 10px 0; text-align: right; font-weight: 600;">7.85</span>
+
+      <span class="mono" style="padding: 10px 0; color: #79839A;">2</span>
+      <span style="padding: 10px 0; font-weight: 600;">0.18&ndash;0.22</span>
+      <span class="mono" style="padding: 10px 0; text-align: right; font-weight: 600;">37</span>
+      <span class="mono" style="padding: 10px 0; text-align: right; font-weight: 600;">4.55</span>
+
+      <span class="mono" style="padding: 10px 0; color: #79839A;">3</span>
+      <span style="padding: 10px 0; font-weight: 600;">0.40&ndash;0.45</span>
+      <span class="mono" style="padding: 10px 0; text-align: right; font-weight: 600;">&mdash;</span>
+      <span class="mono" style="padding: 10px 0; text-align: right; font-weight: 600;">&mdash;</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px; margin-top: 10px; padding-top: 12px; border-top: 1px solid #D3DAE5;">
+      <span style="font-size: 12px; color: #79839A;">Row 3 has a chip on 4 noted</span>
+    </div>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 11px; padding-bottom: 22px;">
+    <div class="nm-in" style="display: flex; gap: 12px; padding: 15px 16px; border-radius: 18px;">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#4C5568" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 1px;" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2.2"></rect><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"></path></svg>
+      <div>
+        <div style="font-size: 13px; font-weight: 700; color: #4C5568; margin-bottom: 3px;">Finishing needs a connection</div>
+        <div style="font-size: 12px; color: #586178; line-height: 1.5;">It runs the stock checks in the office system, and those cannot be answered on the phone.</div>
+      </div>
+    </div>
+    <button style="display: flex; align-items: center; justify-content: center; gap: 10px; height: 56px; border-radius: 19px; background: #DCE1EA; color: #79839A; font-size: 16px; font-weight: 700; box-shadow: none; cursor: not-allowed;" disabled="">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2.2"></rect><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"></path></svg>
+      Finish job work
+    </button>
+    <div style="display: flex; gap: 11px;">
+      <a href="Field-11-JobWork.dc.html" class="nm-up" style="flex-grow: 1; display: flex; align-items: center; justify-content: center; gap: 9px; height: 52px; border-radius: 18px; font-size: 15px; font-weight: 700; color: #01579B;">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="#01579B" stroke="none" aria-hidden="true"><path d="M8 5.5v13l11-6.5Z"></path></svg>
+        Start timer
+      </a>
+      <a href="Field-12-Department.dc.html" class="nm-up" style="flex-grow: 1; display: flex; align-items: center; justify-content: center; height: 52px; border-radius: 18px; font-size: 15px; font-weight: 700; color: #4C5568;">Move</a>
+    </div>
+  </div>
+
+</div></div>
+<figcaption><span class="lbl">Finish needs a signal</span><span class="api">POST /jobwork/{id}/finish — online only</span><span class="src">Field-13-FinishBlocked.dc.html</span></figcaption>
+</figure>
+</div>
+</section>
+<section id="field-queue">
+<header class="sec">
+<h2>Field app — the queue, and the states nobody designs</h2>
+<p>The outbox screen is the most valuable support feature in the app.</p>
+</header>
+<div class="rail">
+<figure class="board">
+<div class="frame"><div style="width: 390px; height: 844px; box-sizing: border-box; padding: 22px 20px 0; display: flex; flex-direction: column; gap: 14px;">
+
+  <div style="display: flex; align-items: center; gap: 12px;">
+    <a href="Field-04-Pickups-Offline.dc.html" class="nm-up" style="width: 44px; height: 44px; border-radius: 15px; display: flex; align-items: center; justify-content: center;" aria-label="Back">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3D4658" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+    </a>
+    <div style="flex-grow: 1;">
+      <h1 class="disp" style="margin: 0 0 2px; font-size: 21px; font-weight: 700;">Waiting to send</h1>
+      <div style="font-size: 12px; color: #586178;">4 items &middot; oldest captured <span class="mono">10:04</span></div>
+    </div>
+    <a href="Field-15-NeedsAttention.dc.html" class="nm-up" style="width: 44px; height: 44px; border-radius: 15px; display: flex; align-items: center; justify-content: center;" aria-label="Items needing attention">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#8E2A25" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4.5 2.8 20h18.4L12 4.5Z"></path><path d="M12 10.2v4.1"></path><circle cx="12" cy="17" r=".95" fill="#8E2A25" stroke="none"></circle></svg>
+    </a>
+  </div>
+
+  <div class="nm-in" style="display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-radius: 16px;">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4C5568" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 6.5l17 17"></path><path d="M4.8 11.2a12 12 0 0 1 4.4-2.6M14.8 8.6a12 12 0 0 1 4.4 2.6"></path><path d="M8.2 15a7 7 0 0 1 3.1-1.7"></path><circle cx="12" cy="19" r="1.1" fill="#4C5568" stroke="none"></circle></svg>
+    <span style="font-size: 12px; font-weight: 700; color: #4C5568;">Offline</span>
+    <span style="width: 1px; height: 13px; background: #C9D1DF;"></span>
+    <span style="font-size: 12px; color: #586178; flex-grow: 1;">Nothing is lost. It sends itself.</span>
+  </div>
+
+  <div style="flex-grow: 1; overflow: hidden; display: flex; flex-direction: column; gap: 12px;">
+
+    <div class="nm-up" style="padding: 15px 16px; border-radius: 20px; flex-shrink: 0;">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+        <span style="font-size: 15px; font-weight: 700; flex-grow: 1;">Confirm pickup</span>
+        <span style="padding: 5px 10px; border-radius: 11px; background: #F3E2C4; color: #7A4A00; font-size: 11px; font-weight: 800;">Retrying</span>
+      </div>
+      <div class="mono" style="font-size: 12px; color: #586178; margin-bottom: 10px;">WH/IN/00042 &middot; captured 10:04 &middot; 2 pages</div>
+      <div class="nm-in-s" style="display: flex; align-items: center; gap: 9px; padding: 9px 12px; border-radius: 13px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7A4A00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.6-5.9"></path><path d="M20 4.5V10h-5.5"></path></svg>
+        <span style="font-size: 12px; color: #7A4A00; font-weight: 600; flex-grow: 1;">Network timeout &middot; next try in <span class="mono">42 s</span></span>
+      </div>
+    </div>
+
+    <div class="nm-up" style="padding: 15px 16px; border-radius: 20px; flex-shrink: 0;">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+        <span style="font-size: 15px; font-weight: 700; flex-grow: 1;">Signature image</span>
+        <span style="padding: 5px 10px; border-radius: 11px; background: #DCE2EB; color: #01579B; font-size: 11px; font-weight: 800;">Uploading</span>
+      </div>
+      <div class="mono" style="font-size: 12px; color: #586178; margin-bottom: 11px;">WH/OUT/00031 &middot; captured 11:20 &middot; 84 KB</div>
+      <div class="nm-in" style="height: 9px; border-radius: 6px; padding: 0; overflow: hidden;">
+        <div style="width: 62%; height: 9px; border-radius: 6px; background: #03A9F4;"></div>
+      </div>
+    </div>
+
+    <div class="nm-up" style="padding: 15px 16px; border-radius: 20px; flex-shrink: 0;">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+        <span style="font-size: 15px; font-weight: 700; flex-grow: 1;">Mark delivered</span>
+        <span style="padding: 5px 10px; border-radius: 11px; background: #D7DCE6; color: #4C5568; font-size: 11px; font-weight: 800;">Held</span>
+      </div>
+      <div class="mono" style="font-size: 12px; color: #586178; margin-bottom: 10px;">WH/OUT/00031 &middot; captured 11:20 &middot; Jayesh Patel</div>
+      <div class="nm-in-s" style="display: flex; align-items: center; gap: 9px; padding: 9px 12px; border-radius: 13px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4C5568" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"></path></svg>
+        <span style="font-size: 12px; color: #4C5568; font-weight: 600; flex-grow: 1;">Goes after its signature</span>
+      </div>
+    </div>
+
+    <div class="nm-up" style="padding: 15px 16px; border-radius: 20px; flex-shrink: 0;">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+        <span style="font-size: 15px; font-weight: 700; flex-grow: 1; color: #4C5568;">Take for delivery</span>
+        <span style="padding: 5px 10px; border-radius: 11px; background: #E2DEF2; color: #57479B; font-size: 11px; font-weight: 800;">Someone else</span>
+      </div>
+      <div class="mono" style="font-size: 12px; color: #586178; margin-bottom: 10px;">WH/OUT/00033 &middot; captured 09:11</div>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span style="font-size: 12px; color: #574C7E; font-weight: 600; flex-grow: 1;">Rakesh took it at <span class="mono">09:12</span></span>
+        <button class="nm-up-s" style="padding: 8px 14px; border-radius: 12px; font-size: 12px; font-weight: 700; color: #4C5568;">Dismiss</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 11px; padding-bottom: 22px;">
+    <button style="display: flex; align-items: center; justify-content: center; gap: 10px; height: 54px; border-radius: 19px; background: #DCE1EA; color: #79839A; font-size: 15px; font-weight: 700; box-shadow: none; cursor: not-allowed;" disabled="">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.6-5.9"></path><path d="M20 4.5V10h-5.5"></path></svg>
+      Send now &mdash; needs a connection
+    </button>
+  </div>
+
+</div></div>
+<figcaption><span class="lbl">The queue</span><span class="api">outbox, serial per record</span><span class="src">Field-14-Outbox.dc.html</span></figcaption>
+</figure>
+<figure class="board">
+<div class="frame"><div style="width: 390px; height: 844px; box-sizing: border-box; padding: 22px 20px 0; display: flex; flex-direction: column; gap: 15px;">
+
+  <div style="display: flex; align-items: center; gap: 12px;">
+    <a href="Field-14-Outbox.dc.html" class="nm-up" style="width: 44px; height: 44px; border-radius: 15px; display: flex; align-items: center; justify-content: center;" aria-label="Back">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3D4658" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+    </a>
+    <div style="flex-grow: 1;">
+      <h1 class="disp" style="margin: 0 0 2px; font-size: 21px; font-weight: 700;">Needs your attention</h1>
+      <div style="font-size: 12px; color: #586178;">Nothing here sends itself</div>
+    </div>
+  </div>
+
+  <div class="nm-up" style="padding: 17px; border-radius: 22px;">
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 11px;">
+      <span style="width: 34px; height: 34px; border-radius: 12px; background: #F3DAD8; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8E2A25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4.5 2.8 20h18.4L12 4.5Z"></path><path d="M12 10.2v4.1"></path><circle cx="12" cy="17" r=".95" fill="#8E2A25" stroke="none"></circle></svg>
+      </span>
+      <div style="flex-grow: 1;">
+        <div style="font-size: 15px; font-weight: 700;">Mark delivered</div>
+        <div class="mono" style="font-size: 12px; color: #586178;">WH/OUT/00036 &middot; Mon 21/09 16:40</div>
+      </div>
+    </div>
+    <div class="nm-in-s" style="padding: 13px 14px; border-radius: 15px; margin-bottom: 13px;">
+      <div style="font-size: 13px; font-weight: 700; color: #8E2A25; margin-bottom: 5px;">Expires in <span class="mono">23 h</span></div>
+      <div style="font-size: 12px; color: #586178; line-height: 1.55;">The office will not accept an event older than three days. Record it again, or tell them what happened.</div>
+    </div>
+    <div style="display: flex; gap: 10px;">
+      <a href="Field-09-Deliver.dc.html" class="nm-up-s" style="flex-grow: 1; display: flex; align-items: center; justify-content: center; height: 46px; border-radius: 15px; font-size: 14px; font-weight: 700; color: #01579B;">Record it again</a>
+      <button class="nm-up-s" style="padding: 0 18px; height: 46px; border-radius: 15px; font-size: 14px; font-weight: 700; color: #4C5568;">Discard</button>
+    </div>
+  </div>
+
+  <div class="nm-up" style="padding: 17px; border-radius: 22px;">
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 11px;">
+      <span style="width: 34px; height: 34px; border-radius: 12px; background: #F3E2C4; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7A4A00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.2V12l3.2 1.9"></path></svg>
+      </span>
+      <div style="flex-grow: 1;">
+        <div style="font-size: 15px; font-weight: 700;">This phone&rsquo;s clock is wrong</div>
+        <div class="mono" style="font-size: 12px; color: #586178;">3 h 12 m fast</div>
+      </div>
+    </div>
+    <div style="font-size: 13px; color: #586178; line-height: 1.55; margin-bottom: 13px;">Your times are corrected before they are sent, so nothing is mis-recorded. Fix it in the phone settings and this goes away.</div>
+    <button class="nm-up-s" style="width: 100%; height: 46px; border-radius: 15px; font-size: 14px; font-weight: 700; color: #01579B;">Open date &amp; time settings</button>
+  </div>
+
+  <div class="nm-up" style="padding: 17px; border-radius: 22px;">
+    <div style="font-size: 13px; font-weight: 800; color: #3D4658; margin-bottom: 13px;">Your devices</div>
+    <div style="display: flex; align-items: center; gap: 11px; margin-bottom: 13px;">
+      <span class="nm-in-s" style="width: 34px; height: 34px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#01579B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6.5" y="2.5" width="11" height="19" rx="2.6"></rect><path d="M10.5 18.5h3"></path></svg>
+      </span>
+      <div style="flex-grow: 1;">
+        <div style="font-size: 14px; font-weight: 700;">This phone</div>
+        <div class="mono" style="font-size: 11px; color: #586178;">8f2c&hellip;a41 &middot; v1.0.3+14</div>
+      </div>
+      <span style="padding: 5px 10px; border-radius: 11px; background: #D5E8DE; color: #1B6B48; font-size: 11px; font-weight: 800;">In use</span>
+    </div>
+    <div style="height: 1px; background: #D3DAE5; margin-bottom: 13px;"></div>
+    <div style="display: flex; align-items: center; gap: 11px;">
+      <span class="nm-in-s" style="width: 34px; height: 34px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#79839A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6.5" y="2.5" width="11" height="19" rx="2.6"></rect><path d="M10.5 18.5h3"></path></svg>
+      </span>
+      <div style="flex-grow: 1;">
+        <div style="font-size: 14px; font-weight: 700; color: #4C5568;">Old handset</div>
+        <div class="mono" style="font-size: 11px; color: #586178;">last seen 12 Sep</div>
+      </div>
+      <button class="nm-up-s" style="padding: 8px 13px; border-radius: 12px; font-size: 12px; font-weight: 700; color: #8E2A25;">Sign out</button>
+    </div>
+  </div>
+
+  <div style="flex-grow: 1;"></div>
+
+  <a href="Field-16-Revoked.dc.html" class="nm-up" style="display: flex; align-items: center; justify-content: center; height: 52px; border-radius: 18px; font-size: 15px; font-weight: 700; color: #4C5568; margin-bottom: 22px;">Sign out of this phone</a>
+
+</div></div>
+<figcaption><span class="lbl">Needs attention</span><span class="api">STALE_INTENT, CLOCK_SKEW, devices</span><span class="src">Field-15-NeedsAttention.dc.html</span></figcaption>
+</figure>
+<figure class="board">
+<div class="frame"><div style="width: 390px; height: 844px; box-sizing: border-box; padding: 72px 28px 32px; display: flex; flex-direction: column; align-items: center;">
+
+  <div class="nm-in" style="width: 104px; height: 104px; border-radius: 34px; display: flex; align-items: center; justify-content: center; margin-bottom: 32px;">
+    <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#8E2A25" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2.2"></rect><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"></path><path d="M12 14v3"></path></svg>
+  </div>
+
+  <h1 class="disp" style="margin: 0 0 14px; font-size: 26px; font-weight: 700; text-align: center; line-height: 1.25;">This phone was signed out by the office</h1>
+  <p style="margin: 0 0 30px; font-size: 15px; color: #586178; text-align: center; line-height: 1.6;">Everything stored on it has been cleared. Your work that had already been sent is safe.</p>
+
+  <div class="nm-up" style="width: 100%; padding: 18px; border-radius: 22px; margin-bottom: 16px;">
+    <div style="display: flex; align-items: center; gap: 11px; margin-bottom: 14px;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1B6B48" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+      <span style="font-size: 14px; font-weight: 600; flex-grow: 1;">11 items had already been sent</span>
+    </div>
+    <div style="height: 1px; background: #D3DAE5; margin-bottom: 14px;"></div>
+    <div style="display: flex; align-items: flex-start; gap: 11px;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8E2A25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 1px;" aria-hidden="true"><path d="M12 4.5 2.8 20h18.4L12 4.5Z"></path><path d="M12 10.2v4.1"></path><circle cx="12" cy="17" r=".95" fill="#8E2A25" stroke="none"></circle></svg>
+      <div>
+        <div style="font-size: 14px; font-weight: 700; color: #8E2A25; margin-bottom: 4px;">2 items were still waiting</div>
+        <div class="mono" style="font-size: 12px; color: #586178; line-height: 1.6;">WH/IN/00042 confirm &middot; 10:04<br>WH/OUT/00031 delivered &middot; 11:20</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nm-in" style="width: 100%; padding: 15px 17px; border-radius: 18px; box-sizing: border-box;">
+    <div style="font-size: 13px; color: #586178; line-height: 1.6;">Tell the office about those two so they can be entered by hand.</div>
+  </div>
+
+  <div style="flex-grow: 1;"></div>
+
+  <a href="Field-01-SignIn.dc.html" style="width: 100%; box-sizing: border-box; display: flex; align-items: center; justify-content: center; height: 56px; border-radius: 19px; background: #03A9F4; color: #06283D; font-size: 16px; font-weight: 700; box-shadow: 5px 6px 14px rgba(1,87,155,.32), -4px -4px 10px #FFFFFF;">Sign in again</a>
+
+</div></div>
+<figcaption><span class="lbl">Wiped by the office</span><span class="api">401 DEVICE_REVOKED</span><span class="src">Field-16-Revoked.dc.html</span></figcaption>
+</figure>
+</div>
+</section>
+<section id="customer">
+<header class="sec">
+<h2>Customer app — one job, done offline</h2>
+<p>Upload a jangad and arrange a pickup. There is no receipt list and no invoices.</p>
+</header>
+<div class="rail">
+<figure class="board">
+<div class="frame"><div style="width: 390px; height: 844px; box-sizing: border-box; padding: 72px 28px 32px; display: flex; flex-direction: column;">
+
+  <div style="display: flex; flex-direction: column; align-items: center; gap: 18px; margin-bottom: 44px;">
+    <div class="nm-up" style="width: 84px; height: 84px; border-radius: 28px; background: #E3E8F0; display: flex; align-items: center; justify-content: center;">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#0E6F66" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h10l4 6-9 12L3 9l4-6Z"></path><path d="M3 9h18M7 3l2 6 3 12 3-12 2-6"></path></svg>
+    </div>
+    <div style="text-align: center;">
+      <h1 class="disp" style="margin: 0 0 7px; font-size: 27px; font-weight: 700; letter-spacing: -0.01em;">Send your jangad</h1>
+      <p style="margin: 0; font-size: 14px; color: #586178; line-height: 1.55;">Photograph the slip, pick a pickup address,<br>and we collect it.</p>
+    </div>
+  </div>
+
+  <label style="display: block;">
+    <span style="display: block; font-size: 12px; font-weight: 700; color: #586178; margin-bottom: 9px;">Mobile number</span>
+    <span class="nm-in" style="display: flex; align-items: center; gap: 12px; padding: 16px 18px; border-radius: 18px;">
+      <span class="mono" style="font-size: 15px; font-weight: 600; color: #4C5568;">+91</span>
+      <span style="width: 1px; height: 20px; background: #C9D1DF;"></span>
+      <input class="filled mono" type="tel" placeholder="98765 43210" style="font-size: 16px; font-weight: 600; letter-spacing: 0.04em;">
+    </span>
+  </label>
+
+  <a href="Cust-02-Otp.dc.html" class="nm-acc" style="display: flex; align-items: center; justify-content: center; gap: 10px; height: 56px; border-radius: 19px; background: #0E6F66; color: #FFFFFF; font-size: 16px; font-weight: 700; margin-top: 20px;">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 11.6c0 4-3.8 7.2-8.5 7.2a9.7 9.7 0 0 1-2.7-.4L4 20l1.5-3.6a6.8 6.8 0 0 1-2-4.8C3.5 7.6 7.3 4.4 12 4.4s8.5 3.2 8.5 7.2Z"></path></svg>
+    Send code on WhatsApp
+  </a>
+
+  <div class="nm-in" style="display: flex; gap: 12px; padding: 16px 18px; border-radius: 18px; margin-top: 24px;">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#0E6F66" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 1px;" aria-hidden="true"><path d="M20.5 11.6c0 4-3.8 7.2-8.5 7.2a9.7 9.7 0 0 1-2.7-.4L4 20l1.5-3.6a6.8 6.8 0 0 1-2-4.8C3.5 7.6 7.3 4.4 12 4.4s8.5 3.2 8.5 7.2Z"></path></svg>
+    <div>
+      <div style="font-size: 13px; font-weight: 700; color: #0A554E; margin-bottom: 3px;">The code comes on WhatsApp</div>
+      <div style="font-size: 12px; color: #586178; line-height: 1.5;">Not by SMS. Check that the number you type has WhatsApp on it.</div>
+    </div>
+  </div>
+
+  <div style="flex-grow: 1;"></div>
+
+  <div style="text-align: center; font-size: 12px; color: #586178; line-height: 1.6;">New here? The same number signs you up.</div>
+
+</div></div>
+<figcaption><span class="lbl">Mobile number</span><span class="api">POST /auth/otp/request</span><span class="src">Cust-01-Phone.dc.html</span></figcaption>
+</figure>
+<figure class="board">
+<div class="frame"><div style="width: 390px; height: 844px; box-sizing: border-box; padding: 26px 28px 32px; display: flex; flex-direction: column;">
+
+  <a href="Cust-01-Phone.dc.html" class="nm-up" style="width: 44px; height: 44px; border-radius: 15px; display: flex; align-items: center; justify-content: center; margin-bottom: 36px;" aria-label="Back">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3D4658" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+  </a>
+
+  <h1 class="disp" style="margin: 0 0 10px; font-size: 26px; font-weight: 700; letter-spacing: -0.01em;">Enter the code</h1>
+  <p style="margin: 0 0 30px; font-size: 14px; color: #586178; line-height: 1.6;">Sent on WhatsApp to <span class="mono" style="font-weight: 600; color: #3D4658;">+91 98765 43210</span>. <a href="Cust-01-Phone.dc.html" style="font-weight: 700;">Change</a></p>
+
+  <div style="display: flex; gap: 10px; margin-bottom: 22px;">
+    <div class="nm-in" style="flex-grow: 1; height: 64px; border-radius: 18px; display: flex; align-items: center;"><input aria-label="Digit 1" class="filled mono" type="text" placeholder="4" style="font-size: 24px; font-weight: 600;"></div>
+    <div class="nm-in" style="flex-grow: 1; height: 64px; border-radius: 18px; display: flex; align-items: center;"><input aria-label="Digit 2" class="filled mono" type="text" placeholder="7" style="font-size: 24px; font-weight: 600;"></div>
+    <div class="nm-in" style="flex-grow: 1; height: 64px; border-radius: 18px; display: flex; align-items: center;"><input aria-label="Digit 3" class="filled mono" type="text" placeholder="2" style="font-size: 24px; font-weight: 600;"></div>
+    <div class="nm-in" style="flex-grow: 1; height: 64px; border-radius: 18px; display: flex; align-items: center;"><input aria-label="Digit 4" class="filled mono" type="text" placeholder="9" style="font-size: 24px; font-weight: 600;"></div>
+    <div class="nm-in" style="flex-grow: 1; height: 64px; border-radius: 18px; display: flex; align-items: center; box-shadow: inset 5px 5px 11px #C4CCDA, inset -5px -5px 11px #FFFFFF, 0 0 0 2px #0E6F66;"><input aria-label="Digit 5" class="hint mono" type="text" placeholder="0" style="font-size: 24px; font-weight: 600;"></div>
+    <div class="nm-in" style="flex-grow: 1; height: 64px; border-radius: 18px; display: flex; align-items: center;"><input aria-label="Digit 6" class="hint mono" type="text" placeholder="0" style="font-size: 24px; font-weight: 600;"></div>
+  </div>
+
+  <div class="nm-in" style="display: flex; align-items: center; gap: 11px; padding: 14px 17px; border-radius: 17px; margin-bottom: 20px;">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#586178" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.2V12l3.2 1.9"></path></svg>
+    <span style="font-size: 13px; color: #586178; flex-grow: 1;">The code expires in <span class="mono" style="font-weight: 600; color: #3D4658;">4:12</span></span>
+  </div>
+
+  <a href="Cust-03-Register.dc.html" class="nm-acc" style="display: flex; align-items: center; justify-content: center; height: 56px; border-radius: 19px; background: #0E6F66; color: #FFFFFF; font-size: 16px; font-weight: 700;">Verify</a>
+
+  <button style="display: flex; align-items: center; justify-content: center; gap: 9px; height: 52px; border-radius: 18px; background: #DCE1EA; color: #79839A; font-size: 14px; font-weight: 700; box-shadow: none; margin-top: 12px; cursor: not-allowed;" disabled="">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.6-5.9"></path><path d="M20 4.5V10h-5.5"></path></svg>
+    Send again in <span class="mono">0:43</span>
+  </button>
+
+  <div style="flex-grow: 1;"></div>
+
+  <div class="nm-in" style="display: flex; gap: 12px; padding: 15px 17px; border-radius: 18px;">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7A4A00" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 1px;" aria-hidden="true"><path d="M12 4.5 2.8 20h18.4L12 4.5Z"></path><path d="M12 10.2v4.1"></path><circle cx="12" cy="17" r=".95" fill="#7A4A00" stroke="none"></circle></svg>
+    <div style="font-size: 12px; color: #586178; line-height: 1.55;">No message? It may be a WhatsApp problem at our end rather than a wrong number &mdash; we will say so plainly if the send failed.</div>
+  </div>
+
+</div></div>
+<figcaption><span class="lbl">WhatsApp code</span><span class="api">POST /auth/otp/verify</span><span class="src">Cust-02-Otp.dc.html</span></figcaption>
+</figure>
+<figure class="board">
+<div class="frame"><div style="width: 390px; height: 844px; box-sizing: border-box; padding: 26px 28px 32px; display: flex; flex-direction: column;">
+
+  <a href="Cust-02-Otp.dc.html" class="nm-up" style="width: 44px; height: 44px; border-radius: 15px; display: flex; align-items: center; justify-content: center; margin-bottom: 32px;" aria-label="Back">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3D4658" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+  </a>
+
+  <h1 class="disp" style="margin: 0 0 9px; font-size: 26px; font-weight: 700; letter-spacing: -0.01em;">Who are we collecting from?</h1>
+  <p style="margin: 0 0 28px; font-size: 14px; color: #586178; line-height: 1.6;">The number is verified. We need a name for the receipt.</p>
+
+  <label style="display: block; margin-bottom: 20px;">
+    <span style="display: block; font-size: 12px; font-weight: 700; color: #586178; margin-bottom: 9px;">Name or firm <span style="color: #8E2A25;">required</span></span>
+    <span class="nm-in" style="display: flex; align-items: center; gap: 12px; padding: 16px 18px; border-radius: 18px;">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#79839A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V6.5L12 3l8 3.5V20"></path><path d="M4 20h16M9.5 20v-4.5h5V20"></path></svg>
+      <input class="filled" type="text" placeholder="Kiran Gems" style="font-size: 15px; font-weight: 600;">
+    </span>
+  </label>
+
+  <label style="display: block;">
+    <span style="display: flex; align-items: baseline; gap: 8px; font-size: 12px; font-weight: 700; color: #586178; margin-bottom: 9px;">GST number <span style="font-weight: 600; color: #79839A;">optional</span></span>
+    <span class="nm-in" style="display: flex; align-items: center; gap: 12px; padding: 16px 18px; border-radius: 18px;">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#79839A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5.5" width="17" height="13" rx="2.4"></rect><path d="M3.5 10h17"></path></svg>
+      <input class="hint mono" type="text" placeholder="24AAACK1234M1ZP" style="font-size: 14px; font-weight: 600; letter-spacing: 0.02em;">
+    </span>
+  </label>
+
+  <div class="nm-in" style="display: flex; gap: 12px; padding: 15px 17px; border-radius: 18px; margin-top: 18px;">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0E6F66" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 1px;" aria-hidden="true"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 11v5.4"></path><circle cx="12" cy="8" r=".95" fill="#0E6F66" stroke="none"></circle></svg>
+    <div style="font-size: 12px; color: #586178; line-height: 1.55;">Your company details are filled in from the GST number. You can leave it out and add it whenever you like.</div>
+  </div>
+
+  <div style="flex-grow: 1;"></div>
+
+  <div style="display: flex; flex-direction: column; gap: 12px;">
+    <a href="Cust-04-Jangad.dc.html" class="nm-acc" style="display: flex; align-items: center; justify-content: center; height: 56px; border-radius: 19px; background: #0E6F66; color: #FFFFFF; font-size: 16px; font-weight: 700;">Continue</a>
+    <a href="Cust-04-Jangad.dc.html" class="nm-up" style="display: flex; align-items: center; justify-content: center; height: 52px; border-radius: 18px; font-size: 15px; font-weight: 700; color: #4C5568;">Skip the GST number</a>
+  </div>
+
+</div></div>
+<figcaption><span class="lbl">Name and GST</span><span class="api">POST /auth/register, /gst, /gst/skip</span><span class="src">Cust-03-Register.dc.html</span></figcaption>
+</figure>
+<figure class="board">
+<div class="frame"><div style="width: 390px; height: 844px; box-sizing: border-box; padding: 26px 20px 0; display: flex; flex-direction: column; gap: 16px;">
+
+  <div style="display: flex; align-items: center; gap: 12px;">
+    <div style="flex-grow: 1;">
+      <h1 class="disp" style="margin: 0 0 2px; font-size: 25px; font-weight: 700; letter-spacing: -0.01em;">New jangad</h1>
+      <p style="margin: 0; font-size: 13px; color: #586178;">Kiran Gems</p>
+    </div>
+    <a href="Cust-06-Submitted.dc.html" class="nm-up" style="width: 44px; height: 44px; border-radius: 15px; display: flex; align-items: center; justify-content: center;" aria-label="Account">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3D4658" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8.5" r="3.6"></circle><path d="M4.8 20a7.4 7.4 0 0 1 14.4 0"></path></svg>
+    </a>
+  </div>
+
+  <div style="display: flex; align-items: baseline; gap: 8px;">
+    <span style="font-size: 13px; font-weight: 800; color: #3D4658;">Pages</span>
+    <span style="font-size: 12px; color: #586178; flex-grow: 1;">we keep the order you shoot them in</span>
+    <span class="mono" style="font-size: 12px; font-weight: 600; color: #0E6F66;">2</span>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px;">
+    <div class="nm-in" style="height: 178px; border-radius: 20px; padding: 10px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; position: relative;">
+      <div style="width: 108px; height: 152px; border-radius: 5px; background: #FBF6E9; box-shadow: 0 4px 12px rgba(72,64,40,.22); box-sizing: border-box; padding: 9px; display: flex; flex-direction: column; gap: 4px;">
+        <div class="slip" style="font-size: 6px; letter-spacing: .12em; text-align: center; border-bottom: 1px solid #C9BD9C; padding-bottom: 3px;">JANGAD</div>
+        <div style="height: 2px; background: #D8CEB4; width: 92%;"></div>
+        <div style="height: 2px; background: #D8CEB4; width: 70%;"></div>
+        <div style="height: 2px; background: #D8CEB4; width: 84%;"></div>
+        <div style="height: 2px; background: #D8CEB4; width: 60%;"></div>
+        <div style="height: 2px; background: #D8CEB4; width: 88%;"></div>
+        <div style="height: 2px; background: #D8CEB4; width: 74%;"></div>
+        <div style="flex-grow: 1;"></div>
+        <svg width="46" height="16" viewBox="0 0 46 16" fill="none" stroke="#2F3C6E" stroke-width="1.2" stroke-linecap="round" aria-hidden="true"><path d="M2 12c4-7 6 1 9-4s4 6 7-1 5 4 9-2"></path></svg>
+      </div>
+      <span style="position: absolute; left: 14px; top: 14px; width: 24px; height: 24px; border-radius: 9px; background: #0E6F66; color: #FFFFFF; font-size: 12px; font-weight: 800; display: flex; align-items: center; justify-content: center;">1</span>
+    </div>
+    <div class="nm-in" style="height: 178px; border-radius: 20px; padding: 10px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; position: relative;">
+      <div style="width: 108px; height: 152px; border-radius: 5px; background: #FBF6E9; box-shadow: 0 4px 12px rgba(72,64,40,.22); box-sizing: border-box; padding: 9px; display: flex; flex-direction: column; gap: 4px;">
+        <div class="slip" style="font-size: 6px; letter-spacing: .12em; text-align: center; border-bottom: 1px solid #C9BD9C; padding-bottom: 3px;">PAGE 2</div>
+        <div style="height: 2px; background: #D8CEB4; width: 66%;"></div>
+        <div style="height: 2px; background: #D8CEB4; width: 90%;"></div>
+        <div style="height: 2px; background: #D8CEB4; width: 52%;"></div>
+        <div style="height: 2px; background: #D8CEB4; width: 80%;"></div>
+      </div>
+      <span style="position: absolute; left: 14px; top: 14px; width: 24px; height: 24px; border-radius: 9px; background: #0E6F66; color: #FFFFFF; font-size: 12px; font-weight: 800; display: flex; align-items: center; justify-content: center;">2</span>
+    </div>
+  </div>
+
+  <button class="nm-up" style="height: 62px; border-radius: 20px; background: #E3E8F0; display: flex; align-items: center; justify-content: center; gap: 11px;">
+    <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#0E6F66" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8.5h3l1.4-2h7.2L17 8.5h3a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1Z"></path><circle cx="12" cy="13.2" r="3.2"></circle></svg>
+    <span style="font-size: 15px; font-weight: 800; color: #0E6F66;">Photograph another page</span>
+  </button>
+
+  <a href="Cust-05-Address.dc.html" class="nm-up" style="display: flex; align-items: center; gap: 13px; padding: 16px 17px; border-radius: 20px;">
+    <span class="nm-in-s" style="width: 38px; height: 38px; border-radius: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0E6F66" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"></path><circle cx="12" cy="10" r="2.6"></circle></svg>
+    </span>
+    <div style="flex-grow: 1;">
+      <div style="font-size: 11px; font-weight: 800; letter-spacing: 0.07em; text-transform: uppercase; color: #79839A; margin-bottom: 4px;">Collect from</div>
+      <div style="font-size: 14px; font-weight: 700; line-height: 1.4;">12, Mahidharpura, Surat</div>
+    </div>
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0E6F66" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg>
+  </a>
+
+  <div style="flex-grow: 1;"></div>
+
+  <div style="display: flex; flex-direction: column; gap: 12px; padding-bottom: 22px;">
+    <div class="nm-in" style="display: flex; align-items: center; gap: 11px; padding: 13px 15px; border-radius: 16px;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1B6B48" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+      <span style="font-size: 12px; color: #586178; line-height: 1.5; flex-grow: 1;">Send it from a basement if you like. It goes when you have signal.</span>
+    </div>
+    <a href="Cust-06-Submitted.dc.html" class="nm-acc" style="display: flex; align-items: center; justify-content: center; gap: 10px; height: 56px; border-radius: 19px; background: #0E6F66; color: #FFFFFF; font-size: 16px; font-weight: 700;">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"></path></svg>
+      Send 2 pages
+    </a>
+  </div>
+
+</div></div>
+<figcaption><span class="lbl">Jangad pages</span><span class="api">POST /uploads then /jangad</span><span class="src">Cust-04-Jangad.dc.html</span></figcaption>
+</figure>
+<figure class="board">
+<div class="frame"><div style="width: 390px; height: 844px; box-sizing: border-box; padding: 22px 20px 0; display: flex; flex-direction: column;">
+
+  <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px;">
+    <a href="Cust-04-Jangad.dc.html" class="nm-up" style="width: 44px; height: 44px; border-radius: 15px; display: flex; align-items: center; justify-content: center;" aria-label="Back">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3D4658" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+    </a>
+    <div style="flex-grow: 1;">
+      <h1 class="disp" style="margin: 0 0 2px; font-size: 21px; font-weight: 700;">Collect from</h1>
+      <div style="font-size: 12px; color: #586178;">Where should we send someone?</div>
+    </div>
+  </div>
+
+  <div class="nm-in" style="display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-radius: 16px; margin-bottom: 20px;">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7A4A00" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 6.5l17 17"></path><path d="M4.8 11.2a12 12 0 0 1 4.4-2.6M14.8 8.6a12 12 0 0 1 4.4 2.6"></path><path d="M8.2 15a7 7 0 0 1 3.1-1.7"></path><circle cx="12" cy="19" r="1.1" fill="#7A4A00" stroke="none"></circle></svg>
+    <span style="font-size: 12px; color: #7A4A00; font-weight: 600; flex-grow: 1;">Saved list from <span class="mono">Tue 16:20</span> &mdash; you can always type one</span>
+  </div>
+
+  <div style="font-size: 13px; font-weight: 800; color: #3D4658; margin-bottom: 12px;">Saved addresses</div>
+
+  <div style="display: flex; flex-direction: column; gap: 11px;">
+    <button class="nm-in-s" style="display: flex; align-items: flex-start; gap: 13px; padding: 16px 17px; border-radius: 19px; background: #DDE3EC; width: 100%; text-align: left;">
+      <span class="nm-up-s" style="width: 22px; height: 22px; border-radius: 50%; background: #0E6F66; flex-shrink: 0; margin-top: 2px; display: flex; align-items: center; justify-content: center;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+      </span>
+      <span style="flex-grow: 1;">
+        <span style="display: flex; align-items: center; gap: 8px; margin-bottom: 5px;">
+          <span style="font-size: 15px; font-weight: 700;">12, Mahidharpura</span>
+          <span style="padding: 4px 9px; border-radius: 9px; background: #D5E8DE; color: #1B6B48; font-size: 10px; font-weight: 800;">USUAL</span>
+        </span>
+        <span style="display: block; font-size: 13px; color: #586178; line-height: 1.5;">Surat 395003</span>
+      </span>
+    </button>
+    <button class="nm-up" style="display: flex; align-items: flex-start; gap: 13px; padding: 16px 17px; border-radius: 19px; width: 100%; text-align: left;">
+      <span class="nm-in-s" style="width: 22px; height: 22px; border-radius: 50%; background: #E3E8F0; flex-shrink: 0; margin-top: 2px;"></span>
+      <span style="flex-grow: 1;">
+        <span style="display: block; font-size: 15px; font-weight: 700; margin-bottom: 5px;">A-402, Diamond World</span>
+        <span style="display: block; font-size: 13px; color: #586178; line-height: 1.5;">Katargam, Surat 395004</span>
+      </span>
+    </button>
+  </div>
+
+  <div style="display: flex; align-items: center; gap: 14px; margin: 24px 0;">
+    <span style="flex-grow: 1; height: 1px; background: #CFD6E2;"></span>
+    <span style="font-size: 12px; font-weight: 700; color: #79839A;">or</span>
+    <span style="flex-grow: 1; height: 1px; background: #CFD6E2;"></span>
+  </div>
+
+  <label style="display: block;">
+    <span style="display: block; font-size: 13px; font-weight: 800; color: #3D4658; margin-bottom: 10px;">Type an address</span>
+    <span class="nm-in" style="display: block; padding: 15px 17px; border-radius: 19px;">
+      <textarea class="hint" rows="3" placeholder="Shop 14, Bhagal, near Chowk Bazaar, Surat" style="font-size: 14px; line-height: 1.55;"></textarea>
+    </span>
+  </label>
+
+  <div style="flex-grow: 1;"></div>
+
+  <a href="Cust-04-Jangad.dc.html" class="nm-acc" style="display: flex; align-items: center; justify-content: center; height: 56px; border-radius: 19px; background: #0E6F66; color: #FFFFFF; font-size: 16px; font-weight: 700; margin-bottom: 22px;">Use this address</a>
+
+</div></div>
+<figcaption><span class="lbl">Collect from</span><span class="api">GET /addresses</span><span class="src">Cust-05-Address.dc.html</span></figcaption>
+</figure>
+<figure class="board">
+<div class="frame"><div style="width: 390px; height: 844px; box-sizing: border-box; padding: 56px 24px 32px; display: flex; flex-direction: column; align-items: center;">
+
+  <div class="nm-up" style="width: 98px; height: 98px; border-radius: 34px; display: flex; align-items: center; justify-content: center; margin-bottom: 26px;">
+    <span class="nm-in-s" style="width: 66px; height: 66px; border-radius: 24px; background: #0E6F66; display: flex; align-items: center; justify-content: center;">
+      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+    </span>
+  </div>
+
+  <h1 class="disp" style="margin: 0 0 10px; font-size: 27px; font-weight: 700; text-align: center;">We have it</h1>
+  <p style="margin: 0 0 26px; font-size: 14px; color: #586178; text-align: center; line-height: 1.6;">Keep this reference. Quote it if you call the office.</p>
+
+  <div class="nm-in" style="width: 100%; box-sizing: border-box; padding: 22px; border-radius: 24px; text-align: center; margin-bottom: 16px;">
+    <div style="font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: #79839A; margin-bottom: 10px;">Your reference</div>
+    <div class="mono" style="font-size: 27px; font-weight: 600; letter-spacing: 0.02em; color: #0A554E;">WH/IN/00042</div>
+  </div>
+
+  <div class="nm-up" style="width: 100%; box-sizing: border-box; padding: 18px; border-radius: 22px; display: flex; flex-direction: column; gap: 14px; margin-bottom: 16px;">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#79839A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="2.4"></rect><path d="m5 17 4.5-5 3 3.2 2.6-2.6L19 17"></path></svg>
+      <span style="font-size: 14px; font-weight: 600; flex-grow: 1;">2 pages sent</span>
+    </div>
+    <div style="height: 1px; background: #D3DAE5;"></div>
+    <div style="display: flex; align-items: flex-start; gap: 12px;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#79839A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 1px;" aria-hidden="true"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"></path><circle cx="12" cy="10" r="2.6"></circle></svg>
+      <span style="font-size: 14px; font-weight: 600; flex-grow: 1; line-height: 1.45;">Collecting from<br>12, Mahidharpura, Surat</span>
+    </div>
+    <div style="height: 1px; background: #D3DAE5;"></div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#79839A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;" aria-hidden="true"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.2V12l3.2 1.9"></path></svg>
+      <span style="font-size: 14px; font-weight: 600; flex-grow: 1;">Sent at <span class="mono">10:04</span></span>
+    </div>
+  </div>
+
+  <div class="nm-up" style="width: 100%; box-sizing: border-box; padding: 16px 17px; border-radius: 20px;">
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 9px;">
+      <span style="font-size: 14px; font-weight: 700; flex-grow: 1; color: #4C5568;">One more waiting</span>
+      <span style="padding: 5px 10px; border-radius: 11px; background: #F3E2C4; color: #7A4A00; font-size: 11px; font-weight: 800;">Queued</span>
+    </div>
+    <div style="font-size: 12px; color: #586178; line-height: 1.55;">Photographed at <span class="mono" style="font-weight: 600;">09:12</span>. It gets its reference the moment it reaches us.</div>
+  </div>
+
+  <div style="flex-grow: 1;"></div>
+
+  <a href="Cust-04-Jangad.dc.html" class="nm-acc" style="width: 100%; box-sizing: border-box; display: flex; align-items: center; justify-content: center; gap: 10px; height: 56px; border-radius: 19px; background: #0E6F66; color: #FFFFFF; font-size: 16px; font-weight: 700;">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>
+    Send another jangad
+  </a>
+
+</div></div>
+<figcaption><span class="lbl">Reference</span><span class="api">the whole acknowledgement</span><span class="src">Cust-06-Submitted.dc.html</span></figcaption>
+</figure>
+</div>
+</section>
+</main>
+</body>
+</html>

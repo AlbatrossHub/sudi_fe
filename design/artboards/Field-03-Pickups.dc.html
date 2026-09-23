@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Pickups</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Sora:wght@500;600;700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#E3E8F0;font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased;color:#1A2032}
+.nm-up{box-shadow:6px 6px 14px #C4CCDA,-6px -6px 14px #FFFFFF}
+.nm-up-s{box-shadow:3px 3px 8px #C6CEDC,-3px -3px 8px #FFFFFF}
+.nm-in{box-shadow:inset 5px 5px 11px #C4CCDA,inset -5px -5px 11px #FFFFFF}
+.nm-in-s{box-shadow:inset 2px 2px 5px #C7CFDD,inset -2px -2px 5px #FFFFFF}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
+.disp{font-family:'Sora',system-ui,sans-serif}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;border:0;background:none;padding:0;cursor:pointer}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; padding: 26px 20px 0; display: flex; flex-direction: column; gap: 14px;">
+
+  <div style="display: flex; align-items: center; gap: 12px;">
+    <div style="flex-grow: 1;">
+      <h1 class="disp" style="margin: 0 0 2px; font-size: 26px; font-weight: 700; letter-spacing: -0.01em;">Pickups</h1>
+      <p style="margin: 0; font-size: 13px; color: #586178;">Thursday, 23 September</p>
+    </div>
+    <a href="Field-15-NeedsAttention.dc.html" class="nm-up" style="width: 44px; height: 44px; border-radius: 15px; display: flex; align-items: center; justify-content: center;" aria-label="Account and devices">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3D4658" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8.5" r="3.6"></circle><path d="M4.8 20a7.4 7.4 0 0 1 14.4 0"></path></svg>
+    </a>
+  </div>
+
+  <div class="nm-in" style="display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-radius: 16px;">
+    <span style="width: 9px; height: 9px; border-radius: 50%; background: #1B6B48; box-shadow: 0 0 0 3px rgba(27,107,72,.18);"></span>
+    <span style="font-size: 12px; font-weight: 700; color: #1B6B48;">Online</span>
+    <span style="width: 1px; height: 13px; background: #C9D1DF;"></span>
+    <span style="font-size: 12px; color: #586178; flex-grow: 1;">Synced 2 min ago</span>
+    <a href="Field-14-Outbox.dc.html" class="nm-up-s" style="display: flex; align-items: center; gap: 6px; padding: 6px 11px; border-radius: 12px; background: #F3E2C4; color: #7A4A00; font-size: 12px; font-weight: 800;">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.2V12l3.2 1.9"></path></svg>
+      3 queued
+    </a>
+  </div>
+
+  <div class="nm-in" style="display: flex; padding: 5px; border-radius: 17px; gap: 5px;">
+    <span class="nm-up-s" style="flex-grow: 1; text-align: center; padding: 11px 0; border-radius: 13px; background: #E8ECF3; font-size: 13px; font-weight: 800; color: #01579B;">To collect &middot; 7</span>
+    <a href="Field-04-Pickups-Offline.dc.html" style="flex-grow: 1; text-align: center; padding: 11px 0; border-radius: 13px; font-size: 13px; font-weight: 700; color: #586178;">Collected today &middot; 4</a>
+  </div>
+
+  <div style="flex-grow: 1; overflow: hidden; display: flex; flex-direction: column; gap: 13px;">
+
+    <a href="Field-05-PickupDetail.dc.html" class="nm-up" style="display: block; padding: 16px 18px; border-radius: 22px; flex-shrink: 0;">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 9px;">
+        <span class="mono" style="font-size: 13px; font-weight: 600; color: #01579B;">WH/IN/00042</span>
+        <span style="flex-grow: 1;"></span>
+        <span style="display: flex; align-items: center; gap: 5px; padding: 5px 9px; border-radius: 10px; background: #D7DCE6; color: #4C5568; font-size: 11px; font-weight: 800;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="2.4"></rect><path d="m5 17 4.5-5 3 3.2 2.6-2.6L19 17"></path></svg>
+          2 pages
+        </span>
+      </div>
+      <div style="font-size: 17px; font-weight: 700; margin-bottom: 7px;">Kiran Gems</div>
+      <div style="display: flex; gap: 8px; align-items: flex-start; margin-bottom: 13px;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#79839A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 2px;" aria-hidden="true"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"></path><circle cx="12" cy="10" r="2.6"></circle></svg>
+        <span style="font-size: 13px; color: #586178; line-height: 1.5;">12, Mahidharpura, Surat 395003</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 7px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#79839A" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.2V12l3.2 1.9"></path></svg>
+        <span class="mono" style="font-size: 12px; font-weight: 600; color: #586178;">10:00</span>
+        <span style="flex-grow: 1;"></span>
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#01579B" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg>
+      </div>
+    </a>
+
+    <a href="Field-05-PickupDetail.dc.html" class="nm-up" style="display: block; padding: 16px 18px; border-radius: 22px; flex-shrink: 0;">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 9px;">
+        <span class="mono" style="font-size: 13px; font-weight: 600; color: #01579B;">WH/IN/00043</span>
+        <span style="flex-grow: 1;"></span>
+        <span style="display: flex; align-items: center; gap: 5px; padding: 5px 9px; border-radius: 10px; background: #D7DCE6; color: #4C5568; font-size: 11px; font-weight: 800;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="2.4"></rect><path d="m5 17 4.5-5 3 3.2 2.6-2.6L19 17"></path></svg>
+          1 page
+        </span>
+      </div>
+      <div style="font-size: 17px; font-weight: 700; margin-bottom: 7px;">Shree Ramkrishna Exports</div>
+      <div style="display: flex; gap: 8px; align-items: flex-start; margin-bottom: 13px;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#79839A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 2px;" aria-hidden="true"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"></path><circle cx="12" cy="10" r="2.6"></circle></svg>
+        <span style="font-size: 13px; color: #586178; line-height: 1.5;">Plot 7, Varachha Main Road, Surat</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 7px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#79839A" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.2V12l3.2 1.9"></path></svg>
+        <span class="mono" style="font-size: 12px; font-weight: 600; color: #586178;">11:30</span>
+        <span style="flex-grow: 1;"></span>
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#01579B" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg>
+      </div>
+    </a>
+
+    <a href="Field-05-PickupDetail.dc.html" class="nm-up" style="display: block; padding: 16px 18px; border-radius: 22px; flex-shrink: 0;">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 9px;">
+        <span class="mono" style="font-size: 13px; font-weight: 600; color: #01579B;">WH/IN/00045</span>
+        <span style="flex-grow: 1;"></span>
+        <span style="padding: 5px 9px; border-radius: 10px; background: #E2DEF2; color: #57479B; font-size: 11px; font-weight: 800;">New number</span>
+      </div>
+      <div style="font-size: 17px; font-weight: 700; margin-bottom: 7px; color: #4C5568;">Not yet on the office records</div>
+      <div style="display: flex; gap: 8px; align-items: flex-start; margin-bottom: 13px;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#79839A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 2px;" aria-hidden="true"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"></path><circle cx="12" cy="10" r="2.6"></circle></svg>
+        <span style="font-size: 13px; color: #586178; line-height: 1.5;">Shop 14, Bhagal, Surat &middot; <span class="mono">98765 43210</span></span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 7px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#79839A" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.2V12l3.2 1.9"></path></svg>
+        <span class="mono" style="font-size: 12px; font-weight: 600; color: #586178;">13:15</span>
+        <span style="flex-grow: 1;"></span>
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#01579B" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg>
+      </div>
+    </a>
+
+    <div class="nm-up" style="padding: 16px 18px; border-radius: 22px; flex-shrink: 0;">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 9px;">
+        <span class="mono" style="font-size: 13px; font-weight: 600; color: #01579B;">WH/IN/00046</span>
+        <span style="flex-grow: 1;"></span>
+        <span style="padding: 5px 9px; border-radius: 10px; background: #D7DCE6; color: #4C5568; font-size: 11px; font-weight: 800;">1 page</span>
+      </div>
+      <div style="font-size: 17px; font-weight: 700;">Dharmanandan Diamonds</div>
+    </div>
+
+  </div>
+
+  <div style="padding: 12px 0 20px; flex-shrink: 0;">
+    <div class="nm-up" style="display: flex; padding: 8px; border-radius: 24px; gap: 7px;">
+      <span class="nm-in-s" style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 11px 0; border-radius: 18px; background: #DDE3EC; color: #01579B;">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 20.5 7.5v9L12 21l-8.5-4.5v-9L12 3Z"></path><path d="M3.5 7.5 12 12l8.5-4.5M12 12v9"></path></svg>
+        <span style="font-size: 11px; font-weight: 800;">Pickups</span>
+      </span>
+      <a href="Field-08-Deliveries.dc.html" style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 11px 0; border-radius: 18px; color: #586178;">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7.5h10v9H3z"></path><path d="M13 10.5h4l3.2 3.2v2.8H13z"></path><circle cx="7" cy="18" r="1.9"></circle><circle cx="17" cy="18" r="1.9"></circle></svg>
+        <span style="font-size: 11px; font-weight: 700;">Deliveries</span>
+      </a>
+      <a href="Field-11-JobWork.dc.html" style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 11px 0; border-radius: 18px; color: #586178;">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13.5" r="7"></circle><path d="M12 10v3.8l2.4 1.4M9.5 3.5h5"></path></svg>
+        <span style="font-size: 11px; font-weight: 700;">Job work</span>
+      </a>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

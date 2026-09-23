@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Needs your attention</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Sora:wght@500;600;700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#E3E8F0;font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased;color:#1A2032}
+.nm-up{box-shadow:6px 6px 14px #C4CCDA,-6px -6px 14px #FFFFFF}
+.nm-up-s{box-shadow:3px 3px 8px #C6CEDC,-3px -3px 8px #FFFFFF}
+.nm-in{box-shadow:inset 5px 5px 11px #C4CCDA,inset -5px -5px 11px #FFFFFF}
+.nm-in-s{box-shadow:inset 2px 2px 5px #C7CFDD,inset -2px -2px 5px #FFFFFF}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
+.disp{font-family:'Sora',system-ui,sans-serif}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;border:0;background:none;padding:0;cursor:pointer}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; padding: 22px 20px 0; display: flex; flex-direction: column; gap: 15px;">
+
+  <div style="display: flex; align-items: center; gap: 12px;">
+    <a href="Field-14-Outbox.dc.html" class="nm-up" style="width: 44px; height: 44px; border-radius: 15px; display: flex; align-items: center; justify-content: center;" aria-label="Back">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3D4658" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+    </a>
+    <div style="flex-grow: 1;">
+      <h1 class="disp" style="margin: 0 0 2px; font-size: 21px; font-weight: 700;">Needs your attention</h1>
+      <div style="font-size: 12px; color: #586178;">Nothing here sends itself</div>
+    </div>
+  </div>
+
+  <div class="nm-up" style="padding: 17px; border-radius: 22px;">
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 11px;">
+      <span style="width: 34px; height: 34px; border-radius: 12px; background: #F3DAD8; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8E2A25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4.5 2.8 20h18.4L12 4.5Z"></path><path d="M12 10.2v4.1"></path><circle cx="12" cy="17" r=".95" fill="#8E2A25" stroke="none"></circle></svg>
+      </span>
+      <div style="flex-grow: 1;">
+        <div style="font-size: 15px; font-weight: 700;">Mark delivered</div>
+        <div class="mono" style="font-size: 12px; color: #586178;">WH/OUT/00036 &middot; Mon 21/09 16:40</div>
+      </div>
+    </div>
+    <div class="nm-in-s" style="padding: 13px 14px; border-radius: 15px; margin-bottom: 13px;">
+      <div style="font-size: 13px; font-weight: 700; color: #8E2A25; margin-bottom: 5px;">Expires in <span class="mono">23 h</span></div>
+      <div style="font-size: 12px; color: #586178; line-height: 1.55;">The office will not accept an event older than three days. Record it again, or tell them what happened.</div>
+    </div>
+    <div style="display: flex; gap: 10px;">
+      <a href="Field-09-Deliver.dc.html" class="nm-up-s" style="flex-grow: 1; display: flex; align-items: center; justify-content: center; height: 46px; border-radius: 15px; font-size: 14px; font-weight: 700; color: #01579B;">Record it again</a>
+      <button class="nm-up-s" style="padding: 0 18px; height: 46px; border-radius: 15px; font-size: 14px; font-weight: 700; color: #4C5568;">Discard</button>
+    </div>
+  </div>
+
+  <div class="nm-up" style="padding: 17px; border-radius: 22px;">
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 11px;">
+      <span style="width: 34px; height: 34px; border-radius: 12px; background: #F3E2C4; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7A4A00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.2V12l3.2 1.9"></path></svg>
+      </span>
+      <div style="flex-grow: 1;">
+        <div style="font-size: 15px; font-weight: 700;">This phone&rsquo;s clock is wrong</div>
+        <div class="mono" style="font-size: 12px; color: #586178;">3 h 12 m fast</div>
+      </div>
+    </div>
+    <div style="font-size: 13px; color: #586178; line-height: 1.55; margin-bottom: 13px;">Your times are corrected before they are sent, so nothing is mis-recorded. Fix it in the phone settings and this goes away.</div>
+    <button class="nm-up-s" style="width: 100%; height: 46px; border-radius: 15px; font-size: 14px; font-weight: 700; color: #01579B;">Open date &amp; time settings</button>
+  </div>
+
+  <div class="nm-up" style="padding: 17px; border-radius: 22px;">
+    <div style="font-size: 13px; font-weight: 800; color: #3D4658; margin-bottom: 13px;">Your devices</div>
+    <div style="display: flex; align-items: center; gap: 11px; margin-bottom: 13px;">
+      <span class="nm-in-s" style="width: 34px; height: 34px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#01579B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6.5" y="2.5" width="11" height="19" rx="2.6"></rect><path d="M10.5 18.5h3"></path></svg>
+      </span>
+      <div style="flex-grow: 1;">
+        <div style="font-size: 14px; font-weight: 700;">This phone</div>
+        <div class="mono" style="font-size: 11px; color: #586178;">8f2c&hellip;a41 &middot; v1.0.3+14</div>
+      </div>
+      <span style="padding: 5px 10px; border-radius: 11px; background: #D5E8DE; color: #1B6B48; font-size: 11px; font-weight: 800;">In use</span>
+    </div>
+    <div style="height: 1px; background: #D3DAE5; margin-bottom: 13px;"></div>
+    <div style="display: flex; align-items: center; gap: 11px;">
+      <span class="nm-in-s" style="width: 34px; height: 34px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#79839A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6.5" y="2.5" width="11" height="19" rx="2.6"></rect><path d="M10.5 18.5h3"></path></svg>
+      </span>
+      <div style="flex-grow: 1;">
+        <div style="font-size: 14px; font-weight: 700; color: #4C5568;">Old handset</div>
+        <div class="mono" style="font-size: 11px; color: #586178;">last seen 12 Sep</div>
+      </div>
+      <button class="nm-up-s" style="padding: 8px 13px; border-radius: 12px; font-size: 12px; font-weight: 700; color: #8E2A25;">Sign out</button>
+    </div>
+  </div>
+
+  <div style="flex-grow: 1;"></div>
+
+  <a href="Field-16-Revoked.dc.html" class="nm-up" style="display: flex; align-items: center; justify-content: center; height: 52px; border-radius: 18px; font-size: 15px; font-weight: 700; color: #4C5568; margin-bottom: 22px;">Sign out of this phone</a>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

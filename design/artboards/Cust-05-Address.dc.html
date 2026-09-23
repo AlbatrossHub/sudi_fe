@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Pickup address</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Sora:wght@500;600;700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#E3E8F0;font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased;color:#1A2032}
+.nm-up{box-shadow:6px 6px 14px #C4CCDA,-6px -6px 14px #FFFFFF}
+.nm-up-s{box-shadow:3px 3px 8px #C6CEDC,-3px -3px 8px #FFFFFF}
+.nm-in{box-shadow:inset 5px 5px 11px #C4CCDA,inset -5px -5px 11px #FFFFFF}
+.nm-in-s{box-shadow:inset 2px 2px 5px #C7CFDD,inset -2px -2px 5px #FFFFFF}
+.nm-acc{box-shadow:5px 6px 14px rgba(9,70,64,.30),-4px -4px 10px #FFFFFF}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
+.disp{font-family:'Sora',system-ui,sans-serif}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;border:0;background:none;padding:0;cursor:pointer}
+textarea{font:inherit;color:inherit;border:0;background:none;outline:none;width:100%;resize:none}
+.hint::placeholder{color:#79839A;opacity:1}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; padding: 22px 20px 0; display: flex; flex-direction: column;">
+
+  <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px;">
+    <a href="Cust-04-Jangad.dc.html" class="nm-up" style="width: 44px; height: 44px; border-radius: 15px; display: flex; align-items: center; justify-content: center;" aria-label="Back">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3D4658" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+    </a>
+    <div style="flex-grow: 1;">
+      <h1 class="disp" style="margin: 0 0 2px; font-size: 21px; font-weight: 700;">Collect from</h1>
+      <div style="font-size: 12px; color: #586178;">Where should we send someone?</div>
+    </div>
+  </div>
+
+  <div class="nm-in" style="display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-radius: 16px; margin-bottom: 20px;">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7A4A00" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 6.5l17 17"></path><path d="M4.8 11.2a12 12 0 0 1 4.4-2.6M14.8 8.6a12 12 0 0 1 4.4 2.6"></path><path d="M8.2 15a7 7 0 0 1 3.1-1.7"></path><circle cx="12" cy="19" r="1.1" fill="#7A4A00" stroke="none"></circle></svg>
+    <span style="font-size: 12px; color: #7A4A00; font-weight: 600; flex-grow: 1;">Saved list from <span class="mono">Tue 16:20</span> &mdash; you can always type one</span>
+  </div>
+
+  <div style="font-size: 13px; font-weight: 800; color: #3D4658; margin-bottom: 12px;">Saved addresses</div>
+
+  <div style="display: flex; flex-direction: column; gap: 11px;">
+    <button class="nm-in-s" style="display: flex; align-items: flex-start; gap: 13px; padding: 16px 17px; border-radius: 19px; background: #DDE3EC; width: 100%; text-align: left;">
+      <span class="nm-up-s" style="width: 22px; height: 22px; border-radius: 50%; background: #0E6F66; flex-shrink: 0; margin-top: 2px; display: flex; align-items: center; justify-content: center;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+      </span>
+      <span style="flex-grow: 1;">
+        <span style="display: flex; align-items: center; gap: 8px; margin-bottom: 5px;">
+          <span style="font-size: 15px; font-weight: 700;">12, Mahidharpura</span>
+          <span style="padding: 4px 9px; border-radius: 9px; background: #D5E8DE; color: #1B6B48; font-size: 10px; font-weight: 800;">USUAL</span>
+        </span>
+        <span style="display: block; font-size: 13px; color: #586178; line-height: 1.5;">Surat 395003</span>
+      </span>
+    </button>
+    <button class="nm-up" style="display: flex; align-items: flex-start; gap: 13px; padding: 16px 17px; border-radius: 19px; width: 100%; text-align: left;">
+      <span class="nm-in-s" style="width: 22px; height: 22px; border-radius: 50%; background: #E3E8F0; flex-shrink: 0; margin-top: 2px;"></span>
+      <span style="flex-grow: 1;">
+        <span style="display: block; font-size: 15px; font-weight: 700; margin-bottom: 5px;">A-402, Diamond World</span>
+        <span style="display: block; font-size: 13px; color: #586178; line-height: 1.5;">Katargam, Surat 395004</span>
+      </span>
+    </button>
+  </div>
+
+  <div style="display: flex; align-items: center; gap: 14px; margin: 24px 0;">
+    <span style="flex-grow: 1; height: 1px; background: #CFD6E2;"></span>
+    <span style="font-size: 12px; font-weight: 700; color: #79839A;">or</span>
+    <span style="flex-grow: 1; height: 1px; background: #CFD6E2;"></span>
+  </div>
+
+  <label style="display: block;">
+    <span style="display: block; font-size: 13px; font-weight: 800; color: #3D4658; margin-bottom: 10px;">Type an address</span>
+    <span class="nm-in" style="display: block; padding: 15px 17px; border-radius: 19px;">
+      <textarea class="hint" rows="3" placeholder="Shop 14, Bhagal, near Chowk Bazaar, Surat" style="font-size: 14px; line-height: 1.55;"></textarea>
+    </span>
+  </label>
+
+  <div style="flex-grow: 1;"></div>
+
+  <a href="Cust-04-Jangad.dc.html" class="nm-acc" style="display: flex; align-items: center; justify-content: center; height: 56px; border-radius: 19px; background: #0E6F66; color: #FFFFFF; font-size: 16px; font-weight: 700; margin-bottom: 22px;">Use this address</a>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

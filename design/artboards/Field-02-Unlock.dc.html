@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Unlock</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Sora:wght@500;600;700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#E3E8F0;font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased;color:#1A2032}
+.nm-up{box-shadow:6px 6px 14px #C4CCDA,-6px -6px 14px #FFFFFF}
+.nm-up-s{box-shadow:3px 3px 8px #C6CEDC,-3px -3px 8px #FFFFFF}
+.nm-in{box-shadow:inset 5px 5px 11px #C4CCDA,inset -5px -5px 11px #FFFFFF}
+.nm-in-s{box-shadow:inset 2px 2px 5px #C7CFDD,inset -2px -2px 5px #FFFFFF}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
+.disp{font-family:'Sora',system-ui,sans-serif}
+a{color:#01579B;text-decoration:none}a:hover{color:#013C6B}
+button{font:inherit;color:inherit;border:0;background:#E3E8F0;padding:0;cursor:pointer}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; padding: 72px 34px 38px; display: flex; flex-direction: column; align-items: center;">
+
+  <div style="text-align: center; margin-bottom: 34px;">
+    <h1 class="disp" style="margin: 0 0 8px; font-size: 25px; font-weight: 700;">Welcome back, Rakesh</h1>
+    <p style="margin: 0; font-size: 14px; color: #586178;">Enter your PIN to unlock</p>
+  </div>
+
+  <div style="display: flex; gap: 16px; margin-bottom: 20px;">
+    <span class="nm-in-s" style="width: 17px; height: 17px; border-radius: 50%; background: #03A9F4;"></span>
+    <span class="nm-in-s" style="width: 17px; height: 17px; border-radius: 50%; background: #03A9F4;"></span>
+    <span class="nm-in" style="width: 17px; height: 17px; border-radius: 50%; background: #E3E8F0;"></span>
+    <span class="nm-in" style="width: 17px; height: 17px; border-radius: 50%; background: #E3E8F0;"></span>
+  </div>
+
+  <div style="display: flex; align-items: center; gap: 9px; padding: 8px 14px; border-radius: 13px; background: #D5E8DE; margin-bottom: 38px;">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1B6B48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+    <span style="font-size: 12px; font-weight: 700; color: #1B6B48;">Works without a connection</span>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; width: 100%;">
+    <button class="nm-up" style="height: 74px; border-radius: 24px; font-size: 25px; font-weight: 600;">1</button>
+    <button class="nm-up" style="height: 74px; border-radius: 24px; font-size: 25px; font-weight: 600;">2</button>
+    <button class="nm-up" style="height: 74px; border-radius: 24px; font-size: 25px; font-weight: 600;">3</button>
+    <button class="nm-up" style="height: 74px; border-radius: 24px; font-size: 25px; font-weight: 600;">4</button>
+    <button class="nm-up" style="height: 74px; border-radius: 24px; font-size: 25px; font-weight: 600;">5</button>
+    <button class="nm-up" style="height: 74px; border-radius: 24px; font-size: 25px; font-weight: 600;">6</button>
+    <button class="nm-up" style="height: 74px; border-radius: 24px; font-size: 25px; font-weight: 600;">7</button>
+    <button class="nm-in-s" style="height: 74px; border-radius: 24px; font-size: 25px; font-weight: 600; background: #DDE3EC; color: #01579B;">8</button>
+    <button class="nm-up" style="height: 74px; border-radius: 24px; font-size: 25px; font-weight: 600;">9</button>
+    <button class="nm-up" style="height: 74px; border-radius: 24px; display: flex; align-items: center; justify-content: center;" aria-label="Unlock with fingerprint">
+      <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="#01579B" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M12 4.5a7.5 7.5 0 0 0-7.5 7.5v2"></path><path d="M19.5 12a7.5 7.5 0 0 0-3.4-6.3"></path><path d="M8 12a4 4 0 0 1 8 0v3.5"></path><path d="M12 12v5.5"></path><path d="M16 18.6v.9"></path><path d="M6.6 17.2A7.5 7.5 0 0 0 7.4 19"></path></svg>
+    </button>
+    <button class="nm-up" style="height: 74px; border-radius: 24px; font-size: 25px; font-weight: 600;">0</button>
+    <button class="nm-up" style="height: 74px; border-radius: 24px; display: flex; align-items: center; justify-content: center;" aria-label="Delete">
+      <svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="#586178" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 5.5H9.5L3.5 12l6 6.5H20a1.5 1.5 0 0 0 1.5-1.5V7a1.5 1.5 0 0 0-1.5-1.5Z"></path><path d="M12.5 9.5l5 5M17.5 9.5l-5 5"></path></svg>
+    </button>
+  </div>
+
+  <div style="flex-grow: 1;"></div>
+  <a href="Field-01-SignIn.dc.html" style="font-size: 13px; font-weight: 700;">Sign in with password instead</a>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Move department</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Sora:wght@500;600;700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#E3E8F0;font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased;color:#1A2032}
+.nm-up{box-shadow:6px 6px 14px #C4CCDA,-6px -6px 14px #FFFFFF}
+.nm-up-s{box-shadow:3px 3px 8px #C6CEDC,-3px -3px 8px #FFFFFF}
+.nm-in{box-shadow:inset 5px 5px 11px #C4CCDA,inset -5px -5px 11px #FFFFFF}
+.nm-in-s{box-shadow:inset 2px 2px 5px #C7CFDD,inset -2px -2px 5px #FFFFFF}
+.nm-acc{box-shadow:5px 6px 14px rgba(1,87,155,.32),-4px -4px 10px #FFFFFF}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
+.disp{font-family:'Sora',system-ui,sans-serif}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;border:0;background:none;padding:0;cursor:pointer}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; padding: 22px 20px 0; display: flex; flex-direction: column;">
+
+  <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 22px;">
+    <a href="Field-11-JobWork.dc.html" class="nm-up" style="width: 44px; height: 44px; border-radius: 15px; display: flex; align-items: center; justify-content: center;" aria-label="Back">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3D4658" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+    </a>
+    <div style="flex-grow: 1;">
+      <h1 class="disp" style="margin: 0 0 2px; font-size: 21px; font-weight: 700;">Move department</h1>
+      <div class="mono" style="font-size: 12px; color: #586178;">WH/IN/00041 &middot; Dharmanandan</div>
+    </div>
+  </div>
+
+  <div class="nm-in" style="display: flex; align-items: center; gap: 14px; padding: 18px; border-radius: 22px; margin-bottom: 24px;">
+    <div style="flex-grow: 1;">
+      <div style="font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #79839A; margin-bottom: 5px;">Now in</div>
+      <div style="font-size: 17px; font-weight: 700;">Cutting</div>
+    </div>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#79839A" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"></path></svg>
+    <div style="flex-grow: 1; text-align: right;">
+      <div style="font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #79839A; margin-bottom: 5px;">Moving to</div>
+      <div style="font-size: 17px; font-weight: 700; color: #01579B;">Polishing</div>
+    </div>
+  </div>
+
+  <div style="font-size: 13px; font-weight: 800; color: #3D4658; margin-bottom: 12px;">Departments</div>
+
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <button class="nm-up" style="display: flex; align-items: center; gap: 13px; padding: 15px 17px; border-radius: 18px; width: 100%; text-align: left;">
+      <span class="nm-in-s" style="width: 22px; height: 22px; border-radius: 50%; background: #E3E8F0; flex-shrink: 0;"></span>
+      <span style="font-size: 15px; font-weight: 600; color: #3D4658; flex-grow: 1;">Cutting</span>
+      <span class="mono" style="font-size: 11px; color: #79839A;">now</span>
+    </button>
+    <button class="nm-in-s" style="display: flex; align-items: center; gap: 13px; padding: 15px 17px; border-radius: 18px; background: #DDE3EC; width: 100%; text-align: left;">
+      <span class="nm-up-s" style="width: 22px; height: 22px; border-radius: 50%; background: #03A9F4; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+      </span>
+      <span style="font-size: 15px; font-weight: 700; flex-grow: 1;">Polishing</span>
+    </button>
+    <button class="nm-up" style="display: flex; align-items: center; gap: 13px; padding: 15px 17px; border-radius: 18px; width: 100%; text-align: left;">
+      <span class="nm-in-s" style="width: 22px; height: 22px; border-radius: 50%; background: #E3E8F0; flex-shrink: 0;"></span>
+      <span style="font-size: 15px; font-weight: 600; color: #3D4658; flex-grow: 1;">Boiling</span>
+    </button>
+    <button class="nm-up" style="display: flex; align-items: center; gap: 13px; padding: 15px 17px; border-radius: 18px; width: 100%; text-align: left;">
+      <span class="nm-in-s" style="width: 22px; height: 22px; border-radius: 50%; background: #E3E8F0; flex-shrink: 0;"></span>
+      <span style="font-size: 15px; font-weight: 600; color: #3D4658; flex-grow: 1;">Assortment</span>
+    </button>
+    <button class="nm-up" style="display: flex; align-items: center; gap: 13px; padding: 15px 17px; border-radius: 18px; width: 100%; text-align: left;">
+      <span class="nm-in-s" style="width: 22px; height: 22px; border-radius: 50%; background: #E3E8F0; flex-shrink: 0;"></span>
+      <span style="font-size: 15px; font-weight: 600; color: #3D4658; flex-grow: 1;">Final checking</span>
+    </button>
+  </div>
+
+  <div class="nm-in" style="display: flex; gap: 11px; padding: 15px 16px; border-radius: 18px; margin-top: 22px;">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#586178" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 1px;" aria-hidden="true"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.2V12l3.2 1.9"></path></svg>
+    <div style="font-size: 12px; color: #586178; line-height: 1.55;">A running timer is banked against <strong style="color: #3D4658;">Cutting</strong> before the move.</div>
+  </div>
+
+  <div style="flex-grow: 1;"></div>
+
+  <div style="display: flex; flex-direction: column; gap: 11px; padding-bottom: 22px;">
+    <div style="display: flex; align-items: center; gap: 7px; justify-content: center;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1B6B48" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+      <span style="font-size: 12px; font-weight: 700; color: #1B6B48;">Works offline</span>
+    </div>
+    <a href="Field-11-JobWork.dc.html" class="nm-acc" style="display: flex; align-items: center; justify-content: center; height: 56px; border-radius: 19px; background: #03A9F4; color: #06283D; font-size: 16px; font-weight: 700;">Move to Polishing</a>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

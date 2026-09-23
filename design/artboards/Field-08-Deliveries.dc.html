@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Deliveries</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Sora:wght@500;600;700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#E3E8F0;font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased;color:#1A2032}
+.nm-up{box-shadow:6px 6px 14px #C4CCDA,-6px -6px 14px #FFFFFF}
+.nm-up-s{box-shadow:3px 3px 8px #C6CEDC,-3px -3px 8px #FFFFFF}
+.nm-in{box-shadow:inset 5px 5px 11px #C4CCDA,inset -5px -5px 11px #FFFFFF}
+.nm-in-s{box-shadow:inset 2px 2px 5px #C7CFDD,inset -2px -2px 5px #FFFFFF}
+.nm-acc{box-shadow:5px 6px 14px rgba(1,87,155,.32),-4px -4px 10px #FFFFFF}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
+.disp{font-family:'Sora',system-ui,sans-serif}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;border:0;background:none;padding:0;cursor:pointer}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; padding: 26px 20px 0; display: flex; flex-direction: column; gap: 13px;">
+
+  <div style="display: flex; align-items: center; gap: 12px;">
+    <div style="flex-grow: 1;">
+      <h1 class="disp" style="margin: 0 0 2px; font-size: 26px; font-weight: 700; letter-spacing: -0.01em;">Deliveries</h1>
+      <p style="margin: 0; font-size: 13px; color: #586178;">2 selected</p>
+    </div>
+    <a href="Field-10-Conflict.dc.html" class="nm-up" style="width: 44px; height: 44px; border-radius: 15px; display: flex; align-items: center; justify-content: center;" aria-label="Refresh">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#3D4658" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.6-5.9"></path><path d="M20 4.5V10h-5.5"></path></svg>
+    </a>
+  </div>
+
+  <div class="nm-in" style="display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-radius: 16px;">
+    <span style="width: 9px; height: 9px; border-radius: 50%; background: #1B6B48; box-shadow: 0 0 0 3px rgba(27,107,72,.18);"></span>
+    <span style="font-size: 12px; font-weight: 700; color: #1B6B48;">Online</span>
+    <span style="width: 1px; height: 13px; background: #C9D1DF;"></span>
+    <span style="font-size: 12px; color: #586178; flex-grow: 1;">Synced just now</span>
+    <a href="Field-14-Outbox.dc.html" class="nm-up-s" style="padding: 6px 11px; border-radius: 12px; background: #D5E8DE; color: #1B6B48; font-size: 12px; font-weight: 800;">Nothing queued</a>
+  </div>
+
+  <div class="nm-in" style="display: flex; padding: 5px; border-radius: 17px; gap: 4px;">
+    <span class="nm-up-s" style="flex-grow: 1; text-align: center; padding: 10px 0; border-radius: 13px; background: #E8ECF3; font-size: 12px; font-weight: 800; color: #01579B;">Awaiting 9</span>
+    <a href="Field-09-Deliver.dc.html" style="flex-grow: 1; text-align: center; padding: 10px 0; border-radius: 13px; font-size: 12px; font-weight: 700; color: #586178;">Out with me 3</a>
+    <a href="Field-10-Conflict.dc.html" style="flex-grow: 1; text-align: center; padding: 10px 0; border-radius: 13px; font-size: 12px; font-weight: 700; color: #586178;">Done today 5</a>
+  </div>
+
+  <div style="flex-grow: 1; overflow: hidden; display: flex; flex-direction: column; gap: 12px;">
+
+    <div class="nm-in-s" style="display: flex; gap: 13px; padding: 15px 16px; border-radius: 22px; background: #DCE2EB; flex-shrink: 0;">
+      <span class="nm-up-s" style="width: 25px; height: 25px; border-radius: 9px; background: #03A9F4; flex-shrink: 0; display: flex; align-items: center; justify-content: center; margin-top: 2px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+      </span>
+      <div style="flex-grow: 1;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+          <span class="mono" style="font-size: 12px; font-weight: 600; color: #01579B;">WH/OUT/00031</span>
+          <span style="flex-grow: 1;"></span>
+          <span class="mono" style="font-size: 11px; color: #79839A;">from WH/IN/00042</span>
+        </div>
+        <div style="font-size: 16px; font-weight: 700; margin-bottom: 5px;">Kiran Gems</div>
+        <div style="font-size: 13px; color: #586178; line-height: 1.45; margin-bottom: 8px;">12, Mahidharpura, Surat 395003</div>
+        <div class="mono" style="font-size: 12px; font-weight: 600; color: #3D4658;">143 pcs &middot; 39.92 ct</div>
+      </div>
+    </div>
+
+    <div class="nm-in-s" style="display: flex; gap: 13px; padding: 15px 16px; border-radius: 22px; background: #DCE2EB; flex-shrink: 0;">
+      <span class="nm-up-s" style="width: 25px; height: 25px; border-radius: 9px; background: #03A9F4; flex-shrink: 0; display: flex; align-items: center; justify-content: center; margin-top: 2px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+      </span>
+      <div style="flex-grow: 1;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+          <span class="mono" style="font-size: 12px; font-weight: 600; color: #01579B;">WH/OUT/00033</span>
+          <span style="flex-grow: 1;"></span>
+          <span class="mono" style="font-size: 11px; color: #79839A;">from WH/IN/00039</span>
+        </div>
+        <div style="font-size: 16px; font-weight: 700; margin-bottom: 5px;">Laxmi Diamond</div>
+        <div style="font-size: 13px; color: #586178; line-height: 1.45; margin-bottom: 8px;">A-402, Diamond World, Katargam</div>
+        <div class="mono" style="font-size: 12px; font-weight: 600; color: #3D4658;">61 pcs &middot; 12.40 ct</div>
+      </div>
+    </div>
+
+    <div class="nm-up" style="display: flex; gap: 13px; padding: 15px 16px; border-radius: 22px; flex-shrink: 0;">
+      <span class="nm-in-s" style="width: 25px; height: 25px; border-radius: 9px; background: #E3E8F0; flex-shrink: 0; margin-top: 2px;"></span>
+      <div style="flex-grow: 1;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+          <span class="mono" style="font-size: 12px; font-weight: 600; color: #01579B;">WH/OUT/00034</span>
+          <span style="flex-grow: 1;"></span>
+          <span class="mono" style="font-size: 11px; color: #79839A;">from WH/IN/00041</span>
+        </div>
+        <div style="font-size: 16px; font-weight: 700; margin-bottom: 5px;">Dharmanandan Diamonds</div>
+        <div style="font-size: 13px; color: #586178; line-height: 1.45; margin-bottom: 8px;">Gate 3, Sachin GIDC, Surat</div>
+        <div class="mono" style="font-size: 12px; font-weight: 600; color: #3D4658;">8 pcs &middot; 4.32 ct</div>
+      </div>
+    </div>
+
+    <div class="nm-up" style="display: flex; gap: 13px; padding: 15px 16px; border-radius: 22px; flex-shrink: 0;">
+      <span class="nm-in-s" style="width: 25px; height: 25px; border-radius: 9px; background: #E3E8F0; flex-shrink: 0; margin-top: 2px;"></span>
+      <div style="flex-grow: 1;">
+        <div class="mono" style="font-size: 12px; font-weight: 600; color: #01579B; margin-bottom: 6px;">WH/OUT/00036</div>
+        <div style="font-size: 16px; font-weight: 700;">Shree Ramkrishna Exports</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="padding: 12px 0 22px; flex-shrink: 0; display: flex; flex-direction: column; gap: 10px;">
+    <div style="display: flex; align-items: center; gap: 8px; justify-content: center;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7A4A00" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.2V12l3.2 1.9"></path></svg>
+      <span style="font-size: 12px; font-weight: 700; color: #7A4A00;">Someone else may take these first</span>
+    </div>
+    <div style="display: flex; gap: 11px;">
+      <button class="nm-up" style="height: 56px; padding: 0 20px; border-radius: 19px; font-size: 15px; font-weight: 700; color: #4C5568;">Clear</button>
+      <a href="Field-09-Deliver.dc.html" class="nm-acc" style="flex-grow: 1; display: flex; align-items: center; justify-content: center; gap: 10px; height: 56px; border-radius: 19px; background: #03A9F4; color: #06283D; font-size: 16px; font-weight: 700;">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7.5h10v9H3z"></path><path d="M13 10.5h4l3.2 3.2v2.8H13z"></path><circle cx="7" cy="18" r="1.9"></circle><circle cx="17" cy="18" r="1.9"></circle></svg>
+        Take 2 out
+      </a>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

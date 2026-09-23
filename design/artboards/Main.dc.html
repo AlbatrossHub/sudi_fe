@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Soft UI foundations</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Sora:wght@500;600;700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#E3E8F0;font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased;color:#1A2032}
+.nm-up{box-shadow:6px 6px 14px #C4CCDA,-6px -6px 14px #FFFFFF}
+.nm-up-s{box-shadow:3px 3px 8px #C6CEDC,-3px -3px 8px #FFFFFF}
+.nm-in{box-shadow:inset 5px 5px 11px #C4CCDA,inset -5px -5px 11px #FFFFFF}
+.nm-in-s{box-shadow:inset 2px 2px 5px #C7CFDD,inset -2px -2px 5px #FFFFFF}
+.nm-acc{box-shadow:5px 6px 14px rgba(1,87,155,.32),-4px -4px 10px #FFFFFF}
+.nm-flat{box-shadow:none}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
+.disp{font-family:'Sora',system-ui,sans-serif}
+a{color:#01579B;text-decoration:none}
+a:hover{color:#013C6B}
+button{font:inherit;color:inherit;border:0;background:none;padding:0;cursor:pointer}
+input{font:inherit;color:inherit;border:0;background:none;outline:none;width:100%}
+.filled::placeholder{color:#1A2032;opacity:1}
+.hint::placeholder{color:#79839A;opacity:1}
+</style>
+</helmet>
+<div style="width: 1240px; height: 1300px; box-sizing: border-box; padding: 56px 56px 48px; display: flex; flex-direction: column; gap: 34px;">
+
+  <div style="display: flex; align-items: flex-end; gap: 24px;">
+    <div style="flex-grow: 1;">
+      <h1 class="disp" style="margin: 0 0 8px; font-size: 42px; font-weight: 700; letter-spacing: -0.02em;">Sudi Soft UI</h1>
+      <p style="margin: 0; font-size: 16px; color: #586178; max-width: 620px;">Neumorphic foundations for the field and customer Flutter flavors. One ground, two accents, and a state layer that stays legible when the shadows do not.</p>
+    </div>
+    <div style="display: flex; gap: 14px;">
+      <div class="nm-up" style="padding: 14px 18px; border-radius: 18px; display: flex; align-items: center; gap: 12px;">
+        <span style="width: 26px; height: 26px; border-radius: 9px; background: #03A9F4;"></span>
+        <div><div style="font-size: 13px; font-weight: 700;">Field</div><div class="mono" style="font-size: 11px; color: #586178;">#01579B</div></div>
+      </div>
+      <div class="nm-up" style="padding: 14px 18px; border-radius: 18px; display: flex; align-items: center; gap: 12px;">
+        <span style="width: 26px; height: 26px; border-radius: 9px; background: #0E6F66;"></span>
+        <div><div style="font-size: 13px; font-weight: 700;">Customer</div><div class="mono" style="font-size: 11px; color: #586178;">#0E6F66</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px;">
+
+    <div class="nm-up" style="padding: 30px 32px; border-radius: 26px; display: flex; flex-direction: column; gap: 22px;">
+      <div style="font-size: 13px; font-weight: 800; letter-spacing: 0.09em; text-transform: uppercase; color: #586178;">Elevation</div>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px;">
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div class="nm-up" style="height: 76px; border-radius: 20px; background: #E3E8F0;"></div>
+          <div style="font-size: 14px; font-weight: 700;">Raised</div>
+          <div class="mono" style="font-size: 11px; line-height: 1.6; color: #586178;">6px 6px 14px #C4CCDA<br>-6px -6px 14px #FFFFFF</div>
+          <div style="font-size: 12px; color: #586178;">Cards, list rows, secondary buttons. Convex means tappable.</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div class="nm-in" style="height: 76px; border-radius: 20px; background: #E3E8F0;"></div>
+          <div style="font-size: 14px; font-weight: 700;">Inset</div>
+          <div class="mono" style="font-size: 11px; line-height: 1.6; color: #586178;">inset 5px 5px 11px #C4CCDA<br>inset -5px -5px 11px #FFFFFF</div>
+          <div style="font-size: 12px; color: #586178;">Text fields, segmented tracks, the status strip. Never tappable on its own.</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div class="nm-in-s" style="height: 76px; border-radius: 20px; background: #DDE3EC;"></div>
+          <div style="font-size: 14px; font-weight: 700;">Pressed / selected</div>
+          <div class="mono" style="font-size: 11px; line-height: 1.6; color: #586178;">inset 2px 2px 5px #C7CFDD<br>inset -2px -2px 5px #FFFFFF</div>
+          <div style="font-size: 12px; color: #586178;">The active tab, a ticked checkbox, a button under the thumb.</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div class="nm-flat" style="height: 76px; border-radius: 20px; background: #DCE1EA; border: 1px dashed #BEC7D6;"></div>
+          <div style="font-size: 14px; font-weight: 700;">Flat / blocked</div>
+          <div class="mono" style="font-size: 11px; line-height: 1.6; color: #586178;">box-shadow: none<br>ink drops to #79839A</div>
+          <div style="font-size: 12px; color: #586178;">Disabled controls lose their shadow entirely, and always carry a reason.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nm-up" style="padding: 30px 32px; border-radius: 26px; display: flex; flex-direction: column; gap: 20px;">
+      <div style="font-size: 13px; font-weight: 800; letter-spacing: 0.09em; text-transform: uppercase; color: #586178;">Type</div>
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+        <div style="display: flex; align-items: baseline; gap: 16px;">
+          <div class="disp" style="font-size: 30px; font-weight: 700; letter-spacing: -0.02em; flex-grow: 1;">Mahidharpura round</div>
+          <div class="mono" style="font-size: 11px; color: #586178; white-space: nowrap;">Sora 700 / 30</div>
+        </div>
+        <div style="display: flex; align-items: baseline; gap: 16px;">
+          <div style="font-size: 17px; font-weight: 700; flex-grow: 1;">Kiran Gems Pvt Ltd</div>
+          <div class="mono" style="font-size: 11px; color: #586178; white-space: nowrap;">Manrope 700 / 17</div>
+        </div>
+        <div style="display: flex; align-items: baseline; gap: 16px;">
+          <div style="font-size: 14px; color: #586178; flex-grow: 1;">12, Mahidharpura, Surat 395003</div>
+          <div class="mono" style="font-size: 11px; color: #586178; white-space: nowrap;">Manrope 400 / 14</div>
+        </div>
+        <div style="display: flex; align-items: baseline; gap: 16px;">
+          <div class="mono" style="font-size: 15px; font-weight: 600; letter-spacing: 0.02em; flex-grow: 1;">WH/IN/00042 &middot; 7.85 ct &middot; 24 pcs</div>
+          <div class="mono" style="font-size: 11px; color: #586178; white-space: nowrap;">Plex Mono 600 / 15</div>
+        </div>
+      </div>
+      <div style="height: 1px; background: #CFD6E2;"></div>
+      <div style="font-size: 13px; color: #586178; line-height: 1.6;">References, carats, pieces, hours and timestamps are monospaced so a column of figures lines up and a mistyped digit is visible. Never round a carat figure on the device.</div>
+    </div>
+
+    <div class="nm-up" style="padding: 30px 32px; border-radius: 26px; display: flex; flex-direction: column; gap: 20px;">
+      <div style="font-size: 13px; font-weight: 800; letter-spacing: 0.09em; text-transform: uppercase; color: #586178;">State colour</div>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <span style="display: inline-flex; align-items: center; gap: 7px; padding: 7px 13px; border-radius: 12px; background: #D5E8DE; color: #1B6B48; font-size: 13px; font-weight: 700;">Synced</span>
+          <span style="font-size: 13px; color: #586178; flex-grow: 1;">The server has it. The office can see it.</span>
+          <span class="mono" style="font-size: 11px; color: #586178;">#1B6B48</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <span style="display: inline-flex; align-items: center; gap: 7px; padding: 7px 13px; border-radius: 12px; background: #F3E2C4; color: #7A4A00; font-size: 13px; font-weight: 700;">Queued</span>
+          <span style="font-size: 13px; color: #586178; flex-grow: 1;">Captured on this phone, not yet sent.</span>
+          <span class="mono" style="font-size: 11px; color: #586178;">#7A4A00</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <span style="display: inline-flex; align-items: center; gap: 7px; padding: 7px 13px; border-radius: 12px; background: #E2DEF2; color: #57479B; font-size: 13px; font-weight: 700;">Someone else</span>
+          <span style="font-size: 13px; color: #586178; flex-grow: 1;">A lost race. Information, never an error.</span>
+          <span class="mono" style="font-size: 11px; color: #586178;">#57479B</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <span style="display: inline-flex; align-items: center; gap: 7px; padding: 7px 13px; border-radius: 12px; background: #F3DAD8; color: #8E2A25; font-size: 13px; font-weight: 700;">Needs you</span>
+          <span style="font-size: 13px; color: #586178; flex-grow: 1;">Dropped for good. A person must act.</span>
+          <span class="mono" style="font-size: 11px; color: #586178;">#8E2A25</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <span style="display: inline-flex; align-items: center; gap: 7px; padding: 7px 13px; border-radius: 12px; background: #D7DCE6; color: #4C5568; font-size: 13px; font-weight: 700;">Blocked</span>
+          <span style="font-size: 13px; color: #586178; flex-grow: 1;">Needs a connection. The tap never queues.</span>
+          <span class="mono" style="font-size: 11px; color: #586178;">#4C5568</span>
+        </div>
+      </div>
+      <div style="height: 1px; background: #CFD6E2;"></div>
+      <div style="font-size: 13px; color: #586178; line-height: 1.6;">State is never carried by the surface. A soft shadow disappears in Surat daylight; a saturated chip does not.</div>
+    </div>
+
+    <div class="nm-up" style="padding: 30px 32px; border-radius: 26px; display: flex; flex-direction: column; gap: 22px;">
+      <div style="font-size: 13px; font-weight: 800; letter-spacing: 0.09em; text-transform: uppercase; color: #586178;">Controls</div>
+      <div style="display: flex; gap: 14px; align-items: center;">
+        <button class="nm-acc" style="flex-grow: 1; height: 52px; border-radius: 18px; background: #03A9F4; color: #06283D; font-size: 15px; font-weight: 700;">Confirm pickup</button>
+        <button class="nm-up" style="height: 52px; padding: 0 22px; border-radius: 18px; background: #E3E8F0; font-size: 15px; font-weight: 700; color: #3D4658;">Cancel</button>
+      </div>
+      <div style="display: flex; gap: 14px; align-items: center;">
+        <button class="nm-flat" style="flex-grow: 1; height: 52px; border-radius: 18px; background: #DCE1EA; color: #79839A; font-size: 15px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 9px;" disabled="">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2.2"></rect><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"></path></svg>
+          Finish job work
+        </button>
+        <span style="font-size: 12px; font-weight: 700; color: #4C5568; width: 96px; line-height: 1.4;">Needs a connection</span>
+      </div>
+      <div class="nm-in" style="display: flex; padding: 6px; border-radius: 18px; gap: 6px;">
+        <span class="nm-up-s" style="flex-grow: 1; text-align: center; padding: 11px 0; border-radius: 13px; background: #E8ECF3; font-size: 14px; font-weight: 700; color: #01579B;">To collect</span>
+        <span style="flex-grow: 1; text-align: center; padding: 11px 0; border-radius: 13px; font-size: 14px; font-weight: 600; color: #586178;">Collected today</span>
+      </div>
+      <label style="display: block;">
+        <span style="display: block; font-size: 12px; font-weight: 700; color: #586178; margin-bottom: 8px;">Receiver name</span>
+        <span class="nm-in" style="display: block; padding: 15px 18px; border-radius: 16px;"><input class="filled" type="text" placeholder="Rakesh Mehta" style="font-size: 15px; font-weight: 600;"></span>
+      </label>
+      <div style="display: flex; gap: 22px; align-items: center;">
+        <span style="display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600;">
+          <span class="nm-in-s" style="width: 26px; height: 26px; border-radius: 9px; background: #03A9F4; display: flex; align-items: center; justify-content: center;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+          </span>Selected</span>
+        <span style="display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; color: #586178;">
+          <span class="nm-in-s" style="width: 26px; height: 26px; border-radius: 9px; background: #E3E8F0;"></span>Not selected</span>
+        <span style="display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; color: #586178;">
+          <span class="nm-in" style="width: 52px; height: 28px; border-radius: 14px; display: flex; align-items: center; padding: 0 3px;"><span class="nm-up-s" style="width: 22px; height: 22px; border-radius: 50%; background: #E8ECF3;"></span></span>Toggle</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="nm-up" style="padding: 30px 32px; border-radius: 26px; display: flex; flex-direction: column; gap: 20px;">
+    <div style="font-size: 13px; font-weight: 800; letter-spacing: 0.09em; text-transform: uppercase; color: #586178;">Offline semantics &mdash; the screen says which one before the tap</div>
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 26px;">
+      <div class="nm-in" style="padding: 22px 24px; border-radius: 20px; display: flex; flex-direction: column; gap: 10px;">
+        <span style="align-self: flex-start; padding: 6px 12px; border-radius: 11px; background: #D5E8DE; color: #1B6B48; font-size: 12px; font-weight: 800;">Works offline</span>
+        <div style="font-size: 15px; font-weight: 700;">Indistinguishable from online, plus a queued marker.</div>
+        <div style="font-size: 13px; color: #586178; line-height: 1.6;">Confirm and cancel pickup, take and release, mark delivered, timer, department transfer, jangad submit.</div>
+      </div>
+      <div class="nm-in" style="padding: 22px 24px; border-radius: 20px; display: flex; flex-direction: column; gap: 10px;">
+        <span style="align-self: flex-start; padding: 6px 12px; border-radius: 11px; background: #F3E2C4; color: #7A4A00; font-size: 12px; font-weight: 800;">Degrades</span>
+        <div style="font-size: 15px; font-weight: 700;">Readable from cache, and labelled as possibly stale.</div>
+        <div style="font-size: 13px; color: #586178; line-height: 1.6;">Worklists, jangad pages already fetched, saved pickup addresses. The age of the data is always on screen.</div>
+      </div>
+      <div class="nm-in" style="padding: 22px 24px; border-radius: 20px; display: flex; flex-direction: column; gap: 10px;">
+        <span style="align-self: flex-start; padding: 6px 12px; border-radius: 11px; background: #D7DCE6; color: #4C5568; font-size: 12px; font-weight: 800;">Blocked</span>
+        <div style="font-size: 15px; font-weight: 700;">Disabled with a reason. The tap never enters a queue that cannot succeed.</div>
+        <div style="font-size: 13px; color: #586178; line-height: 1.6;">Finish job work, first-ever sign in. Nothing else.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1240,"height":1300}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

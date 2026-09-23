@@ -1,0 +1,295 @@
+{
+  "v": 3,
+  "createdOnFiles": {
+    "v": 1,
+    "at": "2026-09-23T12:00:00Z"
+  },
+  "title": "Sudi App — Neumorphism UI Preview",
+  "launch": {
+    "view": "canvas"
+  },
+  "pages": [],
+  "boards": {
+    "Main.dc.html": {
+      "x": 0,
+      "y": 0,
+      "w": 1240,
+      "h": 1300,
+      "title": "Soft UI foundations"
+    },
+    "Field-01-SignIn.dc.html": {
+      "x": 0,
+      "y": 1640,
+      "w": 390,
+      "h": 844,
+      "title": "Sign in",
+      "is_interactive": true
+    },
+    "Field-02-Unlock.dc.html": {
+      "x": 470,
+      "y": 1640,
+      "w": 390,
+      "h": 844,
+      "title": "Unlock offline",
+      "is_interactive": true
+    },
+    "Field-03-Pickups.dc.html": {
+      "x": 940,
+      "y": 1640,
+      "w": 390,
+      "h": 844,
+      "title": "Pickups, online",
+      "is_interactive": true
+    },
+    "Field-04-Pickups-Offline.dc.html": {
+      "x": 1410,
+      "y": 1640,
+      "w": 390,
+      "h": 844,
+      "title": "Pickups, offline",
+      "is_interactive": true
+    },
+    "Field-05-PickupDetail.dc.html": {
+      "x": 0,
+      "y": 2824,
+      "w": 390,
+      "h": 844,
+      "title": "Receipt and jangad",
+      "is_interactive": true
+    },
+    "Field-06-ConfirmPickup.dc.html": {
+      "x": 470,
+      "y": 2824,
+      "w": 390,
+      "h": 844,
+      "title": "Confirm pickup",
+      "is_interactive": true
+    },
+    "Field-07-CancelPickup.dc.html": {
+      "x": 940,
+      "y": 2824,
+      "w": 390,
+      "h": 844,
+      "title": "Cannot collect",
+      "is_interactive": true
+    },
+    "Field-08-Deliveries.dc.html": {
+      "x": 0,
+      "y": 4008,
+      "w": 390,
+      "h": 844,
+      "title": "Take parcels out",
+      "is_interactive": true
+    },
+    "Field-09-Deliver.dc.html": {
+      "x": 470,
+      "y": 4008,
+      "w": 390,
+      "h": 844,
+      "title": "Proof of delivery",
+      "is_interactive": true
+    },
+    "Field-10-Conflict.dc.html": {
+      "x": 940,
+      "y": 4008,
+      "w": 390,
+      "h": 844,
+      "title": "Lost the race",
+      "is_interactive": true
+    },
+    "Field-11-JobWork.dc.html": {
+      "x": 0,
+      "y": 5192,
+      "w": 390,
+      "h": 844,
+      "title": "Job work and timer",
+      "is_interactive": true
+    },
+    "Field-12-Department.dc.html": {
+      "x": 470,
+      "y": 5192,
+      "w": 390,
+      "h": 844,
+      "title": "Move department",
+      "is_interactive": true
+    },
+    "Field-13-FinishBlocked.dc.html": {
+      "x": 940,
+      "y": 5192,
+      "w": 390,
+      "h": 844,
+      "title": "Finish needs a signal",
+      "is_interactive": true
+    },
+    "Field-14-Outbox.dc.html": {
+      "x": 0,
+      "y": 6376,
+      "w": 390,
+      "h": 844,
+      "title": "The queue",
+      "is_interactive": true
+    },
+    "Field-15-NeedsAttention.dc.html": {
+      "x": 470,
+      "y": 6376,
+      "w": 390,
+      "h": 844,
+      "title": "Needs attention",
+      "is_interactive": true
+    },
+    "Field-16-Revoked.dc.html": {
+      "x": 940,
+      "y": 6376,
+      "w": 390,
+      "h": 844,
+      "title": "Wiped by the office",
+      "is_interactive": true
+    },
+    "Cust-01-Phone.dc.html": {
+      "x": 0,
+      "y": 7560,
+      "w": 390,
+      "h": 844,
+      "title": "Mobile number",
+      "is_interactive": true
+    },
+    "Cust-02-Otp.dc.html": {
+      "x": 470,
+      "y": 7560,
+      "w": 390,
+      "h": 844,
+      "title": "WhatsApp code",
+      "is_interactive": true
+    },
+    "Cust-03-Register.dc.html": {
+      "x": 940,
+      "y": 7560,
+      "w": 390,
+      "h": 844,
+      "title": "Name and GST",
+      "is_interactive": true
+    },
+    "Cust-04-Jangad.dc.html": {
+      "x": 1410,
+      "y": 7560,
+      "w": 390,
+      "h": 844,
+      "title": "Jangad pages",
+      "is_interactive": true
+    },
+    "Cust-05-Address.dc.html": {
+      "x": 1880,
+      "y": 7560,
+      "w": 390,
+      "h": 844,
+      "title": "Collect from",
+      "is_interactive": true
+    },
+    "Cust-06-Submitted.dc.html": {
+      "x": 2350,
+      "y": 7560,
+      "w": 390,
+      "h": 844,
+      "title": "Reference",
+      "is_interactive": true
+    }
+  },
+  "order": [
+    "Main.dc.html",
+    "Field-01-SignIn.dc.html",
+    "Field-02-Unlock.dc.html",
+    "Field-03-Pickups.dc.html",
+    "Field-04-Pickups-Offline.dc.html",
+    "Field-05-PickupDetail.dc.html",
+    "Field-06-ConfirmPickup.dc.html",
+    "Field-07-CancelPickup.dc.html",
+    "Field-08-Deliveries.dc.html",
+    "Field-09-Deliver.dc.html",
+    "Field-10-Conflict.dc.html",
+    "Field-11-JobWork.dc.html",
+    "Field-12-Department.dc.html",
+    "Field-13-FinishBlocked.dc.html",
+    "Field-14-Outbox.dc.html",
+    "Field-15-NeedsAttention.dc.html",
+    "Field-16-Revoked.dc.html",
+    "Cust-01-Phone.dc.html",
+    "Cust-02-Otp.dc.html",
+    "Cust-03-Register.dc.html",
+    "Cust-04-Jangad.dc.html",
+    "Cust-05-Address.dc.html",
+    "Cust-06-Submitted.dc.html"
+  ],
+  "notes": {
+    "tB": {
+      "x": 0,
+      "y": 1390,
+      "text": "Field app — getting in",
+      "kind": "title1",
+      "maxW": 1800
+    },
+    "tC": {
+      "x": 0,
+      "y": 2574,
+      "text": "Field app — collecting a jangad",
+      "kind": "title1",
+      "maxW": 1330
+    },
+    "tD": {
+      "x": 0,
+      "y": 3758,
+      "text": "Field app — deliveries, where two phones collide",
+      "kind": "title1",
+      "maxW": 1330
+    },
+    "tE": {
+      "x": 0,
+      "y": 4942,
+      "text": "Field app — job work",
+      "kind": "title1",
+      "maxW": 1330
+    },
+    "tF": {
+      "x": 0,
+      "y": 6126,
+      "text": "Field app — the queue, and the states nobody designs",
+      "kind": "title1",
+      "maxW": 1330
+    },
+    "tG": {
+      "x": 0,
+      "y": 7310,
+      "text": "Customer app — one job, done offline",
+      "kind": "title1",
+      "maxW": 2740
+    },
+    "nA": {
+      "x": 1330,
+      "y": 40,
+      "w": 360,
+      "text": "Ground #E3E8F0, one indigo for staff, one teal for customers.\n\nShadows carry depth. They never carry state — a soft shadow vanishes in Surat daylight, so every state is a saturated chip with real contrast.",
+      "fill": "blue"
+    },
+    "nB": {
+      "x": 1880,
+      "y": 1700,
+      "w": 360,
+      "text": "Four things are on every field screen without opening a menu: the connection, when it last synced, how many items are queued, and — one tap away — why each one has not gone yet.",
+      "fill": "blue"
+    },
+    "nD": {
+      "x": 1410,
+      "y": 4068,
+      "w": 360,
+      "text": "Two operators can take the same parcel while neither can see the other. The loser sees who won and when, on the record, with no error modal.",
+      "fill": "purple"
+    },
+    "nF": {
+      "x": 1410,
+      "y": 6436,
+      "w": 360,
+      "text": "The single most useful support screen in the app. It turns “the app is broken” into “three items queued, oldest four hours, last error a network timeout”.",
+      "fill": "orange"
+    }
+  },
+  "designSystems": []
+}

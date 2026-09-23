@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Pickup detail</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Sora:wght@500;600;700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#E3E8F0;font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased;color:#1A2032}
+.nm-up{box-shadow:6px 6px 14px #C4CCDA,-6px -6px 14px #FFFFFF}
+.nm-up-s{box-shadow:3px 3px 8px #C6CEDC,-3px -3px 8px #FFFFFF}
+.nm-in{box-shadow:inset 5px 5px 11px #C4CCDA,inset -5px -5px 11px #FFFFFF}
+.nm-in-s{box-shadow:inset 2px 2px 5px #C7CFDD,inset -2px -2px 5px #FFFFFF}
+.nm-acc{box-shadow:5px 6px 14px rgba(1,87,155,.32),-4px -4px 10px #FFFFFF}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
+.disp{font-family:'Sora',system-ui,sans-serif}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;border:0;background:none;padding:0;cursor:pointer}
+.slip{font-family:'IBM Plex Mono',monospace;color:#3E3524}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; padding: 22px 20px 0; display: flex; flex-direction: column; gap: 13px;">
+
+  <div style="display: flex; align-items: center; gap: 12px;">
+    <a href="Field-03-Pickups.dc.html" class="nm-up" style="width: 44px; height: 44px; border-radius: 15px; display: flex; align-items: center; justify-content: center;" aria-label="Back to pickups">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3D4658" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+    </a>
+    <div style="flex-grow: 1;">
+      <div class="mono" style="font-size: 15px; font-weight: 600; color: #01579B;">WH/IN/00042</div>
+      <div style="font-size: 12px; color: #586178;">To collect &middot; scheduled <span class="mono">10:00</span></div>
+    </div>
+    <a href="Field-05-PickupDetail.dc.html" class="nm-up" style="width: 44px; height: 44px; border-radius: 15px; display: flex; align-items: center; justify-content: center;" aria-label="Call the customer">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#01579B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 3.5h3l1.5 4-2 1.6a12 12 0 0 0 5.9 5.9l1.6-2 4 1.5v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.5 5.7 2 2 0 0 1 6.5 3.5Z"></path></svg>
+    </a>
+  </div>
+
+  <div class="nm-in" style="padding: 14px; border-radius: 22px; display: flex; flex-direction: column; align-items: center; gap: 11px;">
+    <div style="width: 200px; height: 248px; border-radius: 6px; background: #FBF6E9; box-shadow: 0 6px 16px rgba(72,64,40,.22); transform: rotate(-1.1deg); box-sizing: border-box; padding: 12px 13px; display: flex; flex-direction: column; gap: 7px;">
+      <div class="slip" style="font-size: 9px; letter-spacing: 0.14em; text-align: center; font-weight: 600; border-bottom: 1px solid #C9BD9C; padding-bottom: 5px;">JANGAD &middot; SUDI</div>
+      <div class="slip" style="font-size: 9px; display: flex; justify-content: space-between;"><span>KIRAN GEMS</span><span>23/09</span></div>
+      <div style="display: grid; grid-template-columns: 16px 1fr 26px 30px; gap: 3px 4px; font-size: 8px;" class="slip">
+        <span style="border-bottom: 1px solid #DCD3BE;">SR</span><span style="border-bottom: 1px solid #DCD3BE;">SIZE</span><span style="border-bottom: 1px solid #DCD3BE;">PCS</span><span style="border-bottom: 1px solid #DCD3BE;">CTS</span>
+        <span>1</span><span>0.30-0.35</span><span>24</span><span>7.85</span>
+        <span>2</span><span>0.18-0.22</span><span>61</span><span>12.40</span>
+        <span>3</span><span>0.40-0.45</span><span>12</span><span>5.10</span>
+        <span>4</span><span>0.25-0.30</span><span>38</span><span>10.25</span>
+        <span>5</span><span>0.50-0.55</span><span>8</span><span>4.32</span>
+      </div>
+      <div style="flex-grow: 1;"></div>
+      <div class="slip" style="font-size: 8px; border-top: 1px solid #C9BD9C; padding-top: 5px; display: flex; justify-content: space-between;"><span>TOTAL</span><span>143 / 39.92</span></div>
+      <svg width="70" height="26" viewBox="0 0 70 26" fill="none" stroke="#2F3C6E" stroke-width="1.3" stroke-linecap="round" aria-hidden="true"><path d="M3 19c6-11 9 2 13-6s6 9 11-1 8 6 13-2 9 5 14-1"></path></svg>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <span class="nm-up-s" style="width: 8px; height: 8px; border-radius: 50%; background: #03A9F4;"></span>
+      <span class="nm-in-s" style="width: 8px; height: 8px; border-radius: 50%; background: #D5DBE5;"></span>
+      <span style="font-size: 12px; font-weight: 700; color: #586178;">Page 1 of 2</span>
+    </div>
+  </div>
+
+  <div class="nm-up" style="padding: 15px 17px; border-radius: 20px; display: flex; flex-direction: column; gap: 12px;">
+    <div style="display: flex; align-items: center; gap: 11px;">
+      <span class="nm-in-s" style="width: 38px; height: 38px; border-radius: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#01579B" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8.5" r="3.6"></circle><path d="M4.8 20a7.4 7.4 0 0 1 14.4 0"></path></svg>
+      </span>
+      <div style="flex-grow: 1;">
+        <div style="font-size: 16px; font-weight: 700;">Kiran Gems</div>
+        <div class="mono" style="font-size: 12px; color: #586178;">98765 43210</div>
+      </div>
+    </div>
+    <div style="height: 1px; background: #D3DAE5;"></div>
+    <div style="display: flex; align-items: flex-start; gap: 11px;">
+      <span class="nm-in-s" style="width: 38px; height: 38px; border-radius: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#01579B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"></path><circle cx="12" cy="10" r="2.6"></circle></svg>
+      </span>
+      <div style="flex-grow: 1;">
+        <div style="font-size: 14px; font-weight: 600; line-height: 1.45;">12, Mahidharpura<br>Surat 395003</div>
+      </div>
+      <a href="Field-05-PickupDetail.dc.html" class="nm-up-s" style="padding: 8px 12px; border-radius: 12px; font-size: 12px; font-weight: 700; color: #01579B; align-self: center;">Maps</a>
+    </div>
+  </div>
+
+  <div style="flex-grow: 1;"></div>
+
+  <div style="display: flex; flex-direction: column; gap: 11px; padding-bottom: 22px;">
+    <div style="display: flex; align-items: center; gap: 7px; justify-content: center;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1B6B48" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+      <span style="font-size: 12px; font-weight: 700; color: #1B6B48;">Both actions work offline</span>
+    </div>
+    <a href="Field-06-ConfirmPickup.dc.html" class="nm-acc" style="display: flex; align-items: center; justify-content: center; gap: 10px; height: 56px; border-radius: 19px; background: #03A9F4; color: #06283D; font-size: 16px; font-weight: 700;">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8.5h3l1.4-2h7.2L17 8.5h3a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1Z"></path><circle cx="12" cy="13.2" r="3.2"></circle></svg>
+      Confirm pickup
+    </a>
+    <a href="Field-07-CancelPickup.dc.html" class="nm-up" style="display: flex; align-items: center; justify-content: center; height: 52px; border-radius: 18px; font-size: 15px; font-weight: 700; color: #4C5568;">Cannot collect</a>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

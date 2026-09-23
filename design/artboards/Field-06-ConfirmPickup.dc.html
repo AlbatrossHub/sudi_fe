@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Confirm pickup</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Sora:wght@500;600;700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#E3E8F0;font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased;color:#1A2032}
+.nm-up{box-shadow:6px 6px 14px #C4CCDA,-6px -6px 14px #FFFFFF}
+.nm-up-s{box-shadow:3px 3px 8px #C6CEDC,-3px -3px 8px #FFFFFF}
+.nm-in{box-shadow:inset 5px 5px 11px #C4CCDA,inset -5px -5px 11px #FFFFFF}
+.nm-in-s{box-shadow:inset 2px 2px 5px #C7CFDD,inset -2px -2px 5px #FFFFFF}
+.nm-acc{box-shadow:5px 6px 14px rgba(1,87,155,.32),-4px -4px 10px #FFFFFF}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
+.disp{font-family:'Sora',system-ui,sans-serif}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;border:0;background:none;padding:0;cursor:pointer}
+input,textarea{font:inherit;color:inherit;border:0;background:none;outline:none;width:100%;resize:none}
+.filled::placeholder{color:#1A2032;opacity:1}
+.hint::placeholder{color:#79839A;opacity:1}
+.slip{font-family:'IBM Plex Mono',monospace;color:#3E3524}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; padding: 22px 20px 0; display: flex; flex-direction: column; gap: 16px;">
+
+  <div style="display: flex; align-items: center; gap: 12px;">
+    <a href="Field-05-PickupDetail.dc.html" class="nm-up" style="width: 44px; height: 44px; border-radius: 15px; display: flex; align-items: center; justify-content: center;" aria-label="Back">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3D4658" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+    </a>
+    <div style="flex-grow: 1;">
+      <h1 class="disp" style="margin: 0 0 2px; font-size: 21px; font-weight: 700;">Confirm pickup</h1>
+      <div class="mono" style="font-size: 12px; color: #586178;">WH/IN/00042 &middot; Kiran Gems</div>
+    </div>
+  </div>
+
+  <div>
+    <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 11px;">
+      <span style="font-size: 13px; font-weight: 800; color: #3D4658;">Jangad pages</span>
+      <span style="font-size: 12px; color: #586178; flex-grow: 1;">in the order you photograph them</span>
+    </div>
+    <div style="display: flex; gap: 12px;">
+      <div style="width: 96px;">
+        <div class="nm-in" style="height: 124px; border-radius: 18px; padding: 8px; box-sizing: border-box; display: flex; align-items: center; justify-content: center;">
+          <div style="width: 74px; height: 106px; border-radius: 4px; background: #FBF6E9; box-shadow: 0 3px 8px rgba(72,64,40,.2); box-sizing: border-box; padding: 6px; display: flex; flex-direction: column; gap: 3px;">
+            <div class="slip" style="font-size: 5px; letter-spacing: .1em; text-align: center; border-bottom: 1px solid #C9BD9C; padding-bottom: 2px;">JANGAD</div>
+            <div style="height: 1.5px; background: #D8CEB4; width: 90%;"></div>
+            <div style="height: 1.5px; background: #D8CEB4; width: 74%;"></div>
+            <div style="height: 1.5px; background: #D8CEB4; width: 86%;"></div>
+            <div style="height: 1.5px; background: #D8CEB4; width: 62%;"></div>
+            <div style="height: 1.5px; background: #D8CEB4; width: 80%;"></div>
+          </div>
+        </div>
+        <div class="mono" style="font-size: 11px; color: #586178; text-align: center; margin-top: 7px;">1 &middot; 312 KB</div>
+      </div>
+      <div style="width: 96px;">
+        <div class="nm-in" style="height: 124px; border-radius: 18px; padding: 8px; box-sizing: border-box; display: flex; align-items: center; justify-content: center;">
+          <div style="width: 74px; height: 106px; border-radius: 4px; background: #FBF6E9; box-shadow: 0 3px 8px rgba(72,64,40,.2); box-sizing: border-box; padding: 6px; display: flex; flex-direction: column; gap: 3px;">
+            <div class="slip" style="font-size: 5px; letter-spacing: .1em; text-align: center; border-bottom: 1px solid #C9BD9C; padding-bottom: 2px;">PAGE 2</div>
+            <div style="height: 1.5px; background: #D8CEB4; width: 68%;"></div>
+            <div style="height: 1.5px; background: #D8CEB4; width: 88%;"></div>
+            <div style="height: 1.5px; background: #D8CEB4; width: 55%;"></div>
+          </div>
+        </div>
+        <div class="mono" style="font-size: 11px; color: #586178; text-align: center; margin-top: 7px;">2 &middot; 287 KB</div>
+      </div>
+      <button class="nm-up" style="width: 96px; height: 124px; border-radius: 18px; background: #E3E8F0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 9px;">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#01579B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8.5h3l1.4-2h7.2L17 8.5h3a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1Z"></path><circle cx="12" cy="13.2" r="3.2"></circle></svg>
+        <span style="font-size: 12px; font-weight: 800; color: #01579B;">Add page</span>
+      </button>
+    </div>
+    <div class="mono" style="font-size: 11px; color: #79839A; margin-top: 9px;">1800 px long edge &middot; q80 &middot; kept until the office has it</div>
+  </div>
+
+  <div class="nm-up" style="display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 18px;">
+    <span class="nm-in-s" style="width: 38px; height: 38px; border-radius: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1B6B48" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"></path><circle cx="12" cy="10" r="2.6"></circle></svg>
+    </span>
+    <div style="flex-grow: 1;">
+      <div style="font-size: 14px; font-weight: 700;">Location attached</div>
+      <div class="mono" style="font-size: 11px; color: #586178;">21.1907, 72.8248 &middot; &plusmn;12 m</div>
+    </div>
+    <span class="nm-in" style="width: 52px; height: 28px; border-radius: 14px; display: flex; align-items: center; justify-content: flex-end; padding: 0 3px; box-sizing: border-box;">
+      <span class="nm-up-s" style="width: 22px; height: 22px; border-radius: 50%; background: #03A9F4;"></span>
+    </span>
+  </div>
+
+  <label style="display: block;">
+    <span style="display: block; font-size: 13px; font-weight: 800; color: #3D4658; margin-bottom: 10px;">Note <span style="font-weight: 600; color: #79839A;">optional</span></span>
+    <span class="nm-in" style="display: block; padding: 14px 16px; border-radius: 18px;">
+      <textarea class="hint" rows="2" placeholder="Anything the office should know"  style="font-size: 14px;"></textarea>
+    </span>
+  </label>
+
+  <div style="flex-grow: 1;"></div>
+
+  <div style="display: flex; flex-direction: column; gap: 12px; padding-bottom: 22px;">
+    <div class="nm-in" style="display: flex; align-items: center; gap: 10px; padding: 12px 15px; border-radius: 16px;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#586178" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.2V12l3.2 1.9"></path></svg>
+      <span style="font-size: 12px; color: #586178; flex-grow: 1;">Recorded at <span class="mono" style="font-weight: 600; color: #3D4658;">10:04</span>, not when it sends</span>
+    </div>
+    <a href="Field-04-Pickups-Offline.dc.html" class="nm-acc" style="display: flex; align-items: center; justify-content: center; gap: 10px; height: 56px; border-radius: 19px; background: #03A9F4; color: #06283D; font-size: 16px; font-weight: 700;">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+      Confirm pickup
+    </a>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

@@ -3,27 +3,60 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../config/flavor.dart';
+import '../../config/splash_clock.dart';
 import '../../core/services.dart';
 import '../../core/session.dart';
 import '../../ui/theme/neu.dart';
 import '../../ui/widgets/neu_box.dart';
 import '../../ui/widgets/neu_widgets.dart';
+import '../../ui/widgets/powered_by.dart';
 
-class BootScreen extends StatelessWidget {
+/// The first thing anyone sees: the mark, held long enough to read.
+///
+/// No spinner. The wait is a deliberate one — `Env.splashMinimum` — not a load
+/// the user is waiting on, and a progress indicator would promise otherwise.
+///
+/// The mark is centred on the *window*, not inside a SafeArea, because the
+/// native launch drawable centres it the same way. Inset it here and it would
+/// jump by half the status bar's height the moment Flutter took over.
+class BootScreen extends ConsumerWidget {
   const BootScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final c = NeuTheme.of(context);
+    // This screen is the first frame, so it is the one that starts the clock
+    // the minimum splash is measured against.
+    WidgetsBinding.instance.addPostFrameCallback((_) => SplashClock.markFirstFrame());
+
     return Scaffold(
       backgroundColor: c.ground,
-      body: Center(
-        child: NeuBox(
-          style: NeuStyle.raised,
-          radius: 28,
-          width: 84,
-          height: 84,
-          child: Center(child: Icon(Icons.diamond_outlined, size: 38, color: c.accentInk)),
+      body: SafeArea(
+        // Stretched, with each child centred inside it. Left loose, the Column
+        // takes the width of its widest child and everything centres inside
+        // that band rather than on the screen.
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // 5 above, 6 below: the mark sits on the optical centre, because a
+            // logo centred by arithmetic on a tall phone reads as sitting low.
+            const Spacer(flex: 5),
+            Center(
+              child: Image.asset(
+                'assets/brand/sdppl.png',
+                height: 104,
+                filterQuality: FilterQuality.medium,
+                semanticLabel: 'SDPPL',
+              ),
+            ),
+            const SizedBox(height: 24),
+            Center(
+              child: Text(sudiFlavor.title, style: NeuText.title(c.ink, size: 20)),
+            ),
+            const Spacer(flex: 6),
+            Center(child: PoweredBy(onTap: () => showPoweredBySheet(context, ref))),
+            const SizedBox(height: 26),
+          ],
         ),
       ),
     );
@@ -60,12 +93,11 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Center(
-              child: NeuBox(
-                style: NeuStyle.raised,
-                radius: 28,
-                width: 84,
+              child: Image.asset(
+                'assets/brand/sdppl.png',
                 height: 84,
-                child: Center(child: Icon(Icons.diamond_outlined, size: 40, color: c.accentInk)),
+                filterQuality: FilterQuality.medium,
+                semanticLabel: 'SDPPL',
               ),
             ),
             const SizedBox(height: 18),
@@ -120,6 +152,8 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
               textAlign: TextAlign.center,
               style: NeuText.body_(c.inkMuted, size: 12),
             ),
+            const SizedBox(height: 22),
+            Center(child: PoweredBy(onTap: () => showPoweredBySheet(context, ref))),
           ],
         ),
       ),

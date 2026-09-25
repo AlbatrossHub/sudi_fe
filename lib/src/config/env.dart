@@ -1,23 +1,31 @@
 /// Where the app points, and how to move it.
 ///
-/// The default is the dev tunnel in front of the Odoo box. Override without
-/// editing the file:
+/// The default is production. It is a real hostname with a real certificate, so
+/// a build with no `--dart-define` is the one that should ship — the tunnel
+/// hostnames that used to live here changed every restart and shipped stale.
 ///
-///   flutter run --dart-define=SUDI_BASE_URL=https://example.trycloudflare.com
+/// Override for a local server or a tunnel:
+///
+///   flutter run --dart-define=SUDI_BASE_URL=http://localhost:8069
 ///   flutter build apk --dart-define=SUDI_BASE_URL=... --dart-define=SUDI_DB=sudi
 ///
-/// A quick Cloudflare tunnel gets a new hostname every restart, so expect to
-/// pass `--dart-define` rather than rebuild this constant.
+/// The app shows whichever one it was built with under "Powered by Albatross",
+/// because "it will not connect" is nearly always the server address.
 class Env {
   const Env._();
 
   static const String baseUrl = String.fromEnvironment(
     'SUDI_BASE_URL',
-    defaultValue: 'https://nsw-defend-worlds-sporting.trycloudflare.com',
+    defaultValue: 'https://manage.sdppl.com',
   );
 
   /// Appended as `?db=` on every call — the server hosts several.
   static const String db = String.fromEnvironment('SUDI_DB', defaultValue: 'sudi');
+
+  /// How long the landing screen stays up on a cold start, whether or not the
+  /// session was ready sooner. Long enough to read the mark; it is a floor, not
+  /// a sleep, so a slow restore does not add to it.
+  static const Duration splashMinimum = Duration(seconds: 3);
 
   /// Pull while foregrounded (brief section 6.3).
   static const Duration pollInterval = Duration(seconds: 60);

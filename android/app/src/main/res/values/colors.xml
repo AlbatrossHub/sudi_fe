@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ic_launcher_background">#FFFFFF</color>
+    <!-- NeuColors.light ground. The native launch window uses it so the
+         handover to the first Flutter frame is invisible. -->
+    <color name="sudi_ground">#E3E8F0</color>
+</resources>

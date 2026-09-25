@@ -18,6 +18,7 @@ import '../../models/docs.dart';
 import '../../ui/theme/neu.dart';
 import '../../ui/widgets/neu_box.dart';
 import '../../ui/widgets/neu_widgets.dart';
+import '../../ui/widgets/powered_by.dart';
 import '../field/sign_in_screens.dart';
 import '../../ui/widgets/status_strip.dart';
 
@@ -197,6 +198,8 @@ class _PhoneScreenState extends ConsumerState<PhoneScreen> {
               textAlign: TextAlign.center,
               style: NeuText.body_(c.inkMuted, size: 12),
             ),
+            const SizedBox(height: 22),
+            Center(child: PoweredBy(onTap: () => showPoweredBySheet(context, ref))),
           ],
         ),
       ),

@@ -27,6 +27,21 @@ The backend base URL is a compile-time constant with a default, so a quick
 Cloudflare tunnel (which gets a **new hostname every restart**) is passed in
 rather than committed:
 
+### Where it points
+
+The default is **production**, `https://manage.sdppl.com`, database `sudi`. A
+build with no `--dart-define` is the one that ships; the tunnel hostnames that
+used to be the default changed every restart and shipped stale. Whichever URL a
+build carries is shown in the app under "Powered by Albatross", because "it will
+not connect" is nearly always the server address.
+
+> The API is not live on that host yet. `sudi_api` needs `odoo-addon-fastapi`
+> and `PyJWT` in the server's environment, the `sudi` addons on its addons
+> path, and the module installed — installing it creates the two
+> `fastapi.endpoint` records that mint `/api/field/v1` and `/api/customer/v1`.
+> Until then every call returns Odoo's 404 page and the app says
+> "Request refused."
+
 ```bash
 # live development, phone on USB with debugging on
 flutter run --flavor field    -t lib/main_field.dart \

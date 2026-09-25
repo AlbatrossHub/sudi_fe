@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
 import '../config/env.dart';
+import '../config/splash_clock.dart';
 import '../models/docs.dart';
 import 'api/api_error.dart';
 import 'services.dart';
@@ -84,12 +85,20 @@ class SessionController extends Notifier<SessionState> {
   /// accepts new captures. No splash waits on `/health`, nothing blocks on a
   /// token refresh.
   Future<void> restore() async {
+    // Reading secure storage takes a few hundred milliseconds, which is not
+    // long enough to read a logo. The wait runs *alongside* the work rather
+    // than after it, so the splash costs its own duration and not a millisecond
+    // more — and it is measured from the first frame, not from here.
+    final held = SplashClock.hold(Env.splashMinimum);
+
     final roles = await _s.tokens.roles();
     if (!await _s.tokens.hasSession) {
+      await held;
       state = const SessionState(stage: SessionStage.signedOut);
       return;
     }
     final locked = await _s.pin.isSet;
+    await held;
     state = SessionState(
       stage: locked ? SessionStage.locked : SessionStage.ready,
       roles: roles,

@@ -1,5 +1,6 @@
 import '../api/api_client.dart';
 import '../api/api_error.dart';
+import '../cache/response_cache.dart';
 import '../../models/docs.dart';
 import 'device_identity.dart';
 import 'token_store.dart';
@@ -34,12 +35,33 @@ class OtpVerdict {
   final String? registrationToken;
 }
 
+/// What `POST /gst` and `POST /gst/skip` answer.
+class GstAnswer {
+  const GstAnswer({required this.gstState, this.vat, this.company});
+
+  final String gstState;
+  final String? vat;
+
+  /// The company the GSTIN resolved to -- shown back so the customer can see
+  /// it is the right one.
+  final String? company;
+
+  factory GstAnswer.fromJson(Map<String, dynamic> j, {required String fallback}) => GstAnswer(
+        gstState: '${j['gst_state'] ?? fallback}',
+        vat: j['vat'] as String?,
+        company: j['company'] as String?,
+      );
+}
+
 class AuthRepository {
-  AuthRepository(this._api, this._tokens, this._device);
+  AuthRepository(this._api, this._tokens, this._device, [this._cache]);
 
   final ApiClient _api;
   final TokenStore _tokens;
   final DeviceIdentity _device;
+  final ResponseCache? _cache;
+
+  static const _mePath = '/auth/me';
 
   // -------------------------------------------------------------- staff
 
@@ -102,14 +124,21 @@ class AuthRepository {
   }
 
   /// A skip is a "not now", never final: `POST /gst` still works afterwards.
-  Future<String> submitGst(String vat) async {
+  Future<GstAnswer> submitGst(String vat) async {
     final response = await _api.post<Map<String, dynamic>>('/gst', body: {'vat': vat});
-    return '${(response.data ?? const {})['gst_state'] ?? 'present'}';
+    return GstAnswer.fromJson(response.data ?? const {}, fallback: 'present');
   }
 
-  Future<String> skipGst() async {
+  Future<GstAnswer> skipGst() async {
     final response = await _api.post<Map<String, dynamic>>('/gst/skip', body: const {});
-    return '${(response.data ?? const {})['gst_state'] ?? 'skipped'}';
+    return GstAnswer.fromJson(response.data ?? const {}, fallback: 'skipped');
+  }
+
+  /// The saved `/auth/me` follows what the GST step just changed, so a restart
+  /// offline does not ask again.
+  Future<void> rememberGstState(String state) async {
+    final me = await savedMe();
+    if (me != null) await _cache?.put(_mePath, me.withGstState(state).toJson());
   }
 
   Future<List<AddressSuggestion>> addresses() async {
@@ -123,8 +152,22 @@ class AuthRepository {
   // -------------------------------------------------------------- shared
 
   Future<MeInfo> me() async {
-    final response = await _api.get<Map<String, dynamic>>('/auth/me');
-    return MeInfo.fromJson(response.data ?? const {});
+    final response = await _api.get<Map<String, dynamic>>(_mePath);
+    final data = response.data ?? const <String, dynamic>{};
+    await _cache?.put(_mePath, data);
+    return MeInfo.fromJson(data);
+  }
+
+  /// Who signed in, as the server last said: the name, the roles and the GST
+  /// state are on screen at once on a cold start with no signal.
+  Future<MeInfo?> savedMe() async {
+    try {
+      final hit = await _cache?.get(_mePath);
+      if (hit?.data is! Map) return null;
+      return MeInfo.fromJson(Map<String, dynamic>.from(hit!.data as Map));
+    } catch (_) {
+      return null;
+    }
   }
 
   /// Returns false when the refresh itself was refused — the caller decides

@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sudi v2 overview</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Sora:wght@500;600;700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#E3E8F0;font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased;color:#1A2032}
+.nm-up{box-shadow:6px 6px 14px #C4CCDA,-6px -6px 14px #FFFFFF}
+.nm-up-s{box-shadow:3px 3px 8px #C6CEDC,-3px -3px 8px #FFFFFF}
+.nm-in{box-shadow:inset 5px 5px 11px #C4CCDA,inset -5px -5px 11px #FFFFFF}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
+.disp{font-family:'Sora',system-ui,sans-serif}
+</style>
+</helmet>
+<div style="width: 1240px; height: 1180px; box-sizing: border-box; padding: 56px 64px; display: flex; flex-direction: column; gap: 28px;">
+
+  <div style="display: flex; align-items: flex-end; gap: 24px;">
+    <div style="flex-grow: 1;">
+      <div class="mono" style="font-size: 12px; font-weight: 600; color: #01579B; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px;">Sudi apps · v2 · same soft UI as v1</div>
+      <h1 class="disp" style="margin: 0 0 10px; font-size: 40px; font-weight: 700; letter-spacing: -0.02em;">Four people, two apps</h1>
+      <p style="margin: 0; font-size: 16px; line-height: 1.55; color: #586178; max-width: 720px;">The staff app (blue) now carries four tabs that appear by role: Pickups, Deliveries, Job work and Office. The customer app (teal) opens on a services dashboard. Everything a person taps is saved on the phone first and goes to the office by itself when the network comes back.</p>
+    </div>
+    <div style="display: flex; gap: 10px; flex-shrink: 0;">
+      <span class="nm-up-s" style="padding: 9px 14px; border-radius: 13px; background: #03A9F4; color: #06283D; font-size: 13px; font-weight: 800;">Staff app</span>
+      <span class="nm-up-s" style="padding: 9px 14px; border-radius: 13px; background: #0E6F66; color: #FFFFFF; font-size: 13px; font-weight: 800;">Customer app</span>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px;">
+    <div class="nm-up" style="padding: 22px; border-radius: 24px; display: flex; flex-direction: column; gap: 10px;">
+      <span class="mono" style="font-size: 12px; font-weight: 600; color: #01579B;">PERSONA 1</span>
+      <h2 class="disp" style="margin: 0; font-size: 19px; font-weight: 700;">Pickup &amp; delivery</h2>
+      <ul style="margin: 0; padding-left: 18px; font-size: 13.5px; line-height: 1.6; color: #3D4658;">
+        <li>Collect, cancel, take out, deliver — as today</li>
+        <li>Fully offline, Pahal style: resumes where you left off, drafts survive a closed app</li>
+        <li><b>New:</b> post a jangad for a customer — switched on per person by the office</li>
+      </ul>
+    </div>
+    <div class="nm-up" style="padding: 22px; border-radius: 24px; display: flex; flex-direction: column; gap: 10px;">
+      <span class="mono" style="font-size: 12px; font-weight: 600; color: #01579B;">PERSONA 2</span>
+      <h2 class="disp" style="margin: 0; font-size: 19px; font-weight: 700;">Job workers</h2>
+      <ul style="margin: 0; padding-left: 18px; font-size: 13.5px; line-height: 1.6; color: #3D4658;">
+        <li>List = jangads the office validated, filled and marked READY</li>
+        <li>A real item table: Sr stays put, the rest scrolls, totals at the foot</li>
+        <li>Log time, see My work, move to another department, notifications</li>
+      </ul>
+    </div>
+    <div class="nm-up" style="padding: 22px; border-radius: 24px; display: flex; flex-direction: column; gap: 10px;">
+      <span class="mono" style="font-size: 12px; font-weight: 600; color: #0B564F;">PERSONA 3</span>
+      <h2 class="disp" style="margin: 0; font-size: 19px; font-weight: 700;">Customer</h2>
+      <ul style="margin: 0; padding-left: 18px; font-size: 13.5px; line-height: 1.6; color: #3D4658;">
+        <li>Same sign-in and GST step as today (the KYC)</li>
+        <li><b>Phase 1:</b> pick services one at a time — quantity, remarks</li>
+        <li><b>Phase 2:</b> photograph the jangad, choose the address, send</li>
+      </ul>
+    </div>
+    <div class="nm-up" style="padding: 22px; border-radius: 24px; display: flex; flex-direction: column; gap: 10px;">
+      <span class="mono" style="font-size: 12px; font-weight: 600; color: #01579B;">PERSONA 4</span>
+      <h2 class="disp" style="margin: 0; font-size: 19px; font-weight: 700;">Office</h2>
+      <ul style="margin: 0; padding-left: 18px; font-size: 13.5px; line-height: 1.6; color: #3D4658;">
+        <li>Collected jangads waiting to be validated</li>
+        <li>Add entries straight from the requested-services table, then adjust</li>
+        <li>Mark READY — it moves to job work. Needs a signal; the draft stays on the phone</li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="display: flex; gap: 20px; flex-grow: 1; min-height: 0;">
+    <div class="nm-in" style="flex: 3 1 0; padding: 24px 26px; border-radius: 24px; display: flex; flex-direction: column; gap: 12px;">
+      <h3 class="disp" style="margin: 0 0 4px; font-size: 16px; font-weight: 700;">How the requirement was read — correct any line</h3>
+      <div style="display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 9px 18px; font-size: 13.5px; line-height: 1.5;">
+        <span style="font-weight: 800; color: #3D4658;">On behalf of a customer</span><span style="color: #586178;">The pickup person builds the same request a customer would (services + jangad). It joins the pickup pool; "Collect it now" is offered straight after.</span>
+        <span style="font-weight: 800; color: #3D4658;">Who may do it</span><span style="color: #586178;">A tick on the user form: "Can post jangad for customers".</span>
+        <span style="font-weight: 800; color: #3D4658;">Approved, filled, ready</span><span style="color: #586178;">The office has validated the jangad, filled the item table and pressed Mark READY.</span>
+        <span style="font-weight: 800; color: #3D4658;">Productivity</span><span style="color: #586178;">Time: the timer, manual entries, and a My work summary per day and per service.</span>
+        <span style="font-weight: 800; color: #3D4658;">KYC approved customer</span><span style="color: #586178;">Today's gate stays: WhatsApp code + GST step (GSTIN, or skip for now).</span>
+        <span style="font-weight: 800; color: #3D4658;">Phase 2</span><span style="color: #586178;">Step 2 of the same request: services first, then the jangad photo, then send.</span>
+        <span style="font-weight: 800; color: #3D4658;">Add entries from table</span><span style="color: #586178;">One tap turns the requested-services table into item lines the office then edits.</span>
+      </div>
+    </div>
+    <div class="nm-up" style="flex: 2 1 0; padding: 24px 26px; border-radius: 24px; display: flex; flex-direction: column; gap: 14px;">
+      <h3 class="disp" style="margin: 0; font-size: 16px; font-weight: 700;">States every card can show</h3>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <div style="display: flex; align-items: center; gap: 12px;"><span style="padding: 5px 10px; border-radius: 10px; background: #D5E8DE; color: #1B6B48; font-size: 12px; font-weight: 800; width: 118px; text-align: center;">Synced</span><span style="font-size: 13px; color: #586178;">The office has it</span></div>
+        <div style="display: flex; align-items: center; gap: 12px;"><span style="padding: 5px 10px; border-radius: 10px; background: #F3E2C4; color: #7A4A00; font-size: 12px; font-weight: 800; width: 118px; text-align: center;">On this phone</span><span style="font-size: 13px; color: #586178;">Saved, sends itself when online</span></div>
+        <div style="display: flex; align-items: center; gap: 12px;"><span style="padding: 5px 10px; border-radius: 10px; background: #E2DEF2; color: #57479B; font-size: 12px; font-weight: 800; width: 118px; text-align: center;">Someone else</span><span style="font-size: 13px; color: #586178;">A colleague got there first</span></div>
+        <div style="display: flex; align-items: center; gap: 12px;"><span style="padding: 5px 10px; border-radius: 10px; background: #F3DAD8; color: #8E2A25; font-size: 12px; font-weight: 800; width: 118px; text-align: center;">Needs you</span><span style="font-size: 13px; color: #586178;">The office refused it; open to see why</span></div>
+        <div style="display: flex; align-items: center; gap: 12px;"><span style="padding: 5px 10px; border-radius: 10px; background: #D7DCE6; color: #4C5568; font-size: 12px; font-weight: 800; width: 118px; text-align: center;">Needs signal</span><span style="font-size: 13px; color: #586178;">Only Finish and Mark READY</span></div>
+      </div>
+      <p style="margin: 4px 0 0; font-size: 12.5px; line-height: 1.5; color: #79839A;">Times on offline records are the moment you tapped, from a clock the phone cannot fake; the office sees "recorded offline, synced at …".</p>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1240,"height":1180}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

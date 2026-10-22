@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Log time</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Sora:wght@500;600;700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#E3E8F0;font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased;color:#1A2032}
+.nm-up{box-shadow:6px 6px 14px #C4CCDA,-6px -6px 14px #FFFFFF}
+.nm-up-s{box-shadow:3px 3px 8px #C6CEDC,-3px -3px 8px #FFFFFF}
+.nm-in{box-shadow:inset 5px 5px 11px #C4CCDA,inset -5px -5px 11px #FFFFFF}
+.nm-in-s{box-shadow:inset 2px 2px 5px #C7CFDD,inset -2px -2px 5px #FFFFFF}
+.nm-acc{box-shadow:5px 6px 14px rgba(1,87,155,.32),-4px -4px 10px #FFFFFF}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
+.disp{font-family:'Sora',system-ui,sans-serif}
+button{font:inherit;color:inherit;border:0;background:none;padding:0;cursor:pointer}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; padding: 26px 20px 24px; display: flex; flex-direction: column; gap: 15px;">
+
+  <div style="display: flex; align-items: center; gap: 12px;">
+    <button class="nm-up" style="width: 44px; height: 44px; border-radius: 15px; display: flex; align-items: center; justify-content: center;" aria-label="Back">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3D4658" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+    </button>
+    <div style="flex-grow: 1;">
+      <div class="mono" style="font-size: 12px; font-weight: 600; color: #01579B;">HO/IN/00321 · Shah Gems</div>
+      <h1 class="disp" style="margin: 2px 0 0; font-size: 22px; font-weight: 700; letter-spacing: -0.01em;">Log time</h1>
+    </div>
+  </div>
+
+  <div class="nm-up" style="padding: 16px 18px; border-radius: 22px; display: flex; align-items: center; gap: 14px;">
+    <div class="nm-in" style="width: 74px; height: 74px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+      <span class="mono" style="font-size: 17px; font-weight: 600;">00:00</span>
+    </div>
+    <div style="flex-grow: 1;">
+      <div style="font-size: 14px; font-weight: 800;">Use the timer</div>
+      <div style="font-size: 12.5px; color: #586178; margin-top: 2px;">Start now, stop when you put it down.</div>
+    </div>
+    <button class="nm-up-s" style="width: 46px; height: 46px; border-radius: 16px; display: flex; align-items: center; justify-content: center;" aria-label="Start timer">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="#01579B" stroke="none" aria-hidden="true"><path d="M8 5.5v13l11-6.5Z"></path></svg>
+    </button>
+  </div>
+
+  <div style="display: flex; align-items: center; gap: 10px; color: #79839A; font-size: 12px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase;"><span style="flex-grow: 1; height: 1px; background: #D3DAE5;"></span>or enter it<span style="flex-grow: 1; height: 1px; background: #D3DAE5;"></span></div>
+
+  <div style="display: flex; flex-direction: column; gap: 7px;">
+    <span style="font-size: 12px; font-weight: 800; color: #586178;">Service</span>
+    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+      <span class="nm-in-s" style="padding: 9px 13px; border-radius: 12px; font-size: 13px; font-weight: 800; color: #01579B;">Laser Inscription</span>
+      <span class="nm-up-s" style="padding: 9px 13px; border-radius: 12px; font-size: 13px; font-weight: 700; color: #3D4658;">Ultra Sonic Boiling</span>
+    </div>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 7px;">
+    <span style="font-size: 12px; font-weight: 800; color: #586178;">How long</span>
+    <div style="display: flex; gap: 10px;">
+      <div class="nm-in" style="flex: 1 1 0; display: flex; align-items: center; justify-content: space-between; padding: 8px; border-radius: 18px;">
+        <button class="nm-up-s" style="width: 40px; height: 40px; border-radius: 13px; font-size: 20px; font-weight: 700; color: #01579B;" aria-label="One hour less">−</button>
+        <span style="display: flex; align-items: baseline; gap: 4px;"><span class="mono" style="font-size: 26px; font-weight: 600;">1</span><span style="font-size: 12px; font-weight: 700; color: #586178;">h</span></span>
+        <button class="nm-up-s" style="width: 40px; height: 40px; border-radius: 13px; font-size: 20px; font-weight: 700; color: #01579B;" aria-label="One hour more">+</button>
+      </div>
+      <div class="nm-in" style="flex: 1 1 0; display: flex; align-items: center; justify-content: space-between; padding: 8px; border-radius: 18px;">
+        <button class="nm-up-s" style="width: 40px; height: 40px; border-radius: 13px; font-size: 20px; font-weight: 700; color: #01579B;" aria-label="15 minutes less">−</button>
+        <span style="display: flex; align-items: baseline; gap: 4px;"><span class="mono" style="font-size: 26px; font-weight: 600;">30</span><span style="font-size: 12px; font-weight: 700; color: #586178;">min</span></span>
+        <button class="nm-up-s" style="width: 40px; height: 40px; border-radius: 13px; font-size: 20px; font-weight: 700; color: #01579B;" aria-label="15 minutes more">+</button>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: flex; gap: 10px;">
+    <div class="nm-in-s" style="flex: 1 1 0; padding: 10px 14px; border-radius: 15px;">
+      <div style="font-size: 11px; font-weight: 700; color: #586178;">Day</div>
+      <div style="font-size: 14.5px; font-weight: 700; margin-top: 2px;">Today, 22 Oct</div>
+    </div>
+    <div class="nm-in-s" style="flex: 1.4 1 0; padding: 10px 14px; border-radius: 15px;">
+      <div style="font-size: 11px; font-weight: 700; color: #586178;">Note (optional)</div>
+      <div style="font-size: 14.5px; color: #79839A; margin-top: 2px;">Lines 1–2 done</div>
+    </div>
+  </div>
+
+  <span style="flex-grow: 1;"></span>
+
+  <p style="margin: 0; font-size: 12px; color: #586178; text-align: center;">Works offline · saved with the time you entered it</p>
+  <button class="nm-acc" style="height: 54px; border-radius: 18px; background: #03A9F4; color: #06283D; font-size: 15px; font-weight: 800;">Save 1 h 30 min</button>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

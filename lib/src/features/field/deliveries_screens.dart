@@ -5,7 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/clock/odoo_time.dart';
+import '../../core/drafts/draft_store.dart';
 import '../../core/outbox/outbox.dart';
+import '../../core/projection.dart';
 import '../../core/services.dart';
 import '../../core/sync_status.dart';
 import '../../models/docs.dart';
@@ -14,7 +16,9 @@ import '../../ui/widgets/neu_box.dart';
 import '../../ui/widgets/neu_widgets.dart';
 import '../../ui/widgets/signature_pad.dart';
 import '../../ui/widgets/status_strip.dart';
+import '../../ui/widgets/v2_widgets.dart';
 import 'pickups_screens.dart';
+import 'sign_in_screens.dart';
 
 final deliveriesProvider = FutureProvider.autoDispose<List<DeliveryDoc>>((ref) {
   ref.watch(dataRevisionProvider);
@@ -34,7 +38,7 @@ class DeliveriesScreen extends ConsumerStatefulWidget {
 }
 
 class _DeliveriesScreenState extends ConsumerState<DeliveriesScreen> {
-  int _tab = 0;
+  late int _tab = ref.read(servicesProvider).resume.segment('deliveries');
   final _selected = <int>{};
 
   @override
@@ -43,9 +47,11 @@ class _DeliveriesScreenState extends ConsumerState<DeliveriesScreen> {
     final all = ref.watch(deliveriesProvider).value ?? const <DeliveryDoc>[];
     final pending = ref.watch(pendingByRecordProvider).value ?? const {};
 
-    final awaiting = all.where((d) => d.stage == 'awaiting').toList();
-    final out = all.where((d) => d.stage == 'out').toList();
-    final done = all.where((d) => d.stage == 'delivered').toList();
+    // Where the operator put each parcel, queued or not.
+    String stage(DeliveryDoc d) => Projection.deliveryStage(d, pending[d.id] ?? const []);
+    final awaiting = all.where((d) => stage(d) == 'awaiting').toList();
+    final out = all.where((d) => stage(d) == 'out').toList();
+    final done = all.where((d) => stage(d) == 'delivered').toList();
     final shown = switch (_tab) { 0 => awaiting, 1 => out, _ => done };
 
     return NeuScaffold(
@@ -57,10 +63,17 @@ class _DeliveriesScreenState extends ConsumerState<DeliveriesScreen> {
             subtitle: _selected.isEmpty
                 ? '${out.length} out with you'
                 : '${_selected.length} selected',
-            trailing: NeuIconButton(
-              icon: Icons.refresh_rounded,
-              onPressed: () => ref.read(syncProvider.notifier).syncNow(),
-              tooltip: 'Refresh',
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const NoticeBell(),
+                const SizedBox(width: 10),
+                NeuIconButton(
+                  icon: Icons.person_outline_rounded,
+                  onPressed: () => showAccountSheet(context, ref),
+                  tooltip: 'Account',
+                ),
+              ],
             ),
           ),
           const SizedBox(height: 14),
@@ -69,17 +82,20 @@ class _DeliveriesScreenState extends ConsumerState<DeliveriesScreen> {
           NeuSegmented(
             labels: ['Awaiting ${awaiting.length}', 'Out ${out.length}', 'Done ${done.length}'],
             index: _tab,
-            onChanged: (i) => setState(() {
-              _tab = i;
-              _selected.clear();
-            }),
+            onChanged: (i) {
+              setState(() {
+                _tab = i;
+                _selected.clear();
+              });
+              ref.read(servicesProvider).resume.setSegment('deliveries', i);
+            },
           ),
           const SizedBox(height: 14),
           Expanded(
             child: RefreshIndicator(
               color: c.accentInk,
               backgroundColor: c.ground,
-              onRefresh: () => ref.read(syncProvider.notifier).syncNow(),
+              onRefresh: () => ref.read(syncProvider.notifier).syncNow(flushFirst: true),
               child: shown.isEmpty
                   ? EmptyState(
                       message: switch (_tab) {
@@ -381,21 +397,52 @@ class _DeliverScreenState extends ConsumerState<DeliverScreen> {
   final _signature = SignatureController();
   Map<String, dynamic> _location = const {};
   bool _busy = false;
+  DateTime? _restoredAt;
+
+  // Read once: `ref` is off limits in dispose, where the draft is saved.
+  late final Services _s = ref.read(servicesProvider);
+  String get _key => DraftStore.deliver(widget.id);
 
   @override
   void initState() {
     super.initState();
     _signature.addListener(_onDraw);
+    final s = _s; // resolved now, while `ref` may still be read
     scheduleMicrotask(() async {
-      final fix = await ref.read(servicesProvider).location.capture();
-      if (mounted) setState(() => _location = fix);
+      final draft = await s.drafts.load(_key);
+      if (draft != null && mounted) {
+        _receiver.text = '${draft.data['receiver'] ?? ''}';
+        final sig = draft.data['signature'];
+        if (sig is Map) _signature.load(Map<String, dynamic>.from(sig));
+        final loc = draft.data['location'];
+        if (loc is Map) _location = Map<String, dynamic>.from(loc);
+        if (draft.savedAt.isBefore(DraftStore.launchedAt)) _restoredAt = draft.savedAt;
+        setState(() {});
+      }
+      if (_location.isEmpty) {
+        final fix = await s.location.capture();
+        if (mounted) {
+          setState(() => _location = fix);
+          _persist();
+        }
+      }
     });
   }
 
-  void _onDraw() => setState(() {});
+  void _persist() => _s.drafts.save(_key, {
+        'receiver': _receiver.text,
+        'signature': _signature.toJson(),
+        'location': _location,
+      });
+
+  void _onDraw() {
+    setState(() {});
+    _persist();
+  }
 
   @override
   void dispose() {
+    unawaited(_s.drafts.saveNow(_key));
     _signature.removeListener(_onDraw);
     _signature.dispose();
     _receiver.dispose();
@@ -414,6 +461,14 @@ class _DeliverScreenState extends ConsumerState<DeliverScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          if (_restoredAt != null) ...[
+            ResumeBanner(
+              closedAt: _restoredAt!,
+              what: 'The name and the signature',
+              onDismiss: () => setState(() => _restoredAt = null),
+            ),
+            const SizedBox(height: 13),
+          ],
           ScreenHeader(
             title: 'Proof of delivery',
             subtitle: '${doc.name} · ${doc.customer?.name ?? ''}',
@@ -429,7 +484,10 @@ class _DeliverScreenState extends ConsumerState<DeliverScreen> {
                   required_: true,
                   hint: 'Full name',
                   icon: Icons.person_outline_rounded,
-                  onChanged: (_) => setState(() {}),
+                  onChanged: (_) {
+                    setState(() {});
+                    _persist();
+                  },
                 ),
                 const SizedBox(height: 18),
                 Row(
@@ -518,6 +576,7 @@ class _DeliverScreenState extends ConsumerState<DeliverScreen> {
       signatureUploadLocalId: staged.localId,
       location: _location,
     );
+    await services.drafts.clear(_key);
     await ref.read(syncProvider.notifier).refreshCounters();
     unawaited(ref.read(syncProvider.notifier).syncNow(flushFirst: true));
     if (!mounted) return;

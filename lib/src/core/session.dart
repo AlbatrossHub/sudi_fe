@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
 import '../config/env.dart';
+import '../config/flavor.dart';
 import '../config/splash_clock.dart';
 import '../models/docs.dart';
 import 'api/api_error.dart';
@@ -33,6 +34,7 @@ class SessionState {
     this.error,
     this.busy = false,
     this.mustOfferPin = false,
+    this.mustAskGst = false,
   });
 
   final SessionStage stage;
@@ -47,8 +49,16 @@ class SessionState {
   /// Set once after a fresh sign-in when no local PIN exists yet.
   final bool mustOfferPin;
 
+  /// Customer flavor: `/auth/me` says `gst_state: missing`, so the GST step
+  /// runs before the dashboard.
+  final bool mustAskGst;
+
   bool get hasPickupDelivery => roles.contains('pickup_delivery');
   bool get hasJobWork => roles.contains('job_work');
+  bool get hasOffice => roles.contains('office');
+
+  /// The "Jangad for a customer" button. An extra ability, never a tab.
+  bool get canPostOnBehalf => roles.contains('jangad_on_behalf');
 
   SessionState copyWith({
     SessionStage? stage,
@@ -57,6 +67,7 @@ class SessionState {
     String? error,
     bool? busy,
     bool? mustOfferPin,
+    bool? mustAskGst,
     bool clearError = false,
   }) =>
       SessionState(
@@ -66,6 +77,7 @@ class SessionState {
         error: clearError ? null : (error ?? this.error),
         busy: busy ?? this.busy,
         mustOfferPin: mustOfferPin ?? this.mustOfferPin,
+        mustAskGst: mustAskGst ?? this.mustAskGst,
       );
 }
 
@@ -80,28 +92,34 @@ class SessionController extends Notifier<SessionState> {
     return const SessionState(stage: SessionStage.booting);
   }
 
+  static bool _needsGst(MeInfo? me) =>
+      !sudiFlavor.isField && me != null && me.gstState == 'missing';
+
   /// Cold start with no network, which is the easiest thing to break by
   /// accident: the app opens, unlocks on the local PIN, renders the cache and
   /// accepts new captures. No splash waits on `/health`, nothing blocks on a
   /// token refresh.
+  ///
+  /// Signed in, there is no intro at all: the app goes straight back to the
+  /// page and tab it was left on, from what is saved on the phone, and asks the
+  /// server behind it. Only a signed-out start holds the landing screen.
   Future<void> restore() async {
-    // Reading secure storage takes a few hundred milliseconds, which is not
-    // long enough to read a logo. The wait runs *alongside* the work rather
-    // than after it, so the splash costs its own duration and not a millisecond
-    // more — and it is measured from the first frame, not from here.
-    final held = SplashClock.hold(Env.splashMinimum);
-
     final roles = await _s.tokens.roles();
     if (!await _s.tokens.hasSession) {
-      await held;
+      // Long enough to read the mark, measured from the first frame and run
+      // alongside nothing -- there is nothing else to do signed out.
+      await SplashClock.hold(Env.splashMinimum);
       state = const SessionState(stage: SessionStage.signedOut);
       return;
     }
+    final saved = await _s.auth.savedMe();
+    if (saved != null) _s.myUserId = saved.id;
     final locked = await _s.pin.isSet;
-    await held;
     state = SessionState(
       stage: locked ? SessionStage.locked : SessionStage.ready,
-      roles: roles,
+      me: saved,
+      roles: saved?.roles ?? roles,
+      mustAskGst: _needsGst(saved),
     );
     if (!locked) unawaited(_loadMe());
   }
@@ -109,6 +127,8 @@ class SessionController extends Notifier<SessionState> {
   Future<void> signIn({required String login, required String password}) async {
     state = state.copyWith(busy: true, clearError: true);
     try {
+      // Another account's saved screens must never show.
+      await _s.cache.clear();
       await _s.auth.login(login: login, password: password);
       state = SessionState(
         stage: SessionStage.ready,
@@ -122,6 +142,7 @@ class SessionController extends Notifier<SessionState> {
   }
 
   Future<void> afterCustomerAuth() async {
+    await _s.cache.clear();
     state = SessionState(
       stage: SessionStage.ready,
       roles: await _s.tokens.roles(),
@@ -147,11 +168,26 @@ class SessionController extends Notifier<SessionState> {
 
   void declinePin() => state = state.copyWith(mustOfferPin: false);
 
+  /// The GST step answered: GSTIN saved, or skipped for now.
+  Future<void> gstDone(String gstState) async {
+    await _s.auth.rememberGstState(gstState);
+    state = state.copyWith(
+      me: state.me?.withGstState(gstState),
+      mustAskGst: false,
+    );
+  }
+
   Future<void> _loadMe() async {
     try {
       final me = await _s.auth.me();
       _s.myUserId = me.id;
-      state = state.copyWith(me: me, roles: me.roles, busy: false, clearError: true);
+      state = state.copyWith(
+        me: me,
+        roles: me.roles,
+        busy: false,
+        clearError: true,
+        mustAskGst: _needsGst(me),
+      );
     } on ApiError catch (e) {
       // Offline, or an expired token with no signal. Neither is a logout.
       if (e.isWipe) {
@@ -161,6 +197,9 @@ class SessionController extends Notifier<SessionState> {
       }
     }
   }
+
+  /// Ask the server again (pull-to-refresh on a screen that shows the name).
+  Future<void> reloadMe() => _loadMe();
 
   /// The remote-wipe signal. Anything on that phone is diamond logistics data.
   Future<void> handleWipe() async {

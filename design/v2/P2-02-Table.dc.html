@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Item table</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Sora:wght@500;600;700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#E3E8F0;font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased;color:#1A2032}
+.nm-up{box-shadow:6px 6px 14px #C4CCDA,-6px -6px 14px #FFFFFF}
+.nm-up-s{box-shadow:3px 3px 8px #C6CEDC,-3px -3px 8px #FFFFFF}
+.nm-in{box-shadow:inset 5px 5px 11px #C4CCDA,inset -5px -5px 11px #FFFFFF}
+.nm-in-s{box-shadow:inset 2px 2px 5px #C7CFDD,inset -2px -2px 5px #FFFFFF}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
+.disp{font-family:'Sora',system-ui,sans-serif}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;border:0;background:none;padding:0;cursor:pointer}
+.tb{border-collapse:separate;border-spacing:0;font-size:13.5px}
+.tb th{font-size:10.5px;font-weight:800;color:#586178;letter-spacing:.06em;text-transform:uppercase;text-align:left;padding:10px 10px;border-bottom:1px solid #D3DAE5;background:#E3E8F0;white-space:nowrap}
+.tb td{padding:12px 10px;border-bottom:1px solid #D3DAE5;white-space:nowrap;background:#E3E8F0}
+.tb .sr{position:sticky;left:0;z-index:1;background:#DDE3EC;box-shadow:4px 0 6px -4px #B9C2D2}
+.tb .num{text-align:right;font-family:'IBM Plex Mono',monospace}
+.tb tfoot td{font-weight:800;border-bottom:0;background:#DDE3EC}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; padding: 26px 20px 24px; display: flex; flex-direction: column; gap: 13px;">
+
+  <div style="display: flex; align-items: center; gap: 12px;">
+    <a href="P2-01-Ready.dc.html" class="nm-up" style="width: 44px; height: 44px; border-radius: 15px; display: flex; align-items: center; justify-content: center;" aria-label="Back">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3D4658" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+    </a>
+    <div style="flex-grow: 1;">
+      <div class="mono" style="font-size: 12px; font-weight: 600; color: #01579B;">HO/IN/00321 · READY</div>
+      <h1 class="disp" style="margin: 2px 0 0; font-size: 22px; font-weight: 700; letter-spacing: -0.01em;">Shah Gems</h1>
+    </div>
+  </div>
+
+  <div class="nm-in" style="padding: 11px 14px; border-radius: 16px; font-size: 12.5px; line-height: 1.5; color: #3D4658;"><b>Customer asked for</b> · Laser Inscription 120 pcs “big stones first” · Ultra Sonic Boiling 40 pcs</div>
+
+  <div style="display: flex; align-items: center; gap: 10px;">
+    <div class="nm-in" style="display: flex; padding: 4px; border-radius: 14px; gap: 4px;">
+      <span class="nm-up-s" style="padding: 8px 14px; border-radius: 11px; font-size: 12.5px; font-weight: 800; color: #01579B; background: #E3E8F0;">Table</span>
+      <span style="padding: 8px 14px; border-radius: 11px; font-size: 12.5px; font-weight: 700; color: #586178;">By service</span>
+    </div>
+    <span style="flex-grow: 1;"></span>
+    <span style="font-size: 11.5px; font-weight: 700; color: #586178; display: flex; align-items: center; gap: 4px;">Swipe for more
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M14 7l5 5-5 5"></path></svg>
+    </span>
+  </div>
+
+  <div class="nm-up" style="border-radius: 20px; overflow: hidden; flex-shrink: 0;">
+    <div style="overflow-x: auto;">
+      <table class="tb" style="min-width: 560px;">
+        <thead>
+          <tr><th class="sr">Sr</th><th>Size</th><th class="num">Pcs</th><th class="num">Ct</th><th>Service</th><th>Remarks</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="sr mono">1</td><td>+11</td><td class="num">64</td><td class="num">6.20</td><td>Laser Inscription</td><td>big stones first</td></tr>
+          <tr><td class="sr mono">2</td><td>-2</td><td class="num">56</td><td class="num">3.10</td><td>Laser Inscription</td><td></td></tr>
+          <tr><td class="sr mono">3</td><td>+6.5</td><td class="num">52</td><td class="num">5.60</td><td>Ultra Sonic Boiling</td><td>2 chipped</td></tr>
+          <tr><td class="sr mono">4</td><td>Stars</td><td class="num">38</td><td class="num">3.50</td><td>Ultra Sonic Boiling</td><td></td></tr>
+        </tbody>
+        <tfoot>
+          <tr><td class="sr">Σ</td><td>4 lines</td><td class="num">210</td><td class="num">18.40</td><td>2 services</td><td></td></tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+  <p style="margin: -3px 2px 0; font-size: 12px; color: #586178;">Sr stays put while the rest scrolls. Tap a row to see it in full.</p>
+
+  <span style="flex-grow: 1;"></span>
+
+  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px;">
+    <a href="P2-04-LogTime.dc.html" class="nm-up" style="height: 64px; border-radius: 18px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #01579B;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="7.5"></circle><path d="M12 9.5V13l2.5 1.5M9.5 3h5"></path></svg>
+      <span style="font-size: 12px; font-weight: 800;">Log time</span>
+    </a>
+    <a href="P2-06-Transfer.dc.html" class="nm-up" style="height: 64px; border-radius: 18px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #01579B;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h13M13 4l4 4-4 4M20 16H7M11 12l-4 4 4 4"></path></svg>
+      <span style="font-size: 12px; font-weight: 800;">Move</span>
+    </a>
+    <a href="P2-03-Row.dc.html" class="nm-up" style="height: 64px; border-radius: 18px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #01579B;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2.5"></rect><path d="M4 10h16M10 10v9"></path></svg>
+      <span style="font-size: 12px; font-weight: 800;">Row 3</span>
+    </a>
+  </div>
+
+  <button class="nm-up" style="height: 54px; border-radius: 18px; font-size: 15px; font-weight: 800; color: #1B6B48; display: flex; align-items: center; justify-content: center; gap: 9px;">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+    Finish job work
+  </button>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

@@ -10,6 +10,7 @@ import '../../ui/theme/neu.dart';
 import '../../ui/widgets/neu_box.dart';
 import '../../ui/widgets/neu_widgets.dart';
 import '../../ui/widgets/powered_by.dart';
+import '../../ui/widgets/v2_widgets.dart';
 
 /// The first thing anyone sees: the mark, held long enough to read.
 ///
@@ -112,7 +113,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
             NeuField(
               controller: _login,
               label: 'Login',
-              hint: 'your Odoo login',
+              hint: 'your login',
               icon: Icons.person_outline_rounded,
             ),
             const SizedBox(height: 18),
@@ -411,13 +412,21 @@ class FieldShell extends ConsumerWidget {
     final c = NeuTheme.of(context);
     final session = ref.watch(sessionProvider);
 
+    // Roles decide the tabs: pickup/delivery -> Pickups + Deliveries, job work
+    // -> Job work + My work, office -> Office. With no roles known yet (a first
+    // launch before /auth/me answers), the v1 set.
+    final none = session.roles.isEmpty;
     final tabs = <({IconData icon, String label, int branch})>[
-      if (session.hasPickupDelivery || session.roles.isEmpty)
+      if (session.hasPickupDelivery || none)
         (icon: Icons.inventory_2_outlined, label: 'Pickups', branch: 0),
-      if (session.hasPickupDelivery || session.roles.isEmpty)
+      if (session.hasPickupDelivery || none)
         (icon: Icons.local_shipping_outlined, label: 'Deliveries', branch: 1),
-      if (session.hasJobWork || session.roles.isEmpty)
+      if (session.hasJobWork || none)
         (icon: Icons.timer_outlined, label: 'Job work', branch: 2),
+      if (session.hasJobWork)
+        (icon: Icons.insights_rounded, label: 'My work', branch: 3),
+      if (session.hasOffice)
+        (icon: Icons.fact_check_outlined, label: 'Office', branch: 4),
     ];
 
     return Scaffold(
@@ -465,14 +474,42 @@ class FieldShell extends ConsumerWidget {
         children: [
           Icon(icon, size: 21, color: ink),
           const SizedBox(height: 4),
-          Text(
-            label,
-            style: TextStyle(
-              fontFamily: NeuText.body,
-              fontSize: 11,
-              fontWeight: active ? FontWeight.w800 : FontWeight.w700,
-              color: ink,
+          // Five tabs at a large font scale do not fit "Deliveries" on one line:
+          // shrink the label rather than break the word.
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              label,
+              maxLines: 1,
+              softWrap: false,
+              style: TextStyle(
+                fontFamily: NeuText.body,
+                fontSize: 11,
+                fontWeight: active ? FontWeight.w800 : FontWeight.w700,
+                color: ink,
+              ),
             ),
+          ),
+        ],
+      );
+}
+
+/// The bell and the account button, on the header of every tab: a job worker
+/// or an office user whose only tabs are theirs must still reach "Your phones"
+/// and sign-out (on the M31 only Pickups and Deliveries had the button).
+class TabHeaderActions extends ConsumerWidget {
+  const TabHeaderActions({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) => Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const NoticeBell(),
+          const SizedBox(width: 10),
+          NeuIconButton(
+            icon: Icons.person_outline_rounded,
+            onPressed: () => showAccountSheet(context, ref),
+            tooltip: 'Account',
           ),
         ],
       );
@@ -488,6 +525,8 @@ Future<void> showAccountSheet(BuildContext context, WidgetRef ref) async {
 
   await showModalBottomSheet<void>(
     context: context,
+    // Above the shell's tab bar, not under it (it covered the sheet's foot).
+    useRootNavigator: true,
     backgroundColor: c.ground,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(28)),

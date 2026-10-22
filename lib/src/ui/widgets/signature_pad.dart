@@ -44,6 +44,29 @@ class SignatureController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// The strokes as plain numbers, so a half-signed delivery survives the app
+  /// being killed. Kept in the encrypted draft store, never as an image file.
+  Map<String, dynamic> toJson() => {
+        'strokes': [
+          for (final s in strokes) [for (final p in s) ...[p.dx, p.dy]],
+        ],
+      };
+
+  void load(Map<String, dynamic>? json) {
+    final raw = json?['strokes'];
+    if (raw is! List) return;
+    strokes
+      ..clear()
+      ..addAll([
+        for (final s in raw.whereType<List>())
+          [
+            for (var i = 0; i + 1 < s.length; i += 2)
+              Offset((s[i] as num).toDouble(), (s[i + 1] as num).toDouble()),
+          ],
+      ]);
+    notifyListeners();
+  }
+
   /// Renders to a PNG in the staging directory. Returns null when nothing was
   /// drawn — the caller must not let the delivery through in that case.
   Future<File?> render({Color ink = const Color(0xFF1F2A4D)}) async {

@@ -103,7 +103,9 @@ class NeuColors {
 
 /// Elevation recipes, one per meaning. Nothing outside `NeuBox` should ever
 /// write a raw `boxShadow` — that is what keeps 24 screens looking like one app.
-enum NeuStyle { raised, raisedSm, inset, insetSm, flat }
+/// `accent` is the one primary surface on a screen (DESIGN.md section 2.1):
+/// the accent fill with its own coloured shadow.
+enum NeuStyle { raised, raisedSm, inset, insetSm, accent, flat }
 
 class NeuTheme extends InheritedWidget {
   const NeuTheme({super.key, required this.colors, required super.child});

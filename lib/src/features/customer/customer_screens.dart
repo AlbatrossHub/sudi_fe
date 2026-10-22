@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,68 +8,17 @@ import 'package:go_router/go_router.dart';
 
 import '../../core/api/api_error.dart';
 import '../../core/clock/odoo_time.dart';
-import '../../core/outbox/outbox.dart';
 import '../../core/services.dart';
 import '../../core/session.dart';
 import '../../core/sync_status.dart';
-import '../../core/uploads/image_pipeline.dart';
 import '../../models/docs.dart';
 import '../../ui/theme/neu.dart';
 import '../../ui/widgets/neu_box.dart';
 import '../../ui/widgets/neu_widgets.dart';
 import '../../ui/widgets/powered_by.dart';
-import '../field/sign_in_screens.dart';
 import '../../ui/widgets/status_strip.dart';
-
-/// Pages staged for the jangad being built, and the address chosen for it.
-class JangadDraft extends Notifier<JangadDraftState> {
-  @override
-  JangadDraftState build() => const JangadDraftState();
-
-  void addPage(UploadItem page) =>
-      state = state.copyWith(pages: [...state.pages, page]);
-
-  void removePage(String localId) =>
-      state = state.copyWith(pages: state.pages.where((p) => p.localId != localId).toList());
-
-  void chooseSaved(AddressSuggestion address) =>
-      state = JangadDraftState(pages: state.pages, savedAddress: address);
-
-  void chooseManual(String text) =>
-      state = JangadDraftState(pages: state.pages, manualAddress: text);
-
-  void clear() => state = const JangadDraftState();
-}
-
-class JangadDraftState {
-  const JangadDraftState({this.pages = const [], this.savedAddress, this.manualAddress});
-
-  final List<UploadItem> pages;
-  final AddressSuggestion? savedAddress;
-  final String? manualAddress;
-
-  bool get hasAddress => savedAddress != null || (manualAddress?.isNotEmpty ?? false);
-  String get addressLabel => savedAddress?.label ?? manualAddress ?? 'Choose where to collect from';
-
-  JangadDraftState copyWith({List<UploadItem>? pages}) => JangadDraftState(
-        pages: pages ?? this.pages,
-        savedAddress: savedAddress,
-        manualAddress: manualAddress,
-      );
-}
-
-final jangadDraftProvider =
-    NotifierProvider<JangadDraft, JangadDraftState>(JangadDraft.new);
-
-final addressesProvider = FutureProvider.autoDispose<List<AddressSuggestion>>((ref) async {
-  try {
-    return await ref.read(servicesProvider).auth.addresses();
-  } on ApiError {
-    // Degrades offline: the list may be missing, and an address can always be
-    // typed instead.
-    return const [];
-  }
-});
+import '../shared/catalog.dart';
+import 'customer_v2_screens.dart';
 
 final submissionsProvider = FutureProvider.autoDispose<List<Map<String, Object?>>>((ref) {
   ref.watch(dataRevisionProvider);
@@ -504,272 +452,6 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   }
 }
 
-class JangadScreen extends ConsumerStatefulWidget {
-  const JangadScreen({super.key});
-
-  @override
-  ConsumerState<JangadScreen> createState() => _JangadScreenState();
-}
-
-class _JangadScreenState extends ConsumerState<JangadScreen> {
-  bool _busy = false;
-  String? _warning;
-
-  Future<void> _addPage() async {
-    final services = ref.read(servicesProvider);
-    if (!await ImagePipeline.hasRoom()) {
-      setState(() => _warning = 'This phone is nearly out of room for photos.');
-      return;
-    }
-    final file = await services.images.capture();
-    if (file == null) return;
-    final draft = ref.read(jangadDraftProvider);
-    final staged = await services.uploads.stage(file, pageIndex: draft.pages.length);
-    ref.read(jangadDraftProvider.notifier).addPage(staged);
-    if (mounted) setState(() => _warning = null);
-  }
-
-  Future<void> _submit() async {
-    setState(() => _busy = true);
-    final draft = ref.read(jangadDraftProvider);
-    final services = ref.read(servicesProvider);
-    await services.customer.submitJangad(
-      uploadLocalIds: [for (final p in draft.pages) p.localId],
-      addressId: draft.savedAddress?.id,
-      manualAddress: draft.savedAddress == null ? draft.manualAddress : null,
-      addressLabel: draft.addressLabel,
-    );
-    ref.read(jangadDraftProvider.notifier).clear();
-    await ref.read(syncProvider.notifier).refreshCounters();
-    unawaited(ref.read(syncProvider.notifier).syncNow(flushFirst: true));
-    if (!mounted) return;
-    context.go('/submitted');
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final c = NeuTheme.of(context);
-    final draft = ref.watch(jangadDraftProvider);
-    final ready = draft.pages.isNotEmpty && draft.hasAddress;
-
-    return NeuScaffold(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          ScreenHeader(
-            title: 'New jangad',
-            subtitle: ref.watch(sessionProvider).me?.name ?? 'Your receipts',
-            // Two actions, because until now the customer app had no account
-            // entry at all: no way to see who you are signed in as, no way to
-            // reach your other phones, and no way out except a link on the
-            // lock screen.
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                NeuIconButton(
-                  icon: Icons.receipt_long_outlined,
-                  onPressed: () => context.push('/submitted'),
-                  tooltip: 'What you have sent',
-                ),
-                const SizedBox(width: 10),
-                NeuIconButton(
-                  icon: Icons.person_outline_rounded,
-                  onPressed: () => showAccountSheet(context, ref),
-                  tooltip: 'Account',
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 14),
-          StatusStrip(onQueueTap: () => context.push('/submitted')),
-          const SizedBox(height: 16),
-          Expanded(
-            child: ListView(
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text('Pages', style: NeuText.label(c.ink, size: 13)),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text('we keep the order you shoot them in',
-                          style: NeuText.body_(c.inkMuted, size: 12)),
-                    ),
-                    Text('${draft.pages.length}', style: NeuText.data(c.accentInk)),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                GridView.count(
-                  crossAxisCount: 2,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  mainAxisSpacing: 13,
-                  crossAxisSpacing: 13,
-                  childAspectRatio: 0.95,
-                  children: [
-                    for (var i = 0; i < draft.pages.length; i++)
-                      Stack(
-                        children: [
-                          Positioned.fill(
-                            child: NeuBox(
-                              style: NeuStyle.inset,
-                              radius: 20,
-                              padding: const EdgeInsets.all(10),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(12),
-                                child: Image.file(
-                                  File(draft.pages[i].filePath),
-                                  fit: BoxFit.cover,
-                                  width: double.infinity,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            left: 14,
-                            top: 14,
-                            child: Container(
-                              width: 24,
-                              height: 24,
-                              decoration: BoxDecoration(
-                                color: c.accentInk,
-                                borderRadius: BorderRadius.circular(9),
-                              ),
-                              child: Center(
-                                child: Text('${i + 1}', style: NeuText.label(c.onAccent, size: 12)),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            right: 12,
-                            top: 12,
-                            child: GestureDetector(
-                              onTap: () async {
-                                await ref
-                                    .read(servicesProvider)
-                                    .uploads
-                                    .discard(draft.pages[i].localId);
-                                ref
-                                    .read(jangadDraftProvider.notifier)
-                                    .removePage(draft.pages[i].localId);
-                              },
-                              child: Container(
-                                width: 26,
-                                height: 26,
-                                decoration: BoxDecoration(
-                                  color: c.ground,
-                                  shape: BoxShape.circle,
-                                  boxShadow: [
-                                    BoxShadow(color: c.shadowDark, offset: const Offset(2, 2), blurRadius: 5),
-                                  ],
-                                ),
-                                child: Center(
-                                  child: Icon(Icons.close_rounded, size: 15, color: c.inkMuted),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                  ],
-                ),
-                if (draft.pages.isNotEmpty) const SizedBox(height: 13),
-                NeuButton(
-                  label: draft.pages.isEmpty ? 'Photograph the jangad' : 'Photograph another page',
-                  icon: Icons.photo_camera_outlined,
-                  height: 62,
-                  onPressed: _addPage,
-                ),
-                if (_warning != null) ...[
-                  const SizedBox(height: 13),
-                  NeuNote(text: _warning!, kind: ChipKind.attention, icon: Icons.warning_amber_rounded),
-                ],
-                const SizedBox(height: 14),
-                NeuBox(
-                  style: NeuStyle.raised,
-                  radius: 20,
-                  padding: const EdgeInsets.fromLTRB(17, 16, 17, 16),
-                  onTap: () => context.push('/jangad/address'),
-                  child: Row(
-                    children: [
-                      NeuBox(
-                        style: NeuStyle.insetSm,
-                        radius: 13,
-                        width: 38,
-                        height: 38,
-                        child: Center(child: Icon(Icons.place_outlined, size: 18, color: c.accentInk)),
-                      ),
-                      const SizedBox(width: 13),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('COLLECT FROM', style: NeuText.label(c.inkFaint, size: 11)),
-                            const SizedBox(height: 4),
-                            Text(
-                              draft.hasAddress
-                                  ? oneLineAddress(draft.addressLabel)
-                                  : draft.addressLabel,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: NeuText.strong(
-                                draft.hasAddress ? c.ink : c.inkFaint,
-                                size: 14,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Icon(Icons.chevron_right_rounded, size: 20, color: c.accentInk),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 16),
-              ],
-            ),
-          ),
-          NeuBox(
-            style: NeuStyle.inset,
-            radius: 16,
-            padding: const EdgeInsets.fromLTRB(15, 13, 15, 13),
-            child: Row(
-              children: [
-                Icon(Icons.check_rounded, size: 16, color: c.syncedInk),
-                const SizedBox(width: 11),
-                Expanded(
-                  child: Text(
-                    'Send it from a basement if you like. It goes when you have signal.',
-                    style: NeuText.body_(c.inkMuted, size: 12),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 12),
-          NeuButton(
-            label: ready
-                ? 'Send ${draft.pages.length} page${draft.pages.length == 1 ? '' : 's'}'
-                : draft.pages.isEmpty
-                    ? 'Photograph the jangad first'
-                    : 'Choose where to collect from',
-            kind: NeuButtonKind.primary,
-            icon: Icons.arrow_forward_rounded,
-            busy: _busy,
-            // A button that names the next step should take you there rather
-            // than sit disabled with the answer in its own label.
-            onPressed: ready
-                ? _submit
-                : draft.pages.isEmpty
-                    ? null
-                    : () => context.push('/jangad/address'),
-          ),
-          const SizedBox(height: 18),
-        ],
-      ),
-    );
-  }
-}
-
 class AddressScreen extends ConsumerStatefulWidget {
   const AddressScreen({super.key});
 
@@ -796,7 +478,7 @@ class _AddressScreenState extends ConsumerState<AddressScreen> {
   Widget build(BuildContext context) {
     final c = NeuTheme.of(context);
     final draft = ref.watch(jangadDraftProvider);
-    final saved = ref.watch(addressesProvider);
+    final saved = ref.watch(savedAddressesProvider);
     final online = ref.watch(syncProvider).online;
 
     return NeuScaffold(
@@ -852,7 +534,9 @@ class _AddressScreenState extends ConsumerState<AddressScreen> {
                       ],
                     ),
                   AsyncError() => Text(
-                      'The saved list could not be loaded.',
+                      online
+                          ? 'The saved list could not be loaded.'
+                          : 'We cannot reach your saved list right now.',
                       style: NeuText.body_(c.inkMuted, size: 13),
                     ),
                   _ => Center(child: CircularProgressIndicator(color: c.accentInk)),
@@ -996,7 +680,7 @@ class SubmittedScreen extends ConsumerWidget {
             alignment: Alignment.centerLeft,
             child: NeuIconButton(
               icon: Icons.arrow_back_rounded,
-              onPressed: () => context.go('/jangad'),
+              onPressed: () => context.go('/home'),
               tooltip: 'Back',
             ),
           ),
@@ -1053,6 +737,10 @@ class SubmittedScreen extends ConsumerWidget {
                     padding: const EdgeInsets.all(18),
                     child: Column(
                       children: [
+                        if (_services(latest) != null) ...[
+                          _line(context, Icons.diamond_outlined, _services(latest)!),
+                          Divider(color: c.hairline, height: 26),
+                        ],
                         _line(context, Icons.photo_library_outlined, _pagesSent(latest)),
                         Divider(color: c.hairline, height: 26),
                                         _line(context, Icons.place_outlined,
@@ -1107,6 +795,10 @@ class SubmittedScreen extends ConsumerWidget {
                     padding: const EdgeInsets.all(18),
                     child: Column(
                       children: [
+                        if (_services(newest) != null) ...[
+                          _line(context, Icons.diamond_outlined, _services(newest)!),
+                          Divider(color: c.hairline, height: 26),
+                        ],
                         _line(context, Icons.photo_library_outlined, _pagesHeld(newest)),
                         Divider(color: c.hairline, height: 26),
                         _line(context, Icons.place_outlined,
@@ -1165,7 +857,7 @@ class SubmittedScreen extends ConsumerWidget {
             label: 'Send another jangad',
             kind: NeuButtonKind.primary,
             icon: Icons.add_rounded,
-            onPressed: () => context.go('/jangad'),
+            onPressed: () => context.go('/home'),
           ),
         ],
       ),
@@ -1183,6 +875,16 @@ class SubmittedScreen extends ConsumerWidget {
       count = 1;
     }
     return count == 1 ? '1 page sent' : '$count pages sent';
+  }
+
+  /// `2 services · 160 pcs`, from what was stored with the submission.
+  static String? _services(Map<String, Object?> row) {
+    try {
+      final list = ServiceRequest.listFromDraft(jsonDecode('${row['services'] ?? '[]'}'));
+      return list.isEmpty ? null : ServiceRequest.summary(list);
+    } catch (_) {
+      return null;
+    }
   }
 
   /// Same count, worded for a jangad that has not left the phone yet.

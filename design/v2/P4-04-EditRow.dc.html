@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Edit one entry</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Sora:wght@500;600;700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#E3E8F0;font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased;color:#1A2032}
+.nm-up{box-shadow:6px 6px 14px #C4CCDA,-6px -6px 14px #FFFFFF}
+.nm-up-s{box-shadow:3px 3px 8px #C6CEDC,-3px -3px 8px #FFFFFF}
+.nm-in{box-shadow:inset 5px 5px 11px #C4CCDA,inset -5px -5px 11px #FFFFFF}
+.nm-in-s{box-shadow:inset 2px 2px 5px #C7CFDD,inset -2px -2px 5px #FFFFFF}
+.nm-acc{box-shadow:5px 6px 14px rgba(1,87,155,.32),-4px -4px 10px #FFFFFF}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
+.disp{font-family:'Sora',system-ui,sans-serif}
+button{font:inherit;color:inherit;border:0;background:none;padding:0;cursor:pointer}
+input{font:inherit;color:inherit;border:0;background:none;outline:none;width:100%}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; position: relative; overflow: hidden;">
+
+  <div style="position: absolute; inset: 0; padding: 26px 20px; display: flex; flex-direction: column; gap: 13px; opacity: 0.45;" aria-hidden="true">
+    <div class="mono" style="font-size: 12px; font-weight: 600; color: #01579B;">HO/IN/00325 · Shah Gems</div>
+    <div class="disp" style="font-size: 22px; font-weight: 700;">Item entries</div>
+    <div class="nm-up" style="height: 280px; border-radius: 20px;"></div>
+  </div>
+  <div style="position: absolute; inset: 0; background: rgba(26,32,50,.28);"></div>
+
+  <div style="position: absolute; left: 0; right: 0; bottom: 0; background: #E3E8F0; border-radius: 30px 30px 0 0; padding: 12px 22px 26px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 -10px 30px rgba(26,32,50,.18);">
+    <span style="align-self: center; width: 44px; height: 5px; border-radius: 3px; background: #C4CCDA;"></span>
+
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <span class="mono nm-in-s" style="width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 600; color: #01579B;">4</span>
+      <div style="flex-grow: 1;">
+        <div style="font-size: 12px; font-weight: 800; color: #586178; letter-spacing: 0.05em; text-transform: uppercase;">Line 4</div>
+        <div class="disp" style="font-size: 19px; font-weight: 700;">Edit entry</div>
+      </div>
+      <button class="nm-up-s" style="width: 42px; height: 42px; border-radius: 14px; display: flex; align-items: center; justify-content: center;" aria-label="Delete line 4"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#586178" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 7h14M10 7V4.5h4V7M7 7l1 13h8l1-13"></path></svg></button>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 6px;">
+      <span style="font-size: 12px; font-weight: 800; color: #586178;">Service</span>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <span class="nm-up-s" style="padding: 9px 12px; border-radius: 12px; font-size: 13px; font-weight: 700; color: #3D4658;">Laser Inscription</span>
+        <span class="nm-in-s" style="padding: 9px 12px; border-radius: 12px; font-size: 13px; font-weight: 800; color: #01579B;">Ultra Sonic Boiling</span>
+        <span class="nm-up-s" style="padding: 9px 12px; border-radius: 12px; font-size: 13px; font-weight: 700; color: #3D4658;">Other…</span>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px;">
+      <label class="nm-in-s" style="padding: 10px 12px; border-radius: 14px; display: flex; flex-direction: column; gap: 3px;"><span style="font-size: 11px; font-weight: 700; color: #586178;">Size</span><input value="Stars" style="font-size: 17px; font-weight: 600;"></label>
+      <label class="nm-in-s" style="padding: 10px 12px; border-radius: 14px; display: flex; flex-direction: column; gap: 3px; box-shadow: inset 2px 2px 5px #C7CFDD,inset -2px -2px 5px #FFFFFF, 0 0 0 2px #03A9F4;"><span style="font-size: 11px; font-weight: 700; color: #586178;">Pcs</span><input class="mono" value="38" style="font-size: 17px; font-weight: 600;"></label>
+      <label class="nm-in-s" style="padding: 10px 12px; border-radius: 14px; display: flex; flex-direction: column; gap: 3px;"><span style="font-size: 11px; font-weight: 700; color: #586178;">Carats</span><input class="mono" value="3.50" style="font-size: 17px; font-weight: 600;"></label>
+    </div>
+
+    <label class="nm-in-s" style="padding: 10px 14px; border-radius: 14px; display: flex; flex-direction: column; gap: 3px;">
+      <span style="font-size: 11px; font-weight: 700; color: #586178;">Remarks</span>
+      <input placeholder="Optional" style="font-size: 15px;">
+    </label>
+
+    <div style="display: flex; gap: 10px;">
+      <button class="nm-up" style="flex: 1 1 0; height: 52px; border-radius: 17px; font-size: 14.5px; font-weight: 800; color: #01579B;">Save + next line</button>
+      <button class="nm-acc" style="flex: 1 1 0; height: 52px; border-radius: 17px; background: #03A9F4; color: #06283D; font-size: 14.5px; font-weight: 800;">Done</button>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

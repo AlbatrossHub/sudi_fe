@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Add a service</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Sora:wght@500;600;700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#E3E8F0;font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased;color:#1A2032}
+.nm-up{box-shadow:6px 6px 14px #C4CCDA,-6px -6px 14px #FFFFFF}
+.nm-up-s{box-shadow:3px 3px 8px #C6CEDC,-3px -3px 8px #FFFFFF}
+.nm-in{box-shadow:inset 5px 5px 11px #C4CCDA,inset -5px -5px 11px #FFFFFF}
+.nm-in-s{box-shadow:inset 2px 2px 5px #C7CFDD,inset -2px -2px 5px #FFFFFF}
+.nm-acc{box-shadow:5px 6px 14px rgba(11,86,79,.32),-4px -4px 10px #FFFFFF}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
+.disp{font-family:'Sora',system-ui,sans-serif}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;border:0;background:none;padding:0;cursor:pointer}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; position: relative; overflow: hidden;">
+
+  <div style="position: absolute; inset: 0; padding: 26px 20px; display: flex; flex-direction: column; gap: 14px; opacity: 0.45;" aria-hidden="true">
+    <div class="disp" style="font-size: 24px; font-weight: 700;">Kiran Gems</div>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px;">
+      <div class="nm-up" style="height: 86px; border-radius: 20px;"></div><div class="nm-up" style="height: 86px; border-radius: 20px;"></div>
+      <div class="nm-up" style="height: 86px; border-radius: 20px;"></div><div class="nm-up" style="height: 86px; border-radius: 20px;"></div>
+    </div>
+  </div>
+  <div style="position: absolute; inset: 0; background: rgba(26,32,50,.28);"></div>
+
+  <div style="position: absolute; left: 0; right: 0; bottom: 0; background: #E3E8F0; border-radius: 30px 30px 0 0; padding: 12px 22px 26px; display: flex; flex-direction: column; gap: 16px; box-shadow: 0 -10px 30px rgba(26,32,50,.18);">
+    <span style="align-self: center; width: 44px; height: 5px; border-radius: 3px; background: #C4CCDA;"></span>
+
+    <div>
+      <div style="font-size: 12px; font-weight: 800; color: #0B564F; letter-spacing: 0.05em; text-transform: uppercase;">Add to your request</div>
+      <h2 class="disp" style="margin: 4px 0 0; font-size: 22px; font-weight: 700;">Natts Process</h2>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <span style="font-size: 12px; font-weight: 800; color: #586178;">How many pieces?</span>
+      <div class="nm-in" style="display: flex; align-items: center; justify-content: space-between; padding: 9px; border-radius: 20px;">
+        <button class="nm-up-s" style="width: 52px; height: 52px; border-radius: 16px; font-size: 24px; font-weight: 700; color: #0B564F;" aria-label="Ten fewer">−</button>
+        <span style="display: flex; align-items: baseline; gap: 6px;"><span class="mono" style="font-size: 34px; font-weight: 600;">64</span><span style="font-size: 13px; font-weight: 700; color: #586178;">pcs</span></span>
+        <button class="nm-up-s" style="width: 52px; height: 52px; border-radius: 16px; font-size: 24px; font-weight: 700; color: #0B564F;" aria-label="Ten more">+</button>
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <span class="nm-up-s" style="flex: 1 1 0; text-align: center; padding: 8px 0; border-radius: 12px; font-size: 13px; font-weight: 700; color: #3D4658;">10</span>
+        <span class="nm-up-s" style="flex: 1 1 0; text-align: center; padding: 8px 0; border-radius: 12px; font-size: 13px; font-weight: 700; color: #3D4658;">25</span>
+        <span class="nm-up-s" style="flex: 1 1 0; text-align: center; padding: 8px 0; border-radius: 12px; font-size: 13px; font-weight: 700; color: #3D4658;">50</span>
+        <span class="nm-up-s" style="flex: 1 1 0; text-align: center; padding: 8px 0; border-radius: 12px; font-size: 13px; font-weight: 700; color: #3D4658;">100</span>
+      </div>
+    </div>
+
+    <label class="nm-in-s" style="display: flex; flex-direction: column; gap: 3px; padding: 11px 14px; border-radius: 15px;">
+      <span style="font-size: 11px; font-weight: 700; color: #586178;">Remarks (optional)</span>
+      <span style="font-size: 14.5px;">Please do the small ones too</span>
+    </label>
+
+    <div style="display: flex; gap: 10px;">
+      <a href="P3-01-Dashboard.dc.html" class="nm-up" style="flex: 1 1 0; height: 54px; border-radius: 18px; font-size: 15px; font-weight: 800; color: #0B564F; display: flex; align-items: center; justify-content: center;">Cancel</a>
+      <a href="P3-03-Request.dc.html" class="nm-acc" style="flex: 2 1 0; height: 54px; border-radius: 18px; background: #0E6F66; color: #FFFFFF; font-size: 15px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px;">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>
+        Add 64 pcs
+      </a>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

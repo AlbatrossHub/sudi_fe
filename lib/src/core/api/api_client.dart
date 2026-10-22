@@ -9,11 +9,13 @@ import 'api_error.dart';
 
 /// Everything that talks to the server goes through here.
 ///
-/// Two things it guarantees for the rest of the app: every failure surfaces as
-/// an [ApiError] with a `code` (never a raw `DioException`), and `db` is on
-/// every call because the server hosts several databases.
+/// Three things it guarantees for the rest of the app: every failure surfaces
+/// as an [ApiError] with a `code` (never a raw `DioException`), `db` is on
+/// every call because the server hosts several databases, and every answer --
+/// or the lack of one -- is reported to [onReachability]. "Online" in this app
+/// means *the server answered*, not that the radio is on.
 class ApiClient {
-  ApiClient(this._tokens) {
+  ApiClient(this._tokens, {HttpClientAdapter? adapter, Transformer? transformer}) {
     dio = Dio(
       BaseOptions(
         baseUrl: '${Env.baseUrl}${sudiFlavor.apiPath}',
@@ -26,6 +28,8 @@ class ApiClient {
         validateStatus: (s) => s != null && ((s >= 200 && s < 300) || s == 304),
       ),
     );
+    if (adapter != null) dio.httpClientAdapter = adapter;
+    if (transformer != null) dio.transformer = transformer;
     dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
@@ -38,7 +42,12 @@ class ApiClient {
           }
           handler.next(options);
         },
+        onResponse: (response, handler) {
+          onReachability?.call(true);
+          handler.next(response);
+        },
         onError: (e, handler) async {
+          onReachability?.call(answered(e));
           final err = ApiError.fromDio(e);
 
           // A revoked device is a wipe signal, not a refresh-and-retry.
@@ -73,9 +82,25 @@ class ApiClient {
   final TokenStore _tokens;
   late final Dio dio;
 
+  /// Told after every request whether the server answered. Wired to
+  /// `ConnectivityWatch.reportServer`.
+  void Function(bool answered)? onReachability;
+
   void Function()? _onWipe;
   Future<bool> Function()? _refresher;
   Future<bool>? _inFlightRefresh;
+
+  /// Did the *server* answer? A refusal is an answer; a timeout, a dead socket
+  /// or a gateway saying the office system behind it is down is not.
+  static bool answered(DioException e) {
+    final status = e.response?.statusCode;
+    if (status == null) return false;
+    if (status == 502 || status == 503 || status == 504) {
+      final data = e.response?.data;
+      return data is Map && data['code'] is String;
+    }
+    return true;
+  }
 
   /// Wired by the auth layer once, at startup.
   void wire({required Future<bool> Function() refresher, required void Function() onWipe}) {
@@ -128,6 +153,23 @@ class ApiClient {
                 ...?headers,
               },
               extra: {'skipAuth': skipAuth},
+            ),
+          ));
+
+  Future<Response<T>> put<T>(
+    String path, {
+    Object? body,
+    Map<String, dynamic>? headers,
+    String? idempotencyKey,
+  }) =>
+      _guard(() => dio.put<T>(
+            path,
+            data: body,
+            options: Options(
+              headers: {
+                'Idempotency-Key': ?idempotencyKey,
+                ...?headers,
+              },
             ),
           ));
 

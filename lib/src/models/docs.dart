@@ -1,4 +1,7 @@
 import '../core/clock/odoo_time.dart';
+import 'v2_docs.dart';
+
+export 'v2_docs.dart';
 
 /// The shapes `/sync/pull` hands over. `upserts` are whole documents, not field
 /// diffs, so these are read models with no merge logic in them.
@@ -16,6 +19,7 @@ class Ref {
 
 class ItemLine {
   const ItemLine({
+    this.moveId,
     required this.sr,
     required this.product,
     required this.size,
@@ -25,6 +29,9 @@ class ItemLine {
     this.remarks,
   });
 
+  /// The `stock.move` behind the row: what an editable table keeps when it
+  /// sends the table back.
+  final int? moveId;
   final int sr;
   final String product;
   final String size;
@@ -37,6 +44,7 @@ class ItemLine {
   final String? remarks;
 
   factory ItemLine.fromJson(Map<String, dynamic> j) => ItemLine(
+        moveId: (j['move_id'] as num?)?.toInt(),
         sr: (j['sr'] as num?)?.toInt() ?? 0,
         product: '${j['product'] ?? ''}',
         size: '${j['size'] ?? ''}',
@@ -65,6 +73,7 @@ class PickupDoc {
     this.scheduledDate,
     this.collectedAt,
     this.collectedBy,
+    this.services = const [],
   });
 
   final int id;
@@ -81,6 +90,9 @@ class PickupDoc {
   final DateTime? scheduledDate;
   final DateTime? collectedAt;
   final Ref? collectedBy;
+
+  /// What the customer (or the operator on their behalf) asked for.
+  final List<ServiceLine> services;
 
   bool get isCollected => stage == 'collected';
 
@@ -99,6 +111,7 @@ class PickupDoc {
         scheduledDate: OdooTime.parse(j['scheduled_date']),
         collectedAt: OdooTime.parse(j['collected_at']),
         collectedBy: Ref.from(j['collected_by']),
+        services: ServiceLine.listFrom(j['services']),
       );
 }
 
@@ -183,6 +196,8 @@ class JobWorkDoc {
     this.customer,
     this.scheduledDate,
     this.currentDepartment,
+    this.services = const [],
+    this.myHours = 0,
   });
 
   final int id;
@@ -197,6 +212,12 @@ class JobWorkDoc {
   final Ref? customer;
   final DateTime? scheduledDate;
   final Ref? currentDepartment;
+
+  /// What the customer asked for, shown above the item table.
+  final List<ServiceLine> services;
+
+  /// Hours booked on this receipt by the person holding the phone.
+  final double myHours;
 
   double get totalPcs => items.fold(0, (a, b) => a + (b.pcs ?? 0));
   double get totalCarats => items.fold(0, (a, b) => a + (b.carats ?? 0));
@@ -217,6 +238,8 @@ class JobWorkDoc {
         customer: Ref.from(j['customer']),
         scheduledDate: OdooTime.parse(j['scheduled_date']),
         currentDepartment: Ref.from(j['current_department']),
+        services: ServiceLine.listFrom(j['services']),
+        myHours: (j['my_hours'] as num?)?.toDouble() ?? 0,
       );
 }
 
@@ -245,6 +268,30 @@ class MeInfo {
 
   bool get hasPickupDelivery => roles.contains('pickup_delivery');
   bool get hasJobWork => roles.contains('job_work');
+  bool get hasOffice => roles.contains('office');
+  bool get canPostOnBehalf => roles.contains('jangad_on_behalf');
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'name': name,
+        'roles': roles,
+        'login': login,
+        'phone': phone,
+        'company': company,
+        'is_customer': isCustomer,
+        'gst_state': gstState,
+      };
+
+  MeInfo withGstState(String state) => MeInfo(
+        id: id,
+        name: name,
+        roles: roles,
+        login: login,
+        phone: phone,
+        company: company,
+        isCustomer: isCustomer,
+        gstState: state,
+      );
 
   factory MeInfo.fromJson(Map<String, dynamic> j) => MeInfo(
         id: (j['id'] as num?)?.toInt() ?? 0,
@@ -272,6 +319,9 @@ class AddressSuggestion {
   final bool isDefault;
 
   String get label => address.isNotEmpty ? address : name;
+
+  Map<String, dynamic> toJson() =>
+      {'id': id, 'name': name, 'address': address, 'is_default': isDefault};
 
   factory AddressSuggestion.fromJson(Map<String, dynamic> j) => AddressSuggestion(
         id: (j['id'] as num?)?.toInt() ?? 0,

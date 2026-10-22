@@ -50,16 +50,23 @@ class StatusStrip extends ConsumerWidget {
           const SizedBox(width: 8),
           Expanded(
             child: Text(
-              // No "Synced" prefix: at a large system font scale the three
-              // parts of this strip do not fit, and the *time* is the part
-              // that matters.
               status.syncing
                   ? 'Syncing…'
                   // The customer app pulls nothing, so "synced 3 min ago" — and
                   // worse, "never" — says nothing true about it.
-                  : sudiFlavor.isField
-                      ? OdooTime.ago(status.lastSyncedAt)
-                      : (status.queued > 0 ? 'Waiting to send' : 'Ready'),
+                  : !sudiFlavor.isField
+                      ? (online
+                          ? (status.queued > 0 ? 'Sending…' : 'Ready')
+                          : 'Sends by itself when online')
+                      : online
+                          ? (status.lastSyncedAt == null
+                              ? 'Not synced yet'
+                              : 'Synced ${OdooTime.ago(status.lastSyncedAt)}')
+                          // Offline the list is the copy saved at the last pull:
+                          // say when, as a time, so nobody mistakes it for live.
+                          : (status.lastSyncedAt == null
+                              ? 'Nothing saved yet'
+                              : 'List saved ${OdooTime.hm(status.lastSyncedAt)}'),
               overflow: TextOverflow.ellipsis,
               style: NeuText.body_(c.inkMuted, size: 12),
             ),
@@ -97,7 +104,7 @@ class StatusStrip extends ConsumerWidget {
                     status.needsAttention > 0
                         ? '${status.needsAttention} needs you'
                         : status.queued > 0
-                            ? '${status.queued} queued'
+                            ? '${status.queued} on this phone'
                             : 'All sent',
                     style: NeuText.label(
                       status.needsAttention > 0
@@ -153,12 +160,20 @@ class ScreenHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                title,
-                overflow: TextOverflow.ellipsis,
-                style: mono
-                    ? NeuText.data(c.accentInk, size: 15)
-                    : NeuText.title(c.ink, size: onBack != null ? 21 : 26),
+              // One line, shrunk to fit: at a large font scale a header beside
+              // an action ellipsised ("For which custome…") or, allowed two
+              // lines, broke a single word ("Notificatio / ns").
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  title,
+                  maxLines: 1,
+                  softWrap: false,
+                  style: mono
+                      ? NeuText.data(c.accentInk, size: 15)
+                      : NeuText.title(c.ink, size: onBack != null ? 21 : 26),
+                ),
               ),
               if (subtitle != null) ...[
                 const SizedBox(height: 3),

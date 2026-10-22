@@ -1,3 +1,4 @@
+import '../models/docs.dart';
 import 'db/records_dao.dart';
 import 'outbox/outbox.dart';
 import 'outbox/outbox_repository.dart';
@@ -5,8 +6,9 @@ import 'outbox/outbox_repository.dart';
 /// The customer's only write.
 ///
 /// It is an offline intent like any field one: a capture-time idempotency key,
-/// `occurred_at` from the corrected clock, and pages staged through
-/// `POST /uploads` first, then quoted in page order.
+/// `occurred_at` from the trusted clock, and pages staged through
+/// `POST /uploads` first, then quoted in page order. Since v2 it carries the
+/// services picked on the dashboard: one submission is services + pages.
 class CustomerRepository {
   CustomerRepository(this._outbox, this._records);
 
@@ -20,6 +22,7 @@ class CustomerRepository {
     int? addressId,
     String? manualAddress,
     required String addressLabel,
+    List<ServiceRequest> services = const [],
   }) async {
     assert(
       (addressId == null) != (manualAddress == null),
@@ -31,6 +34,7 @@ class CustomerRepository {
       body: {
         'pickup_address_id': ?addressId,
         'manual_pickup_address': ?manualAddress,
+        if (services.isNotEmpty) 'services': [for (final s in services) s.toWire()],
       },
       uploadLocalIds: uploadLocalIds,
     );
@@ -42,6 +46,7 @@ class CustomerRepository {
       pages: uploadLocalIds,
       address: addressLabel,
       occurredAt: item.occurredAt,
+      services: [for (final s in services) s.toDraft()],
     );
     return item;
   }

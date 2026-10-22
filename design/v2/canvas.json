@@ -1,0 +1,51 @@
+{
+  "v": 3,
+  "createdOnFiles": {"v": 1, "at": "2026-10-22T08:10:00Z"},
+  "title": "Sudi App v2 — Four Personas",
+  "launch": {"view": "canvas"},
+  "pages": [],
+  "boards": {
+    "Main.dc.html": {"x": 0, "y": 0, "w": 1240, "h": 1180, "title": "What's new in v2"},
+
+    "P1-01-Pickups.dc.html": {"x": 0, "y": 1640, "w": 390, "h": 844, "title": "Pickups, offline, with on-behalf", "is_interactive": true},
+    "P1-02-Customer.dc.html": {"x": 470, "y": 1640, "w": 390, "h": 844, "title": "For which customer", "is_interactive": true},
+    "P1-03-Services.dc.html": {"x": 940, "y": 1640, "w": 390, "h": 844, "title": "Services they want", "is_interactive": true},
+    "P1-04-Pages.dc.html": {"x": 1410, "y": 1640, "w": 390, "h": 844, "title": "Jangad pages + address", "is_interactive": true},
+    "P1-05-Posted.dc.html": {"x": 1880, "y": 1640, "w": 390, "h": 844, "title": "Posted on this phone", "is_interactive": true},
+    "P1-06-Resume.dc.html": {"x": 2350, "y": 1640, "w": 390, "h": 844, "title": "Back where you left off"},
+
+    "P2-01-Ready.dc.html": {"x": 0, "y": 2940, "w": 390, "h": 844, "title": "Ready for job work", "is_interactive": true},
+    "P2-02-Table.dc.html": {"x": 470, "y": 2940, "w": 390, "h": 844, "title": "Item table", "is_interactive": true},
+    "P2-03-Row.dc.html": {"x": 940, "y": 2940, "w": 390, "h": 844, "title": "One line, in full"},
+    "P2-04-LogTime.dc.html": {"x": 1410, "y": 2940, "w": 390, "h": 844, "title": "Log time"},
+    "P2-05-MyWork.dc.html": {"x": 1880, "y": 2940, "w": 390, "h": 844, "title": "My work (productivity)"},
+    "P2-06-Transfer.dc.html": {"x": 2350, "y": 2940, "w": 390, "h": 844, "title": "Move to department"},
+    "P2-07-Notices.dc.html": {"x": 2820, "y": 2940, "w": 390, "h": 844, "title": "Notifications"},
+
+    "P3-01-Dashboard.dc.html": {"x": 0, "y": 4240, "w": 390, "h": 844, "title": "Customer home: services", "is_interactive": true},
+    "P3-02-AddService.dc.html": {"x": 470, "y": 4240, "w": 390, "h": 844, "title": "Add a service", "is_interactive": true},
+    "P3-03-Request.dc.html": {"x": 940, "y": 4240, "w": 390, "h": 844, "title": "Your request", "is_interactive": true},
+    "P3-04-Jangad.dc.html": {"x": 1410, "y": 4240, "w": 390, "h": 844, "title": "Phase 2: jangad photo"},
+    "P3-05-Gst.dc.html": {"x": 1880, "y": 4240, "w": 390, "h": 844, "title": "GST / KYC step"},
+
+    "P4-01-Validate.dc.html": {"x": 0, "y": 5540, "w": 390, "h": 844, "title": "To validate", "is_interactive": true},
+    "P4-02-Receipt.dc.html": {"x": 470, "y": 5540, "w": 390, "h": 844, "title": "Validate the jangad", "is_interactive": true},
+    "P4-03-Entries.dc.html": {"x": 940, "y": 5540, "w": 390, "h": 844, "title": "Entries from the table", "is_interactive": true},
+    "P4-04-EditRow.dc.html": {"x": 1410, "y": 5540, "w": 390, "h": 844, "title": "Edit one entry"},
+    "P4-05-Ready.dc.html": {"x": 1880, "y": 5540, "w": 390, "h": 844, "title": "Mark READY"}
+  },
+  "order": [
+    "Main.dc.html",
+    "P1-01-Pickups.dc.html", "P1-02-Customer.dc.html", "P1-03-Services.dc.html", "P1-04-Pages.dc.html", "P1-05-Posted.dc.html", "P1-06-Resume.dc.html",
+    "P2-01-Ready.dc.html", "P2-02-Table.dc.html", "P2-03-Row.dc.html", "P2-04-LogTime.dc.html", "P2-05-MyWork.dc.html", "P2-06-Transfer.dc.html", "P2-07-Notices.dc.html",
+    "P3-01-Dashboard.dc.html", "P3-02-AddService.dc.html", "P3-03-Request.dc.html", "P3-04-Jangad.dc.html", "P3-05-Gst.dc.html",
+    "P4-01-Validate.dc.html", "P4-02-Receipt.dc.html", "P4-03-Entries.dc.html", "P4-04-EditRow.dc.html", "P4-05-Ready.dc.html"
+  ],
+  "notes": {
+    "rowP1": {"x": 0, "y": 1380, "text": "Persona 1 · Pickup & delivery — works offline, posts a jangad for a customer", "kind": "title1", "maxW": 2740},
+    "rowP2": {"x": 0, "y": 2680, "text": "Persona 2 · Job workers — ready list, item table, time, transfer, notifications", "kind": "title1", "maxW": 3210},
+    "rowP3": {"x": 0, "y": 3980, "text": "Persona 3 · Customer — pick services, then photograph the jangad", "kind": "title1", "maxW": 2270},
+    "rowP4": {"x": 0, "y": 5280, "text": "Persona 4 · Office — validate the jangad, add entries from the table", "kind": "title1", "maxW": 2270}
+  },
+  "designSystems": []
+}

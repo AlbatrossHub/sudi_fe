@@ -6,16 +6,34 @@ import '../../models/docs.dart';
 import '../clock/odoo_time.dart';
 import 'database.dart';
 
-/// Reads and writes the three cached worklists.
+/// Reads and writes the cached worklists.
 ///
-/// `upserts` are whole documents, so every write here is a replace. `rev`
-/// increases monotonically per record and is used only to drop an out-of-order
-/// write — never to merge.
+/// `upserts` are whole documents, so every write here is a replace -- but only
+/// when the incoming `rev` is at least the stored one. `rev` rises
+/// monotonically per record, so an older document arriving late (a slow intent
+/// answer racing a pull, a replayed response) must never overwrite a newer one.
+/// It is used only to drop an out-of-order write -- never to merge.
 class RecordsDao {
   RecordsDao(this._db);
 
   final AppDatabase _db;
   Database get _handle => _db.db;
+
+  /// `INSERT ... ON CONFLICT(id) DO UPDATE ... WHERE excluded.rev >= rev`.
+  static void _upsert(Batch batch, String table, Map<String, Object?> row) {
+    final columns = row.keys.toList();
+    final updates = [
+      for (final c in columns)
+        if (c != 'id') '$c = excluded.$c',
+    ].join(', ');
+    batch.rawInsert(
+      'INSERT INTO $table (${columns.join(', ')}) '
+      'VALUES (${List.filled(columns.length, '?').join(', ')}) '
+      'ON CONFLICT(id) DO UPDATE SET $updates '
+      'WHERE excluded.rev >= $table.rev',
+      [for (final c in columns) row[c]],
+    );
+  }
 
   // ---------------------------------------------------------------- pickups
 
@@ -23,20 +41,16 @@ class RecordsDao {
     final batch = _handle.batch();
     for (final json in docs) {
       final doc = PickupDoc.fromJson(json);
-      batch.insert(
-        'pickups',
-        {
-          'id': doc.id,
-          'rev': doc.rev,
-          'payload': jsonEncode(json),
-          'name': doc.name,
-          'stage': doc.stage,
-          'customer_name': doc.customer?.name,
-          'scheduled_date': doc.scheduledDate?.toIso8601String(),
-          'collected_at': doc.collectedAt?.toIso8601String(),
-        },
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
+      _upsert(batch, 'pickups', {
+        'id': doc.id,
+        'rev': doc.rev,
+        'payload': jsonEncode(json),
+        'name': doc.name,
+        'stage': doc.stage,
+        'customer_name': doc.customer?.name,
+        'scheduled_date': doc.scheduledDate?.toIso8601String(),
+        'collected_at': doc.collectedAt?.toIso8601String(),
+      });
     }
     await batch.commit(noResult: true);
   }
@@ -65,21 +79,16 @@ class RecordsDao {
     final batch = _handle.batch();
     for (final json in docs) {
       final doc = DeliveryDoc.fromJson(json);
-      batch.insert(
-        'deliveries',
-        {
-          'id': doc.id,
-          'rev': doc.rev,
-          'payload': jsonEncode(json),
-          'name': doc.name,
-          'stage': doc.stage,
-          'customer_name': doc.customer?.name,
-          'taken_by_me':
-              (myUserId != null && doc.takenBy?.id == myUserId) ? 1 : 0,
-          'delivered_at': doc.deliveredAt?.toIso8601String(),
-        },
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
+      _upsert(batch, 'deliveries', {
+        'id': doc.id,
+        'rev': doc.rev,
+        'payload': jsonEncode(json),
+        'name': doc.name,
+        'stage': doc.stage,
+        'customer_name': doc.customer?.name,
+        'taken_by_me': (myUserId != null && doc.takenBy?.id == myUserId) ? 1 : 0,
+        'delivered_at': doc.deliveredAt?.toIso8601String(),
+      });
     }
     await batch.commit(noResult: true);
   }
@@ -118,20 +127,16 @@ class RecordsDao {
     final batch = _handle.batch();
     for (final json in docs) {
       final doc = JobWorkDoc.fromJson(json);
-      batch.insert(
-        'jobwork',
-        {
-          'id': doc.id,
-          'rev': doc.rev,
-          'payload': jsonEncode(json),
-          'name': doc.name,
-          'customer_name': doc.customer?.name,
-          'department': doc.currentDepartment?.name,
-          'timer_running': doc.timer.running ? 1 : 0,
-          'scheduled_date': doc.scheduledDate?.toIso8601String(),
-        },
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
+      _upsert(batch, 'jobwork', {
+        'id': doc.id,
+        'rev': doc.rev,
+        'payload': jsonEncode(json),
+        'name': doc.name,
+        'customer_name': doc.customer?.name,
+        'department': doc.currentDepartment?.name,
+        'timer_running': doc.timer.running ? 1 : 0,
+        'scheduled_date': doc.scheduledDate?.toIso8601String(),
+      });
     }
     await batch.commit(noResult: true);
   }
@@ -149,21 +154,65 @@ class RecordsDao {
   JobWorkDoc _jobWork(Map<String, Object?> row) =>
       JobWorkDoc.fromJson(jsonDecode(row['payload'] as String) as Map<String, dynamic>);
 
+  // ----------------------------------------------------------------- office
+
+  Future<void> upsertOffice(List<Map<String, dynamic>> docs) async {
+    final batch = _handle.batch();
+    for (final json in docs) {
+      final doc = OfficeDoc.fromJson(json);
+      _upsert(batch, 'office', {
+        'id': doc.id,
+        'rev': doc.rev,
+        'payload': jsonEncode(json),
+        'name': doc.name,
+        'customer_name': doc.customer?.name,
+        'collected_at': doc.collectedAt?.toIso8601String(),
+      });
+    }
+    await batch.commit(noResult: true);
+  }
+
+  /// Oldest collection first: the office works the queue in arrival order.
+  Future<List<OfficeDoc>> office() async {
+    final rows = await _handle.query('office', orderBy: 'collected_at ASC, id ASC');
+    return rows.map(_office).toList();
+  }
+
+  Future<OfficeDoc?> officeOne(int id) async {
+    final rows = await _handle.query('office', where: 'id = ?', whereArgs: [id], limit: 1);
+    return rows.isEmpty ? null : _office(rows.first);
+  }
+
+  OfficeDoc _office(Map<String, Object?> row) =>
+      OfficeDoc.fromJson(jsonDecode(row['payload'] as String) as Map<String, dynamic>);
+
   // -------------------------------------------------------------------- all
 
   /// A record that left the caller's scope must be deleted locally. Skip this
   /// and the phone accumulates work that no longer exists.
   Future<void> removeGone(String scope, List<int> ids) async {
     if (ids.isEmpty) return;
-    final table = switch (scope) {
-      'pickup' => 'pickups',
-      'delivery' => 'deliveries',
-      'jobwork' => 'jobwork',
-      _ => null,
-    };
-    if (table == null) return;
+    final String table;
+    try {
+      table = AppDatabase.tableForScope(scope);
+    } on ArgumentError {
+      return;
+    }
     final placeholders = List.filled(ids.length, '?').join(',');
     await _handle.delete(table, where: 'id IN ($placeholders)', whereArgs: ids);
+  }
+
+  /// The server said these are not ours any more (`NOT_IN_SCOPE`), and no pull
+  /// brought them back: drop them from every worklist.
+  Future<void> removeEverywhere(Iterable<int> ids) async {
+    final list = ids.toList();
+    if (list.isEmpty) return;
+    final placeholders = List.filled(list.length, '?').join(',');
+    final batch = _handle.batch();
+    for (final table in AppDatabase.recordTables) {
+      batch.delete(table, where: 'id IN ($placeholders)', whereArgs: list);
+    }
+    await batch.commit(noResult: true);
   }
 
   /// A single-record intent answers with the updated document, so the local row
@@ -173,6 +222,7 @@ class RecordsDao {
       'pickup' => upsertPickups([record]),
       'delivery' => upsertDeliveries([record], myUserId: myUserId),
       'jobwork' => upsertJobWork([record]),
+      'office' => upsertOffice([record]),
       _ => Future.value(),
     };
   }
@@ -187,6 +237,7 @@ class RecordsDao {
     required List<String> pages,
     required String address,
     required DateTime occurredAt,
+    List<Map<String, dynamic>> services = const [],
   }) async {
     await _handle.insert('jangads', {
       'local_id': localId,
@@ -196,6 +247,7 @@ class RecordsDao {
       'occurred_at': occurredAt.toIso8601String(),
       'state': 'queued',
       'submitted_at': null,
+      'services': jsonEncode(services),
     }, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
@@ -230,9 +282,10 @@ class RecordsDao {
         'cursor': cursor,
         'etag': etag,
         // Stamped with an offset, because `OdooTime.parse` reads a naive
-        // string as UTC -- Odoo's wire format. A bare `toIso8601String()` is
-        // naive *local*, so it came back 5h30m in the future here, `ago()` saw
-        // a negative delta, and the strip said "just now" forever.
+        // string as UTC -- the server's wire format. A bare
+        // `toIso8601String()` is naive *local*, so it came back 5h30m in the
+        // future here, `ago()` saw a negative delta, and the strip said "just
+        // now" forever.
         'last_pulled_at': OdooTime.stamp(DateTime.now()),
       },
       conflictAlgorithm: ConflictAlgorithm.replace,

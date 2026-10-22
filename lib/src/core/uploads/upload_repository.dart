@@ -16,10 +16,12 @@ import 'image_pipeline.dart';
 /// The intent is a few hundred bytes and lands on the worst signal; the image
 /// retries on its own. Never inline a photo into an intent body.
 class UploadRepository {
-  UploadRepository(this._db, this._api);
+  UploadRepository(this._db, this._api, {Future<Directory> Function()? stagingDirectory})
+      : _stagingDirectory = stagingDirectory ?? ImagePipeline.stagingDirectory;
 
   final AppDatabase _db;
   final ApiClient _api;
+  final Future<Directory> Function() _stagingDirectory;
   static const _uuid = Uuid();
 
   Database get _handle => _db.db;
@@ -50,6 +52,33 @@ class UploadRepository {
     await _handle.delete('uploads', where: 'local_id = ?', whereArgs: [localId]);
   }
 
+  /// The staged pages a draft names, in the order it names them. A page whose
+  /// row has gone (swept, or sent with an intent) is simply missing.
+  Future<List<UploadItem>> byIds(List<String> localIds) async {
+    if (localIds.isEmpty) return const [];
+    final placeholders = List.filled(localIds.length, '?').join(',');
+    final rows = await _handle.query(
+      'uploads',
+      where: 'local_id IN ($placeholders)',
+      whereArgs: localIds,
+    );
+    final byId = {for (final r in rows) r['local_id'] as String: UploadItem.fromRow(r)};
+    return [
+      for (final id in localIds)
+        if (byId[id] != null && File(byId[id]!.filePath).existsSync()) byId[id]!,
+    ];
+  }
+
+  /// Re-number pages after one was removed from the middle of a draft, so the
+  /// intent quotes them in the order the operator sees.
+  Future<void> renumber(List<String> localIds) async {
+    final batch = _handle.batch();
+    for (var i = 0; i < localIds.length; i++) {
+      batch.update('uploads', {'page_index': i}, where: 'local_id = ?', whereArgs: [localIds[i]]);
+    }
+    await batch.commit(noResult: true);
+  }
+
   Future<List<UploadItem>> forIntent(String intentLocalId) async {
     final rows = await _handle.query(
       'uploads',
@@ -72,6 +101,61 @@ class UploadRepository {
   Future<void> save(UploadItem item) async {
     await _handle
         .update('uploads', item.toRow(), where: 'local_id = ?', whereArgs: [item.localId]);
+  }
+
+  /// Boot: an upload cut off by a killed app is staged again, so the flush
+  /// that owns it sends it afresh rather than waiting on a dead request.
+  Future<int> recoverInterrupted() => _handle.update(
+        'uploads',
+        {'state': UploadState.staged.name},
+        where: 'state = ?',
+        whereArgs: [UploadState.uploading.name],
+      );
+
+  /// Staged pages that nothing will ever send: photographed for a form that
+  /// was abandoned (its draft discarded or expired) and never attached to an
+  /// intent. Without this they sit in the app's storage for good and count
+  /// against the staging cap until the phone refuses to take another photo.
+  ///
+  /// [keep] is every page a live draft still names. Only pages older than
+  /// [minAge] go, so a form being filled right now is never swept from under
+  /// the person filling it. Files in the staging folder that no row points at
+  /// (a signature rendered just before the app was killed, the pages of a
+  /// dismissed intent) are deleted on the same terms.
+  Future<int> sweepOrphans({
+    required Set<String> keep,
+    Duration minAge = const Duration(hours: 6),
+    DateTime? now,
+  }) async {
+    final cutoff = (now ?? DateTime.now()).subtract(minAge);
+    var swept = 0;
+    for (final item in await unattached()) {
+      if (keep.contains(item.localId)) continue;
+      if (item.createdAt.isAfter(cutoff)) continue;
+      await discard(item.localId);
+      swept++;
+    }
+
+    try {
+      final dir = await _stagingDirectory();
+      if (dir.existsSync()) {
+        final rows = await _handle.query('uploads', columns: ['file_path']);
+        final known = {for (final r in rows) r['file_path'] as String};
+        for (final entity in dir.listSync()) {
+          if (entity is! File || known.contains(entity.path)) continue;
+          if (entity.lastModifiedSync().isAfter(cutoff)) continue;
+          try {
+            entity.deleteSync();
+            swept++;
+          } catch (_) {
+            // A file the OS will not let go of is a problem for another day.
+          }
+        }
+      }
+    } catch (_) {
+      // No staging folder (tests, a first launch): nothing to sweep.
+    }
+    return swept;
   }
 
   /// Send one staged page. Returns the item with its server `reference`.
@@ -102,7 +186,13 @@ class UploadRepository {
       ),
     });
 
-    final response = await _api.post<Map<String, dynamic>>('/uploads', body: form);
+    final Response<Map<String, dynamic>> response;
+    try {
+      response = await _api.post<Map<String, dynamic>>('/uploads', body: form);
+    } on ApiError {
+      await save(item.copyWith(state: UploadState.staged));
+      rethrow;
+    }
     final data = response.data ?? const {};
     final reference = '${data['reference'] ?? ''}';
     final serverDigest = data['sha256'] as String?;

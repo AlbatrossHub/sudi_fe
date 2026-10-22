@@ -16,10 +16,7 @@ class NeuScaffold extends StatelessWidget {
     return Scaffold(
       backgroundColor: c.ground,
       body: SafeArea(
-        child: Padding(
-          padding: padding ?? const EdgeInsets.fromLTRB(20, 14, 20, 0),
-          child: child,
-        ),
+        child: Padding(padding: padding ?? const EdgeInsets.fromLTRB(20, 14, 20, 0), child: child),
       ),
     );
   }
@@ -88,50 +85,38 @@ class NeuButton extends StatelessWidget {
       }
     }
 
-    final content = Center(
-      child: busy
-          ? SizedBox(
-              width: 22,
-              height: 22,
-              child: CircularProgressIndicator(strokeWidth: 2.4, color: ink),
-            )
-          : Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (icon != null || kind == NeuButtonKind.destructive) ...[
-                  Icon(icon ?? Icons.warning_amber_rounded, size: 19, color: ink),
-                  const SizedBox(width: 10),
-                ],
-                Flexible(
-                  child: Text(
-                    label,
-                    overflow: TextOverflow.ellipsis,
-                    style: NeuText.strong(ink, size: 16),
+    // Side padding so a long label ellipsises inside the pill, never at its edge.
+    final content = Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 18),
+      child: Center(
+        child: busy
+            ? SizedBox(width: 22, height: 22, child: CircularProgressIndicator(strokeWidth: 2.4, color: ink))
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (icon != null || kind == NeuButtonKind.destructive) ...[
+                    Icon(icon ?? Icons.warning_amber_rounded, size: 19, color: ink),
+                    const SizedBox(width: 10),
+                  ],
+                  Flexible(
+                    child: Text(label, overflow: TextOverflow.ellipsis, style: NeuText.strong(ink, size: 16)),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
+      ),
     );
 
     Widget button;
     if (accentShadow != null) {
       button = DecoratedBox(
-        decoration: BoxDecoration(
-          color: fill,
-          borderRadius: BorderRadius.circular(19),
-          boxShadow: accentShadow,
-        ),
+        decoration: BoxDecoration(color: fill, borderRadius: BorderRadius.circular(19), boxShadow: accentShadow),
         child: SizedBox(height: height, child: content),
       );
       button = Material(
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(19),
-        child: InkWell(
-          onTap: onPressed,
-          borderRadius: BorderRadius.circular(19),
-          child: button,
-        ),
+        child: InkWell(onTap: onPressed, borderRadius: BorderRadius.circular(19), child: button),
       );
     } else {
       button = NeuBox(
@@ -154,10 +139,7 @@ class NeuButton extends StatelessWidget {
               Icon(Icons.lock_outline_rounded, size: 14, color: c.blockedInk),
               const SizedBox(width: 7),
               Flexible(
-                child: Text(
-                  disabledReason!,
-                  style: NeuText.body_(c.blockedInk, size: 12, w: FontWeight.w700),
-                ),
+                child: Text(disabledReason!, style: NeuText.body_(c.blockedInk, size: 12, w: FontWeight.w700)),
               ),
             ],
           ),
@@ -198,7 +180,11 @@ class StateChip extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           if (icon != null) ...[Icon(icon, size: 12, color: ink), const SizedBox(width: 5)],
-          Text(label, style: NeuText.label(ink, size: 11)),
+          // Ellipsise inside a Flexible: "In Laser Inscription · new" ran off
+          // the card on the M31.
+          Flexible(
+            child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: NeuText.label(ink, size: 11)),
+          ),
         ],
       ),
     );
@@ -258,10 +244,7 @@ class NeuField extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              if (icon != null) ...[
-                Icon(icon, size: 19, color: c.inkFaint),
-                const SizedBox(width: 12),
-              ],
+              if (icon != null) ...[Icon(icon, size: 19, color: c.inkFaint), const SizedBox(width: 12)],
               Expanded(
                 child: TextField(
                   controller: controller,
@@ -290,12 +273,7 @@ class NeuField extends StatelessWidget {
 }
 
 class NeuSegmented extends StatelessWidget {
-  const NeuSegmented({
-    super.key,
-    required this.labels,
-    required this.index,
-    required this.onChanged,
-  });
+  const NeuSegmented({super.key, required this.labels, required this.index, required this.onChanged});
 
   final List<String> labels;
   final int index;
@@ -425,10 +403,7 @@ class NeuNote extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (title != null) ...[
-                  Text(title!, style: NeuText.strong(ink, size: 13)),
-                  const SizedBox(height: 4),
-                ],
+                if (title != null) ...[Text(title!, style: NeuText.strong(ink, size: 13)), const SizedBox(height: 4)],
                 Text(text, style: NeuText.body_(c.inkMuted, size: 12.5)),
               ],
             ),

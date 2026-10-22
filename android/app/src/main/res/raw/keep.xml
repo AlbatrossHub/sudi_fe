@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Resources referenced only by name from Dart (the notification small icon,
+     lib/src/core/notices/notices.dart): keep them through release resource
+     shrinking, or every notification silently fails to show. -->
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@drawable/ic_stat_sudi" />

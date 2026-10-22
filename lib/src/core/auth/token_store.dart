@@ -91,11 +91,21 @@ class TokenStore {
     _accessCache = null;
     _expiryCache = null;
     final deviceUid = await _storage.read(key: _kDeviceUid);
+    // The database file outlives a sign-out (its rows are cleared, the file
+    // stays open), so its key must too: dropping it left a file no later
+    // launch could open -- a blank screen until the app data was cleared.
+    final dbKey = await _storage.read(key: _kDbKey);
     await _storage.deleteAll();
     if (deviceUid != null && deviceUid.isNotEmpty) {
       await _storage.write(key: _kDeviceUid, value: deviceUid);
     }
+    if (dbKey != null && dbKey.isNotEmpty) {
+      await _storage.write(key: _kDbKey, value: dbKey);
+    }
   }
+
+  /// Only when the database file it opens has been deleted.
+  Future<void> forgetDatabaseKey() => _storage.delete(key: _kDbKey);
 
   /// The app version last accepted by `PATCH /devices/me`, so the report is
   /// sent when it changes rather than on every launch.

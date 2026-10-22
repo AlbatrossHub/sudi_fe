@@ -26,6 +26,9 @@ class ImagePipeline {
       maxHeight: Env.imageLongEdge.toDouble(),
       imageQuality: 90,
       requestFullMetadata: false,
+      // A jangad is a slip on a table, never a selfie; the camera app otherwise
+      // reopens on whichever lens it last used (found on the M31: the front one).
+      preferredCameraDevice: CameraDevice.rear,
     );
     if (shot == null) return null;
     return compress(File(shot.path));

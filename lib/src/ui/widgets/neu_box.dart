@@ -39,7 +39,12 @@ class NeuBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = NeuTheme.of(context);
-    final fill = color ?? (style == NeuStyle.insetSm ? c.groundSunk : c.ground);
+    final fill = color ??
+        switch (style) {
+          NeuStyle.insetSm => c.groundSunk,
+          NeuStyle.accent => c.accent,
+          _ => c.ground,
+        };
     final rr = BorderRadius.circular(radius);
 
     Widget content = Padding(
@@ -81,6 +86,18 @@ class NeuBox extends StatelessWidget {
             light: c.shadowLight,
             offset: big ? 5 : 2,
             blur: big ? 11 : 5,
+          ),
+          child: content,
+        );
+      case NeuStyle.accent:
+        content = DecoratedBox(
+          decoration: BoxDecoration(
+            color: fill,
+            borderRadius: rr,
+            boxShadow: [
+              BoxShadow(color: c.accentShadow, offset: const Offset(5, 6), blurRadius: 14),
+              BoxShadow(color: c.shadowLight, offset: const Offset(-4, -4), blurRadius: 10),
+            ],
           ),
           child: content,
         );

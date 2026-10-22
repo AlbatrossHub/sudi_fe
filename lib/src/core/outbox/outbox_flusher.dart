@@ -1,21 +1,28 @@
 import 'dart:async';
 import 'dart:math';
 
+import '../../models/docs.dart';
 import '../api/api_client.dart';
 import '../api/api_error.dart';
-import '../clock/server_clock.dart';
+import '../clock/trusted_clock.dart';
 import '../db/records_dao.dart';
+import '../store/kv_store.dart';
 import '../uploads/upload_repository.dart';
+import '../v2_repository.dart';
 import 'outbox.dart';
 import 'outbox_repository.dart';
 
 /// Replays the outbox.
 ///
-/// Two properties matter more than anything else here:
+/// Three properties matter more than anything else here:
 ///
-/// * **Serial per record, parallel across records.** Two intents on delivery
-///   1234 go in capture order; delivery 1235 is not blocked behind them. A
-///   conflict stops *that record's* chain only.
+/// * **One chain per record, serial within it, parallel across chains.** A
+///   confirm and a cancel on pickup 42 go in capture order whatever their
+///   verbs; delivery 1235 is not blocked behind them. A take of five parcels
+///   joins those five chains. A conflict stops *that chain* only.
+/// * **A chain waits for its oldest intent.** If that one is backing off, the
+///   ones behind it wait too -- sending them first would replay the operator's
+///   taps out of order.
 /// * **The idempotency key is reused on every retry, forever.** It is minted at
 ///   capture and lives in the outbox row; nothing in this file generates one.
 class OutboxFlusher {
@@ -24,67 +31,130 @@ class OutboxFlusher {
     required OutboxRepository outbox,
     required UploadRepository uploads,
     required RecordsDao records,
-    required ServerClock clock,
+    required TrustedClock clock,
     required this.myUserId,
+    KvStore? store,
   })  : _api = api,
         _outbox = outbox,
         _uploads = uploads,
         _records = records,
-        _clock = clock;
+        _clock = clock,
+        _store = store;
 
   final ApiClient _api;
   final OutboxRepository _outbox;
   final UploadRepository _uploads;
   final RecordsDao _records;
-  final ServerClock _clock;
+  final TrustedClock _clock;
+  final KvStore? _store;
   final int? Function() myUserId;
 
-  bool _running = false;
+  Future<void>? _running;
+  bool _again = false;
+  bool _againIgnoringBackoff = false;
 
   /// Fired whenever a row changes state, so the UI can re-read.
   void Function()? onChanged;
 
-  /// Ids the server told us to re-pull after a conflict.
+  /// Ids the server told us to re-pull after a conflict (`resync` on the error
+  /// envelope, the `failed` half of a take). Handed to the next pull.
   final Set<int> pendingResync = {};
 
-  Future<void> flush() async {
-    if (_running) return;
-    _running = true;
-    try {
-      await _outbox.expireStale();
-      final now = _clock.now();
-      final due = (await _outbox.open()).where((item) {
-        if (!item.isWaiting) return false;
-        final next = item.nextAttemptAt;
-        return next == null || !next.isAfter(now);
-      }).toList();
+  /// Ids the server said are not ours any more. Dropped locally unless the
+  /// resync pull brings them back.
+  final Set<int> notInScope = {};
 
-      if (due.isEmpty) {
-        onChanged?.call();
-        return;
-      }
+  /// What the server answered for a jangad posted on a customer's behalf:
+  /// `posted/<local id>` -> `{picking_id, reference}`, read by the "Posted"
+  /// screen and by "Collect it now" once the receipt exists.
+  static String postedKey(String localId) => 'posted/$localId';
 
-      final chains = <String, List<OutboxItem>>{};
-      for (final item in due) {
-        (chains[item.chainKey] ??= []).add(item);
-      }
-
-      await Future.wait(chains.values.map(_flushChain));
-    } finally {
-      _running = false;
-      onChanged?.call();
-    }
+  /// Hand over (and forget) the ids to re-pull.
+  ({Set<int> resync, Set<int> notInScope}) takeResync() {
+    final out = (resync: {...pendingResync, ...notInScope}, notInScope: {...notInScope});
+    pendingResync.clear();
+    notInScope.clear();
+    return out;
   }
 
-  Future<void> _flushChain(List<OutboxItem> chain) async {
-    for (final item in chain) {
+  /// Send what is due. Asked while a run is going, it runs once more
+  /// afterwards, so an intent captured mid-run is never left behind.
+  ///
+  /// [ignoreBackoff]: the server just became reachable again, so everything
+  /// waiting on a network failure goes now rather than at its next slot.
+  Future<void> flush({bool ignoreBackoff = false}) {
+    final running = _running;
+    if (running != null) {
+      _again = true;
+      _againIgnoringBackoff = _againIgnoringBackoff || ignoreBackoff;
+      return running;
+    }
+    final run = () async {
+      var ignore = ignoreBackoff;
+      do {
+        _again = false;
+        await _run(ignoreBackoff: ignore);
+        ignore = _againIgnoringBackoff;
+        _againIgnoringBackoff = false;
+      } while (_again);
+    }();
+    _running = run.whenComplete(() {
+      _running = null;
+      onChanged?.call();
+    });
+    return _running!;
+  }
+
+  Future<void> _run({required bool ignoreBackoff}) async {
+    await _outbox.expireStale();
+    final open = await _outbox.open();
+    if (!open.any((i) => i.isWaiting)) return;
+    final now = _clock.now();
+    await Future.wait(
+      outboxChains(open).map((chain) => _flushChain(chain, now, ignoreBackoff)),
+    );
+  }
+
+  bool _due(OutboxItem item, DateTime now, bool ignoreBackoff) {
+    if (item.state == OutboxState.pending) return true;
+    if (item.state != OutboxState.retrying) return false;
+    final next = item.nextAttemptAt;
+    return ignoreBackoff || next == null || !next.isAfter(now);
+  }
+
+  Future<void> _flushChain(List<OutboxItem> chain, DateTime now, bool ignoreBackoff) async {
+    for (final snapshot in chain) {
+      // Re-read: an earlier intent in this chain may have just filled in this
+      // one's record id (an on-behalf jangad answering with its receipt).
+      final item = await _outbox.byId(snapshot.localId);
+      if (item == null || item.state == OutboxState.done) continue;
+      // Refused for good: shown to the operator, and not in the way of the
+      // intents behind it on later runs.
+      if (item.state == OutboxState.needsAttention) continue;
+      if (item.state == OutboxState.sending) return;
+      if (!_due(item, now, ignoreBackoff)) return;
       final keepGoing = await _flushOne(item);
       if (!keepGoing) return;
     }
   }
 
-  /// Returns whether this record's chain may continue.
+  /// Returns whether this chain may continue.
   Future<bool> _flushOne(OutboxItem item) async {
+    // Chained behind an intent that has not answered with a record id yet.
+    if (item.dependsOn != null && item.recordId == null && _needsRecord(item.kind)) {
+      final parent = await _outbox.byId(item.dependsOn!);
+      if (parent == null || parent.state == OutboxState.needsAttention) {
+        await _outbox.save(item.copyWith(
+          state: OutboxState.needsAttention,
+          lastErrorCode: 'DEPENDENCY',
+          lastErrorMessage: 'The jangad it belongs to did not reach the office, so this '
+              'cannot be sent. Collect it again once the jangad is in.',
+        ));
+        onChanged?.call();
+      }
+      return false;
+    }
+
     await _outbox.save(item.copyWith(state: OutboxState.sending));
     onChanged?.call();
 
@@ -121,6 +191,15 @@ class OutboxFlusher {
       return false;
     }
   }
+
+  static bool _needsRecord(IntentKind kind) => switch (kind) {
+        IntentKind.submitJangad ||
+        IntentKind.submitOnBehalf ||
+        IntentKind.takeDeliveries ||
+        IntentKind.noticesRead =>
+          false,
+        _ => true,
+      };
 
   /// A lost race or a refusal stops the chain for that record: anything queued
   /// behind it was written against a world that no longer exists.
@@ -165,20 +244,30 @@ class OutboxFlusher {
         IntentKind.markDelivered => '/deliveries/${item.recordId}/deliver',
         IntentKind.timer => '/jobwork/${item.recordId}/timer',
         IntentKind.department => '/jobwork/${item.recordId}/department',
+        IntentKind.logTime => V2Paths.timesheets(item.recordId!),
         IntentKind.submitJangad => '/jangad',
+        IntentKind.submitOnBehalf => V2Paths.onBehalfJangad,
+        IntentKind.noticesRead => V2Paths.noticesRead,
       };
 
   String _scopeFor(IntentKind kind) => switch (kind) {
-        IntentKind.confirmPickup || IntentKind.cancelPickup => 'pickup',
+        IntentKind.confirmPickup || IntentKind.cancelPickup || IntentKind.submitOnBehalf =>
+          'pickup',
         IntentKind.takeDeliveries ||
         IntentKind.releaseDelivery ||
         IntentKind.markDelivered =>
           'delivery',
-        IntentKind.timer || IntentKind.department => 'jobwork',
+        IntentKind.timer || IntentKind.department || IntentKind.logTime => 'jobwork',
         IntentKind.submitJangad => 'jangad',
+        IntentKind.noticesRead => 'notice',
       };
 
+  /// Intents the server accepted, ever. The sync controller compares it across
+  /// a run to know that this phone itself just changed something.
+  int landed = 0;
+
   Future<void> _succeed(OutboxItem item, Map<String, dynamic> payload) async {
+    landed++;
     final scope = _scopeFor(item.kind);
 
     // Every single-record intent answers with the updated document, so the
@@ -190,6 +279,31 @@ class OutboxFlusher {
         Map<String, dynamic>.from(record),
         myUserId: myUserId(),
       );
+    }
+
+    // A manual time entry answers with the receipt as it now stands.
+    final jobwork = payload['jobwork'];
+    if (item.kind == IntentKind.logTime && jobwork is Map) {
+      await _records.upsertJobWork([Map<String, dynamic>.from(jobwork)]);
+    }
+
+    // A jangad posted for a customer answers with its receipt: the pickup
+    // joins the list, and whatever was chained behind it (the confirm taken
+    // straight after posting) now acts on that receipt.
+    if (item.kind == IntentKind.submitOnBehalf) {
+      final result = OnBehalfResult.from(payload);
+      if (result != null) {
+        if (result.pickup != null) await _records.upsertPickups([result.pickup!]);
+        await _outbox.attachDependents(item.localId, result.pickingId);
+        await _store?.writeJson(postedKey(item.localId), {
+          'picking_id': result.pickingId,
+          'reference': result.reference,
+          // The outbox row goes once this lands; the "posted" and "collect it
+          // now" screens still need to say what was posted, and when.
+          'meta': item.meta,
+          'occurred_at': item.occurredAt.toIso8601String(),
+        });
+      }
     }
 
     // `take` is the one multi-record intent, and a partial result is normal.
@@ -236,6 +350,8 @@ class OutboxFlusher {
 
   Future<void> _record(OutboxItem item, ApiError error) async {
     pendingResync.addAll(error.resync);
+    if (error.code == ApiError.notInScope) notInScope.addAll(item.touchedIds);
+    if (error.isLostRace) pendingResync.addAll(item.touchedIds);
 
     // The server sends `AUTH` with `retryable: false`, which is right for a
     // login attempt and wrong for a queued intent: the interceptor already
@@ -273,8 +389,4 @@ class OutboxFlusher {
     final jitterMs = _jitter.nextInt(1000);
     return Duration(seconds: base, milliseconds: jitterMs);
   }
-}
-
-extension _FirstOrNull<T> on Iterable<T> {
-  T? get firstOrNull => isEmpty ? null : first;
 }

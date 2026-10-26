@@ -818,6 +818,7 @@ class SubmittedScreen extends ConsumerWidget {
                     message: 'Nothing sent yet',
                     hint: 'Photograph a jangad and it appears here',
                     icon: Icons.receipt_long_outlined,
+                    inline: true,
                   ),
                 if (queued.isNotEmpty) ...[
                   const SizedBox(height: 16),

@@ -59,38 +59,37 @@ void main() {
     await tester.tap(find.byKey(const Key('service-tile-3')));
     await tester.pumpAndSettle();
     expect(find.text('How many pieces?'), findsOneWidget);
-    await tester.tap(find.byKey(const ValueKey('qty-stepper-more')));
+    // No presets: whatever count the customer types (the client asked for it).
+    expect(find.byKey(const ValueKey('qty-stepper-more')), findsNothing);
+    expect(find.text('Add, no count'), findsOneWidget);
+    await tester.enterText(find.byKey(const Key('qty-input')), '37');
     await tester.pump();
-    await tester.tap(find.byKey(const ValueKey('qty-stepper-more')));
-    await tester.pump();
-    await tester.tap(find.text('25')); // a quick chip replaces the count
-    await tester.pump();
-    expect(find.text('Add 25 pcs'), findsOneWidget);
+    expect(find.text('Add 37 pcs'), findsOneWidget);
     await tester.enterText(find.widgetWithText(TextField, 'Please do the small ones too'), 'big stones first');
     await tester.tap(find.byKey(const Key('service-sheet-save')));
     await tester.pumpAndSettle();
 
     // The tile says it is in, and the bar at the foot sums the request.
-    expect(find.text('Added · 25 pcs'), findsOneWidget);
+    expect(find.text('Added · 37 pcs'), findsOneWidget);
     expect(find.byKey(const Key('request-bar')), findsOneWidget);
-    expect(find.text('1 service · 25 pcs'), findsOneWidget);
+    expect(find.text('1 service · 37 pcs'), findsOneWidget);
 
     // A second one, by the carat.
     await tester.tap(find.byKey(const Key('service-tile-9')));
     await tester.pumpAndSettle();
     expect(find.text('How many carats?'), findsOneWidget);
-    await tester.tap(find.byKey(const ValueKey('qty-stepper-more')));
+    await tester.enterText(find.byKey(const Key('qty-input')), '1.25');
     await tester.pump();
     await tester.tap(find.byKey(const Key('service-sheet-save')));
     await tester.pumpAndSettle();
-    expect(find.text('2 services · 25 pcs · 1.00 ct'), findsOneWidget);
+    expect(find.text('2 services · 37 pcs · 1.25 ct'), findsOneWidget);
 
     // It is a draft on the phone's disk: a killed app would come back to it.
     await drive(tester, h.services.drafts.flushAll());
     final draft = (await drive(tester, h.services.drafts.load(DraftStore.customerJangad)))!;
     expect(draft.data['services'], [
-      {'job_type_id': 3, 'quantity': 25.0, 'remarks': 'big stones first', 'name': 'Laser Inscription', 'unit': 'pcs'},
-      {'job_type_id': 9, 'quantity': 1.0, 'name': 'CVD Diamond Testing', 'unit': 'ct'},
+      {'job_type_id': 3, 'quantity': 37.0, 'remarks': 'big stones first', 'name': 'Laser Inscription', 'unit': 'pcs'},
+      {'job_type_id': 9, 'quantity': 1.25, 'name': 'CVD Diamond Testing', 'unit': 'ct'},
     ]);
 
     // Your request: remove one.
@@ -107,8 +106,8 @@ void main() {
     // Back on the dashboard the tile is free again.
     await tester.tap(find.text('Add another service'));
     await tester.pumpAndSettle();
-    expect(find.text('Added · 25 pcs'), findsNothing);
-    expect(find.text('1 service · 1.00 ct'), findsOneWidget);
+    expect(find.text('Added · 37 pcs'), findsNothing);
+    expect(find.text('1 service · 1.25 ct'), findsOneWidget);
 
     // The edit sheet can take a service out too.
     await tester.tap(find.byKey(const Key('service-tile-9')));

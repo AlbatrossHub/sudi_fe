@@ -6,7 +6,6 @@ import '../../core/api/api_error.dart';
 import '../../core/services.dart';
 import '../../models/docs.dart';
 import '../../ui/theme/neu.dart';
-import '../../ui/widgets/neu_box.dart';
 import '../../ui/widgets/neu_widgets.dart';
 import '../../ui/widgets/v2_widgets.dart';
 
@@ -78,21 +77,20 @@ class _AddServiceSheet extends StatefulWidget {
   State<_AddServiceSheet> createState() => _AddServiceSheetState();
 }
 
+/// Digits with at most one point and three decimals: a count, typed, never a
+/// preset (the client: "the person can type the quantity by his own").
+final _quantityFormat = TextInputFormatter.withFunction(
+  (old, next) => RegExp(r'^\d{0,6}(\.\d{0,3})?$').hasMatch(next.text) ? next : old,
+);
+
 class _AddServiceSheetState extends State<_AddServiceSheet> {
   late double _qty = widget.existing?.quantity ?? 0;
-  late final _qtyText = TextEditingController(text: _fmt(_qty));
+  late final _qtyText = TextEditingController(text: _qty > 0 ? _fmt(_qty) : '');
   late final _remarks = TextEditingController(text: widget.existing?.remarks ?? '');
 
   bool get _carats => widget.unit == 'ct';
-  double get _step => _carats ? 1 : 10;
-  List<double> get _quick => _carats ? const [1, 2, 5, 10] : const [10, 25, 50, 100];
 
   String _fmt(double v) => _carats ? Fig.ct(v) : Fig.pcs(v);
-
-  void _set(double v) {
-    setState(() => _qty = v < 0 ? 0 : v);
-    _qtyText.text = _fmt(_qty);
-  }
 
   @override
   void dispose() {
@@ -104,7 +102,6 @@ class _AddServiceSheetState extends State<_AddServiceSheet> {
   @override
   Widget build(BuildContext context) {
     final c = NeuTheme.of(context);
-    final unitLabel = _carats ? 'ct' : (widget.unit == 'pcs' ? 'pcs' : '');
     final verb = widget.existing == null ? 'Add' : 'Save';
     final label = _qty > 0 ? '$verb ${Fig.qty(_qty, widget.unit)}' : '$verb, no count';
     return Column(
@@ -123,43 +120,17 @@ class _AddServiceSheetState extends State<_AddServiceSheet> {
           style: NeuText.label(c.inkMuted, size: 12),
         ),
         const SizedBox(height: 8),
-        QtyStepper(
-          key: const Key('qty-stepper'),
-          value: _qty,
-          unit: unitLabel,
-          step: _step,
-          format: _fmt,
-          lessLabel: _carats ? 'One carat less' : 'Ten fewer',
-          moreLabel: _carats ? 'One carat more' : 'Ten more',
-          onChanged: _set,
-        ),
-        const SizedBox(height: 8),
-        Row(
-          children: [
-            for (var i = 0; i < _quick.length; i++) ...[
-              if (i > 0) const SizedBox(width: 8),
-              Expanded(
-                child: NeuBox(
-                  style: NeuStyle.raisedSm,
-                  radius: 12,
-                  onTap: () => _set(_quick[i]),
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: Center(
-                    child: Text(_fmt(_quick[i]),
-                        style: NeuText.label(c.inkSoft, size: 13).copyWith(fontWeight: FontWeight.w700)),
-                  ),
-                ),
-              ),
-            ],
-          ],
-        ),
-        const SizedBox(height: 12),
         LabeledInput(
-          label: 'Or type it',
+          label: _carats ? 'Carats' : (widget.unit == 'pcs' ? 'Pieces' : 'Quantity'),
           controller: _qtyText,
+          fieldKey: const Key('qty-input'),
+          hint: _carats ? 'Type the carats, e.g. 6.20' : 'Type the count, e.g. 120',
           mono: true,
+          size: 22,
+          // a new service opens with the number pad up; editing one does not
+          autofocus: widget.existing == null,
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
-          inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.]'))],
+          inputFormatters: [_quantityFormat],
           onChanged: (v) => setState(() => _qty = double.tryParse(v) ?? 0),
         ),
         const SizedBox(height: 12),

@@ -341,6 +341,7 @@ class AttentionScreen extends ConsumerWidget {
                     message: 'Nothing needs you',
                     hint: 'Refused and expired captures land here',
                     icon: Icons.check_circle_outline_rounded,
+                    inline: true,
                   )
                 else
                   for (final item in items) ...[

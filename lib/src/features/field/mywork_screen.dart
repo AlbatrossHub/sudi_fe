@@ -205,7 +205,7 @@ class _MyWorkScreenState extends ConsumerState<MyWorkScreen> {
             Text('Hours per day', style: NeuText.label(c.inkMuted, size: 12)),
             const SizedBox(height: 8),
             Semantics(
-              label: 'Hours per day: ${days.map((d) => '${weekdayShort[d.date.weekday - 1]} ${Fig.pcs(d.hours)}').join(', ')}',
+              label: 'Hours per day: ${days.map((d) => '${weekdayShort[d.date.weekday - 1]} ${Fig.hours(d.hours)}').join(', ')}',
               child: Container(
                 height: 110,
                 padding: const EdgeInsets.symmetric(horizontal: 4),

@@ -31,12 +31,13 @@ class Fig {
   }
 
   static String _trimmed(double d) {
-    var s = d.toString();
-    if (s.contains('e')) s = d.toStringAsFixed(6);
-    if (s.contains('.')) {
-      s = s.replaceFirst(RegExp(r'0+$'), '').replaceFirst(RegExp(r'\.$'), '');
-    }
-    return s;
+    // Six places is finer than anything the office enters, and drops the binary
+    // noise of summed lines (61.45 + 26.07 printed as 87.52000000000001 on the
+    // phone, against the migrated prod data).
+    return d
+        .toStringAsFixed(6)
+        .replaceFirst(RegExp(r'0+$'), '')
+        .replaceFirst(RegExp(r'\.$'), '');
   }
 
   /// `120 pcs`, `6.20 ct`, or the bare number for a service with no unit.

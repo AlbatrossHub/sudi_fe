@@ -421,25 +421,30 @@ class EmptyState extends StatelessWidget {
     required this.message,
     this.hint = 'Pull down to check again',
     this.icon = Icons.inbox_outlined,
+    this.inline = false,
   });
 
   final String message;
   final String hint;
   final IconData icon;
 
+  /// Inside a screen that already scrolls as one list. A list inside a list
+  /// gets unbounded height and a release build then draws nothing at all
+  /// (found on the phone: the customer's "What you have sent" was blank).
+  final bool inline;
+
   @override
   Widget build(BuildContext context) {
     final c = NeuTheme.of(context);
-    return ListView(
-      children: [
-        const SizedBox(height: 60),
-        Center(child: Icon(icon, size: 44, color: c.inkFaint)),
-        const SizedBox(height: 14),
-        Center(child: Text(message, style: NeuText.body_(c.inkMuted, size: 14))),
-        const SizedBox(height: 8),
-        Center(child: Text(hint, style: NeuText.body_(c.inkFaint, size: 12))),
-      ],
-    );
+    final children = [
+      const SizedBox(height: 60),
+      Center(child: Icon(icon, size: 44, color: c.inkFaint)),
+      const SizedBox(height: 14),
+      Center(child: Text(message, style: NeuText.body_(c.inkMuted, size: 14))),
+      const SizedBox(height: 8),
+      Center(child: Text(hint, style: NeuText.body_(c.inkFaint, size: 12))),
+    ];
+    return inline ? Column(children: children) : ListView(children: children);
   }
 }
 

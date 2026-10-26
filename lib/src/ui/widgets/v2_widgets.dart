@@ -421,6 +421,7 @@ class LabeledInput extends StatelessWidget {
     this.size = 15,
     this.inputFormatters,
     this.fieldKey,
+    this.autofocus = false,
   });
 
   final String label;
@@ -436,6 +437,7 @@ class LabeledInput extends StatelessWidget {
   final double size;
   final List<TextInputFormatter>? inputFormatters;
   final Key? fieldKey;
+  final bool autofocus;
 
   @override
   Widget build(BuildContext context) {
@@ -452,6 +454,7 @@ class LabeledInput extends StatelessWidget {
           TextField(
             key: fieldKey,
             controller: controller,
+            autofocus: autofocus,
             keyboardType: keyboardType,
             maxLines: maxLines,
             onChanged: onChanged,

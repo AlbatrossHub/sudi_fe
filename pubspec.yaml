@@ -152,8 +152,10 @@ flutter:
 # told apart by their labels, "Sudi Field" and "Sudi Customer".
 flutter_launcher_icons:
   android: true
-  ios: false
+  ios: true
   image_path: "assets/icon/app_icon.png"
+  # The App Store refuses an icon with an alpha channel, even a fully opaque one.
+  remove_alpha_ios: true
   # Android crops an adaptive icon to whatever shape the launcher prefers, so the
   # mark rides small on transparency over a white background. White because the
   # mark's own artwork is drawn for it -- on the app's pale ground the navy arc

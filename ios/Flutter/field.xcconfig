@@ -1,0 +1,5 @@
+// Field app (pickup/delivery, job work, office) — the iOS twin of Android's `field` flavor.
+PRODUCT_BUNDLE_IDENTIFIER = com.sudi.field
+APP_DISPLAY_NAME = Sudi Field
+// An archive made from Xcode builds the right entry point even without `flutter build -t`.
+FLUTTER_TARGET = lib/main_field.dart

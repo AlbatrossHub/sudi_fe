@@ -74,6 +74,70 @@ re-run it before each session. Cleartext HTTP is permitted to loopback
 addresses only (`android/app/src/main/res/xml/network_security_config.xml`);
 everything else stays HTTPS.
 
+## iPhone builds and TestFlight (on a Mac)
+
+The iOS project carries the same two apps as Android, as Xcode schemes:
+
+| Scheme / `--flavor` | Bundle id | Name on the phone | Entry point |
+|---|---|---|---|
+| `field` | `com.sudi.field` | Sudi Field | `lib/main_field.dart` |
+| `customer` | `com.sudi.customer` | Sudi | `lib/main_customer.dart` |
+
+Bundle id, name and entry point live in `ios/Flutter/field.xcconfig` and
+`ios/Flutter/customer.xcconfig`; each scheme builds with its own
+`Debug-/Profile-/Release-<flavor>` configuration. Both default to production
+(`https://manage.sdppl.com`, database `sudi`), like the Android builds.
+
+### Once per Mac and per Apple account
+
+1. Xcode (current), CocoaPods (`brew install cocoapods`) and the same Flutter
+   as the build machine (`flutter --version`: 3.47 stable). Then `flutter pub get`.
+2. developer.apple.com → Certificates, IDs & Profiles → Identifiers: register
+   the explicit App IDs `com.sudi.field` and `com.sudi.customer`. If Apple says
+   one is taken, pick another (e.g. `com.sdppl.field`) and change
+   `PRODUCT_BUNDLE_IDENTIFIER` in that flavor's xcconfig.
+3. App Store Connect → Apps → **+ New App** (iOS) for each bundle id. The App
+   Store name must be unique worldwide, so "Sudi" may be refused: use e.g.
+   "Sudi by SDPPL" there. The name under the icon stays as in the table.
+4. Signing: put the Team ID in `ios/Flutter/Team.xcconfig`
+   (`DEVELOPMENT_TEAM = ABCDE12345`, without the `//`), or open
+   `ios/Runner.xcworkspace` → Runner → Signing & Capabilities → Team. Signing is
+   automatic; Xcode makes the certificates and profiles.
+
+### Each test build
+
+Raise the build number in `pubspec.yaml` first (`version: 2.0.0+3`):
+TestFlight refuses a build number it has already seen for that app.
+
+```bash
+flutter build ipa --release --flavor field    -t lib/main_field.dart
+# upload build/ios/ipa/*.ipa (path printed at the end) BEFORE building the other app,
+# which writes to the same folder
+flutter build ipa --release --flavor customer -t lib/main_customer.dart
+```
+
+Upload with Apple's **Transporter** app (drag the `.ipa` in, Deliver), or from
+Xcode: `open build/ios/archive/Runner.xcarchive` → Distribute App → App Store
+Connect. Xcode alone also works: open `ios/Runner.xcworkspace`, choose scheme
+`field` or `customer` and *Any iOS Device*, then Product → Archive → Distribute
+(run one `flutter build ipa` for that flavor first, so CocoaPods and the
+generated Flutter files exist).
+
+App Store Connect → the app → TestFlight: when the build has processed
+(10–30 min), add it to an **Internal Testing** group and invite the team (people
+on the App Store Connect account, up to 100). Internal builds need no Beta App
+Review; the export-compliance question is already answered in `Info.plist`
+(HTTPS only).
+
+### iPhone against a development server
+
+`flutter run --flavor field -t lib/main_field.dart --dart-define=SUDI_BASE_URL=...`
+as above. An iPhone has no `adb reverse`: use the Mac's local name
+(`http://<mac-name>.local:8069`) — plain HTTP is allowed to local-network names
+only (`NSAllowsLocalNetworking`), everything else must be HTTPS. The Simulator
+shares the Mac's network, so `http://localhost:8069` works there (no camera on
+the Simulator).
+
 Check the server is reachable before blaming the app:
 
 ```bash

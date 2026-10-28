@@ -1,0 +1,4 @@
+// Apple Developer Team used to sign both apps (Automatic signing).
+// Put your 10-character Team ID here once (developer.apple.com > Account > Membership),
+// remove the leading "//", and both flavors sign with it:
+// DEVELOPMENT_TEAM = ABCDE12345

@@ -35,6 +35,10 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Take photos of jangad pages, parcels and delivery proof.</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Unlock the app with Face ID instead of typing your PIN.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Records where a pickup or delivery is handed over, only while the app is open. Optional: the handover still works without it.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Records where a pickup or delivery is handed over. Optional: the handover still works without it.</string>
 	<key>NSPhotoLibraryUsageDescription</key>

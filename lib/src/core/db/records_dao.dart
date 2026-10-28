@@ -60,7 +60,8 @@ class RecordsDao {
       'pickups',
       where: stage == null ? null : 'stage = ?',
       whereArgs: stage == null ? null : [stage],
-      orderBy: 'scheduled_date ASC, id ASC',
+      // Newest first: today's work sits on top, not under weeks of older items.
+      orderBy: 'scheduled_date DESC, id DESC',
     );
     return rows.map(_pickup).toList();
   }
@@ -108,7 +109,7 @@ class RecordsDao {
       'deliveries',
       where: clauses.isEmpty ? null : clauses.join(' AND '),
       whereArgs: args.isEmpty ? null : args,
-      orderBy: 'id ASC',
+      orderBy: 'id DESC', // newest first
     );
     return rows.map(_delivery).toList();
   }
@@ -142,7 +143,8 @@ class RecordsDao {
   }
 
   Future<List<JobWorkDoc>> jobWork() async {
-    final rows = await _handle.query('jobwork', orderBy: 'timer_running DESC, id ASC');
+    // A running timer stays on top; otherwise newest first.
+    final rows = await _handle.query('jobwork', orderBy: 'timer_running DESC, id DESC');
     return rows.map(_jobWork).toList();
   }
 
@@ -172,9 +174,9 @@ class RecordsDao {
     await batch.commit(noResult: true);
   }
 
-  /// Oldest collection first: the office works the queue in arrival order.
+  /// Newest collection first: the jangad just collected is the one the office looks for.
   Future<List<OfficeDoc>> office() async {
-    final rows = await _handle.query('office', orderBy: 'collected_at ASC, id ASC');
+    final rows = await _handle.query('office', orderBy: 'collected_at DESC, id DESC');
     return rows.map(_office).toList();
   }
 

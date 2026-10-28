@@ -50,7 +50,13 @@ class _DeliveriesScreenState extends ConsumerState<DeliveriesScreen> {
     // Where the operator put each parcel, queued or not.
     String stage(DeliveryDoc d) => Projection.deliveryStage(d, pending[d.id] ?? const []);
     final awaiting = all.where((d) => stage(d) == 'awaiting').toList();
-    final out = all.where((d) => stage(d) == 'out').toList();
+    // "Out" is the operator's own bag. A parcel another operator has out is
+    // theirs: the server refuses anyone else's hand-back or delivery, so listing
+    // it here as "Out with you" (with buttons that cannot work) only misleads.
+    final me = ref.read(servicesProvider).myUserId;
+    bool mine(DeliveryDoc d) =>
+        (pending[d.id] ?? const []).isNotEmpty || d.takenBy == null || me == null || d.takenBy!.id == me;
+    final out = all.where((d) => stage(d) == 'out' && mine(d)).toList();
     final done = all.where((d) => stage(d) == 'delivered').toList();
     final shown = switch (_tab) { 0 => awaiting, 1 => out, _ => done };
 

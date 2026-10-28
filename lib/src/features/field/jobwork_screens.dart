@@ -481,6 +481,35 @@ class _JobWorkDetailScreenState extends ConsumerState<JobWorkDetailScreen> {
   }
 
   Future<void> _finish(JobWorkDoc doc) async {
+    // Finishing closes the receipt and creates the delivery order at once, and it
+    // cannot be undone from the phone: ask first, then say what happened.
+    final c = NeuTheme.of(context);
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: c.ground,
+        surfaceTintColor: Colors.transparent,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        title: Text('Finish ${doc.name}?', style: NeuText.title(c.ink, size: 20)),
+        content: Text(
+          'The job work is closed and a delivery order is made for '
+          '${doc.customer?.name ?? 'the customer'}. This cannot be undone from the app.',
+          style: NeuText.body_(c.inkMuted, size: 14),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text('Not yet', style: NeuText.label(c.inkMuted, size: 13)),
+          ),
+          TextButton(
+            key: const Key('finish-job-work-confirm'),
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text('Finish', style: NeuText.label(c.syncedInk, size: 13)),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
     setState(() {
       _finishing = true;
       _finishError = null;
@@ -493,7 +522,12 @@ class _JobWorkDetailScreenState extends ConsumerState<JobWorkDetailScreen> {
       await ref.read(syncProvider.notifier).syncNow();
       // The delivery order it creates reaches Deliveries after the visibility lag.
       ref.read(syncProvider.notifier).followUpOwnChange();
-      if (mounted) context.go('/jobwork');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('${doc.name} finished: it is now in Deliveries')),
+        );
+        context.go('/jobwork');
+      }
     } on ApiError catch (e) {
       if (mounted) {
         setState(() {

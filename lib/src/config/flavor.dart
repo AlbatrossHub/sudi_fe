@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 enum Flavor {
   field(
     apiPath: '/api/field/v1',
-    title: 'Sudi Field',
+    title: 'Sudi Work',
     // The brand blue, used as a fill.
     accent: Color(0xFF03A9F4),
     // Its legible partner for text and icons: #03A9F4 as 12px type on the

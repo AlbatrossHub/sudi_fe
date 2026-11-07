@@ -80,7 +80,7 @@ The iOS project carries the same two apps as Android, as Xcode schemes:
 
 | Scheme / `--flavor` | Bundle id | Name on the phone | Entry point |
 |---|---|---|---|
-| `field` | `com.sudi.field` | Sudi Field | `lib/main_field.dart` |
+| `field` | `com.sudi.work` | Sudi Work | `lib/main_field.dart` |
 | `customer` | `com.sudi.customer` | Sudi | `lib/main_customer.dart` |
 
 Bundle id, name and entry point live in `ios/Flutter/field.xcconfig` and

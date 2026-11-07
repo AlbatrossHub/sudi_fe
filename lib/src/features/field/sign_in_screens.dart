@@ -102,7 +102,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
               ),
             ),
             const SizedBox(height: 18),
-            Text('Sudi Field', textAlign: TextAlign.center, style: NeuText.title(c.ink, size: 27)),
+            Text('Sudi Work', textAlign: TextAlign.center, style: NeuText.title(c.ink, size: 27)),
             const SizedBox(height: 6),
             Text(
               'Pickups, deliveries and job work',
@@ -352,6 +352,50 @@ Future<void> confirmSignOut(BuildContext context, WidgetRef ref) async {
   }
 }
 
+/// Play's account-deletion path. Closes the account on the server (every
+/// phone's sign-in dies with it), then wipes this phone like a sign-out.
+Future<void> confirmDeleteAccount(BuildContext context, WidgetRef ref) async {
+  final c = NeuTheme.of(context);
+  final confirmed = await showDialog<bool>(
+    context: context,
+    builder: (context) => AlertDialog(
+      backgroundColor: c.ground,
+      surfaceTintColor: Colors.transparent,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+      title: Text('Delete your account?', style: NeuText.title(c.ink, size: 20)),
+      content: Text(
+        'Your sign-in, registered phones and notifications are deleted and '
+        'cannot be brought back. Jangads and invoices stay in our business '
+        'records, as the law requires.\n\nThe same number can sign up again '
+        'later as a new account.',
+        style: NeuText.body_(c.inkMuted, size: 14),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(false),
+          child: Text('Keep my account', style: NeuText.label(c.inkMuted, size: 13)),
+        ),
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(true),
+          child: Text('Delete', style: NeuText.label(c.attentionInk, size: 13)),
+        ),
+      ],
+    ),
+  );
+  if (confirmed != true) return;
+  try {
+    await ref.read(servicesProvider).api.dio.post('/account/delete');
+  } on Exception {
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Could not reach the server. Check your connection and try again.'),
+      ));
+    }
+    return;
+  }
+  await ref.read(sessionProvider.notifier).signOut();
+}
+
 class RevokedScreen extends ConsumerWidget {
   const RevokedScreen({super.key});
 
@@ -582,6 +626,20 @@ Future<void> showAccountSheet(BuildContext context, WidgetRef ref) async {
                 confirmSignOut(context, ref);
               },
             ),
+            if (sudiFlavor == Flavor.customer) ...[
+              const SizedBox(height: 12),
+              // Play policy: an app with open sign-up must offer deletion
+              // in-app. Staff accounts are the company's, so the work app
+              // deliberately has no such button.
+              NeuButton(
+                label: 'Delete my account',
+                kind: NeuButtonKind.destructive,
+                onPressed: () {
+                  Navigator.of(sheetContext).pop();
+                  confirmDeleteAccount(context, ref);
+                },
+              ),
+            ],
           ],
         ),
       ),

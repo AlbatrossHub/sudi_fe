@@ -84,14 +84,11 @@ Full description:
 Both apps: Category **Business** · Contact email `info@sdppl.com` · website
 `https://sdppl.com` · phone `+91 80808 09288`.
 
-## 3. The two web pages (publish before filling App content)
+## 3. The two web pages — LIVE since 2026-11-07
 
-Host `privacy-policy.html` at **https://sdppl.com/app/privacy** and
-`delete-account.html` at **https://sdppl.com/app/delete-account** (the
-sdppl.com nginx serves static files from `/var/www/sdppl/current`; put them
-under `app/` in a new release folder and repoint the `current` symlink).
-Check both URLs from outside before submission — Google's pre-check caches
-failures.
+**https://sdppl.com/app/privacy** and **https://sdppl.com/app/delete-account**
+both answer 200 from outside (served from `/var/www/sdppl/current/app/`,
+released the deploy-folder way; nginx also learned `$uri/index.html`).
 
 ## 4. App content declarations (left menu → App content, per app)
 
@@ -114,19 +111,19 @@ failures.
 
 ## 5. App access (reviewer sign-in)
 
-- **Sudi Work**: "All or some functionality is restricted" → credentials:
-  a dedicated review login on manage.sdppl.com (create with the deploy step
-  before submission; pattern from MARK: `playreview@sdppl.com` + generated
-  password, roles limited to the field-app groups and no real-data screens
-  beyond its own scope). Note for the reviewer: *"Employee-only app; the
-  server is preset; the account sees the pickup/delivery screens with company
-  work data."*
-- **Sudi**: sign-in is a WhatsApp one-time code, which a reviewer cannot
-  receive — so the backend gets a **review number**: config parameters
-  `sudi_auth.review_phone` + `sudi_auth.review_code`; entering that phone
-  with that fixed code signs in a sandbox customer account. Instructions:
-  *"Enter phone <review_phone>, then code <review_code> on the next screen
-  (fixed review code — real customers receive theirs on WhatsApp)."*
+Both are LIVE on production (2026-11-07) and verified end to end. The
+credentials are NOT in this repository: see
+`~/.config/sdppl/play-review-logins.txt` and `~/.config/sdppl/review-code.txt`
+on the build machine.
+
+- **Sudi Work**: "All or some functionality is restricted" → `playreview@sdppl.com`
+  + the saved password (roles: pickup/delivery, job work, office). Reviewer
+  note: *"Employee-only app; the server is preset; the account sees the
+  pickup/office/job-work/delivery work lists."*
+- **Sudi**: *"Enter phone 9900112233, tap 'Send code on WhatsApp', then enter
+  the fixed review code <saved code> on the next screen (review bypass — real
+  customers receive their code on WhatsApp). The account signs into a sandbox
+  customer profile."*
 
 ## 6. Data safety (declare exactly this)
 

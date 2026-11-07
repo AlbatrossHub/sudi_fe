@@ -1,6 +1,6 @@
 # sudi_fe
 
-Flutter front end for Sudi — one codebase, two build flavors:
+Flutter front end for SDPPL (project "Sudi") — one codebase, two build flavors:
 
 | Flavor | Audience | Base URL |
 |---|---|---|
@@ -80,8 +80,8 @@ The iOS project carries the same two apps as Android, as Xcode schemes:
 
 | Scheme / `--flavor` | Bundle id | Name on the phone | Entry point |
 |---|---|---|---|
-| `field` | `com.sudi.work` | Sudi Work | `lib/main_field.dart` |
-| `customer` | `com.sudi.customer` | Sudi | `lib/main_customer.dart` |
+| `field` | `com.sdppl.work` | SDPPL Work | `lib/main_field.dart` |
+| `customer` | `com.sdppl.customer` | SDPPL | `lib/main_customer.dart` |
 
 Bundle id, name and entry point live in `ios/Flutter/field.xcconfig` and
 `ios/Flutter/customer.xcconfig`; each scheme builds with its own
@@ -93,12 +93,12 @@ Bundle id, name and entry point live in `ios/Flutter/field.xcconfig` and
 1. Xcode (current), CocoaPods (`brew install cocoapods`) and the same Flutter
    as the build machine (`flutter --version`: 3.47 stable). Then `flutter pub get`.
 2. developer.apple.com → Certificates, IDs & Profiles → Identifiers: register
-   the explicit App IDs `com.sudi.field` and `com.sudi.customer`. If Apple says
-   one is taken, pick another (e.g. `com.sdppl.field`) and change
+   the explicit App IDs `com.sdppl.work` and `com.sdppl.customer`. If Apple says
+   one is taken, pick another (e.g. `com.sdppl.field2`) and change
    `PRODUCT_BUNDLE_IDENTIFIER` in that flavor's xcconfig.
 3. App Store Connect → Apps → **+ New App** (iOS) for each bundle id. The App
-   Store name must be unique worldwide, so "Sudi" may be refused: use e.g.
-   "Sudi by SDPPL" there. The name under the icon stays as in the table.
+   Store name must be unique worldwide, so "SDPPL" may be refused: use e.g.
+   "SDPPL by Super Diamond" there. The name under the icon stays as in the table.
 4. Signing: put the Team ID in `ios/Flutter/Team.xcconfig`
    (`DEVELOPMENT_TEAM = ABCDE12345`, without the `//`), or open
    `ios/Runner.xcworkspace` → Runner → Signing & Capabilities → Team. Signing is
@@ -144,7 +144,7 @@ Check the server is reachable before blaming the app:
 curl https://<your-tunnel>.trycloudflare.com/api/field/v1/health?db=sudi
 ```
 
-Application ids are `com.sudi.field` and `com.sudi.customer`, so both flavors
+Application ids are `com.sdppl.work` and `com.sdppl.customer`, so both flavors
 install side by side on one handset — which is how the conflict cases get
 tested.
 

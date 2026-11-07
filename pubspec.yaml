@@ -151,7 +151,7 @@ flutter:
 # own ground rather than in a white box.
 #
 # Written to `main`, not per flavour: the two apps are the same company and are
-# told apart by their labels, "Sudi Work" and "Sudi".
+# told apart by their labels, "SDPPL Work" and "SDPPL".
 flutter_launcher_icons:
   android: true
   ios: true

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <!--
-  Privacy manifest shared by both apps (Sudi Work and Sudi). Nothing is used for tracking or
+  Privacy manifest shared by both apps (SDPPL Work and Sudi). Nothing is used for tracking or
   advertising; what is collected is what a jangad needs: the customer's phone number and name
   (sign-in, registration), pickup addresses, jangad page and delivery photos, and the one location
   point taken at a pickup or delivery handover (optional). Keep the App Store Connect privacy

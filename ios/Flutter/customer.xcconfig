@@ -1,5 +1,5 @@
 // Customer app (jangad capture and submission) — the iOS twin of Android's `customer` flavor.
-PRODUCT_BUNDLE_IDENTIFIER = com.sudi.customer
-APP_DISPLAY_NAME = Sudi
+PRODUCT_BUNDLE_IDENTIFIER = com.sdppl.customer
+APP_DISPLAY_NAME = SDPPL
 // An archive made from Xcode builds the right entry point even without `flutter build -t`.
 FLUTTER_TARGET = lib/main_customer.dart

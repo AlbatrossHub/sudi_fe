@@ -1,18 +1,20 @@
-# Prompt for the Mac session — Sudi iOS release (give verbatim)
+# Prompt for the Mac session — SDPPL iOS release (give verbatim)
 
 The Android apps are live work; iOS follows them. Repo `sudi_fe`, branch
-`main` — pull first; you need commit 98023a7 or later.
+`main` — pull first; you need the SDPPL-rename commit (after c3bac23) or later.
 
-1. **Sudi Work is the old "field" flavor, renamed.** `ios/Flutter/field.xcconfig`
-   already says `PRODUCT_BUNDLE_IDENTIFIER = com.sudi.work`,
-   `APP_DISPLAY_NAME = Sudi Work`. In App Store Connect create a NEW app
-   "Sudi Work" with the new bundle id `com.sudi.work` (the old TestFlight app
-   under com.sudi.field is retired — do not upload to it again). The customer
-   app stays `com.sudi.customer` / "Sudi".
+1. **Both apps were renamed to SDPPL / SDPPL Work with NEW bundle ids.**
+   `ios/Flutter/field.xcconfig` says `PRODUCT_BUNDLE_IDENTIFIER = com.sdppl.work`,
+   `APP_DISPLAY_NAME = SDPPL Work`; `customer.xcconfig` says
+   `com.sdppl.customer` / `SDPPL`. In App Store Connect create TWO NEW apps,
+   "SDPPL Work" (`com.sdppl.work`) and "SDPPL" (`com.sdppl.customer`). The old
+   TestFlight apps under com.sudi.field / com.sudi.customer are retired — do
+   not upload to them again. Register the two new explicit App IDs in
+   developer.apple.com first.
 2. **Firebase (push) is set up** — project `sudi-3f4bf` under the client's
    Google account (sdppl15@gmail.com). On the Mac:
    - In the Firebase console add TWO iOS apps to that project, bundle ids
-     `com.sudi.customer` and `com.sudi.work`; download each
+     `com.sdppl.customer` and `com.sdppl.work`; download each
      `GoogleService-Info.plist`.
    - Wire them per-flavor the Xcode way (one plist per scheme, same approach
      as the per-flavor xcconfigs already in the project), add the

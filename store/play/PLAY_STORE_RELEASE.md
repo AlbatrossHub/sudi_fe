@@ -1,4 +1,4 @@
-# Sudi & Sudi Work — Play Store release handbook
+# SDPPL & SDPPL Work — Play Store release handbook
 
 Everything for the first Play Store release of the two production apps, in the
 order the console asks for it. Every file named here sits in `store/play/`;
@@ -7,8 +7,8 @@ website: **https://sdppl.com**.
 
 | | Customer app | Staff app |
 |---|---|---|
-| Store name | **Sudi** | **Sudi Work** |
-| Package | `com.sudi.customer` | `com.sudi.work` |
+| Store name | **SDPPL** | **SDPPL Work** |
+| Package | `com.sdppl.customer` | `com.sdppl.work` |
 | Who signs in | any customer, phone + WhatsApp code | staff accounts made by the company |
 | Bundle | `build/app/outputs/bundle/customerRelease/app-customer-release.aab` | `build/app/outputs/bundle/fieldRelease/app-field-release.aab` |
 | Icon | `icon-512-customer.png` | `icon-512-work.png` |
@@ -34,18 +34,18 @@ website: **https://sdppl.com**.
 
 ## 1. Create the apps (console → Create app, twice)
 
-- App name: `Sudi` (then `Sudi Work`) · Default language: `English (United
+- App name: `SDPPL` (then `SDPPL Work`) · Default language: `English (United
   Kingdom)` · **App** · **Free** · accept the declarations.
 
 ## 2. Store listings
 
-### Sudi (customer)
+### SDPPL (customer)
 
 Short description (≤80 chars):
 > Diamond services by SDPPL: send your jangad, we collect, process and deliver.
 
 Full description:
-> Sudi is the customer app of SUPER DIAMOND PROCESSORS PRIVATE LIMITED
+> SDPPL is the customer app of SUPER DIAMOND PROCESSORS PRIVATE LIMITED
 > (SDPPL), Mumbai — diamond processing services such as laser inscription,
 > drilling, boiling and testing.
 >
@@ -60,13 +60,13 @@ Full description:
 > An SDPPL trade account is created on first sign-in. The app is for our
 > jewellery-trade customers in India.
 
-### Sudi Work (staff)
+### SDPPL Work (staff)
 
 Short description:
 > SDPPL staff app: pickups, office intake, job work and deliveries — offline.
 
 Full description:
-> Sudi Work is the staff app of SUPER DIAMOND PROCESSORS PRIVATE LIMITED
+> SDPPL Work is the staff app of SUPER DIAMOND PROCESSORS PRIVATE LIMITED
 > (SDPPL), Mumbai. It is used by our own employees; accounts are created by
 > the company and there is no public sign-up.
 >
@@ -104,9 +104,9 @@ released the deploy-folder way; nginx also learned `$uri/index.html`).
   Terms of Use tick is a legal agreement — **the owner clicks it**. Expected
   result: Everyone / PEGI 3.
 - **Data safety** — see §6.
-- **Account deletion** (asked for Sudi because it has account creation):
+- **Account deletion** (asked for SDPPL because it has account creation):
   deletion URL `https://sdppl.com/app/delete-account`; in-app path Account →
-  Delete my account. Sudi Work: accounts are created and removed by the
+  Delete my account. SDPPL Work: accounts are created and removed by the
   organisation, no self sign-up.
 
 ## 5. App access (reviewer sign-in)
@@ -116,11 +116,11 @@ credentials are NOT in this repository: see
 `~/.config/sdppl/play-review-logins.txt` and `~/.config/sdppl/review-code.txt`
 on the build machine.
 
-- **Sudi Work**: "All or some functionality is restricted" → `playreview@sdppl.com`
+- **SDPPL Work**: "All or some functionality is restricted" → `playreview@sdppl.com`
   + the saved password (roles: pickup/delivery, job work, office). Reviewer
   note: *"Employee-only app; the server is preset; the account sees the
   pickup/office/job-work/delivery work lists."*
-- **Sudi**: *"Enter phone 9900112233, tap 'Send code on WhatsApp', then enter
+- **SDPPL**: *"Enter phone 9900112233, tap 'Send code on WhatsApp', then enter
   the fixed review code <saved code> on the next screen (review bypass — real
   customers receive their code on WhatsApp). The account signs into a sandbox
   customer profile."*
@@ -128,10 +128,10 @@ on the build machine.
 ## 6. Data safety (declare exactly this)
 
 Both apps: Collects data **Yes** · Encrypted in transit **Yes** · Deletion
-request path **Yes** (Sudi: in-app + URL; Sudi Work: via the company).
+request path **Yes** (SDPPL: in-app + URL; SDPPL Work: via the company).
 Nothing is **shared**. Nothing is used for tracking or ads.
 
-| Data type | Sudi | Sudi Work | Purpose |
+| Data type | SDPPL | SDPPL Work | Purpose |
 |---|---|---|---|
 | Personal info → Name, Phone number | ✓ | ✓ | Account management |
 | Personal info → Other info (GST number, optional) | ✓ | — | App functionality (invoicing) |
@@ -139,7 +139,7 @@ Nothing is **shared**. Nothing is used for tracking or ads.
 | Location → Precise, foreground only | — | ✓ (pickup/delivery record) | App functionality |
 | Device or other IDs (device id, push token) | ✓ | ✓ | App functionality |
 
-(The customer build carries no location permission; only Sudi Work declares
+(The customer build carries no location permission; only SDPPL Work declares
 location.)
 
 ## 7. Upload and roll out (per app)
@@ -156,8 +156,8 @@ location.)
 
 ## 8. After both apps are live
 
-- Mac/iOS: new App Store app for **Sudi Work** with bundle id
-  `com.sudi.work` (ios/Flutter/field.xcconfig already renamed) + Firebase iOS
+- Mac/iOS: new App Store app for **SDPPL Work** with bundle id
+  `com.sdppl.work` (ios/Flutter/field.xcconfig already renamed) + Firebase iOS
   apps for both bundle ids — the Mac session prompt is prepared separately.
 - Remove the review OTP parameters or rotate the code if support wants it.
 - Keep `~/.config/sdppl/sudi-upload-keystore.jks` + password banked; losing

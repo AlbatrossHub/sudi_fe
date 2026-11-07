@@ -7,6 +7,44 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:207464116848:android:b9aabac2d1cd48a890bab5",
+        "android_client_info": {
+          "package_name": "com.sdppl.customer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKIPlAm7iqnP3uJXCGiz87NiLHWLgEJuI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:207464116848:android:08966cf24765a8a490bab5",
+        "android_client_info": {
+          "package_name": "com.sdppl.work"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKIPlAm7iqnP3uJXCGiz87NiLHWLgEJuI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:207464116848:android:ce52fcad97ccba0e90bab5",
         "android_client_info": {
           "package_name": "com.sudi.customer"

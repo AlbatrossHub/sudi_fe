@@ -102,7 +102,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
               ),
             ),
             const SizedBox(height: 18),
-            Text('Sudi Work', textAlign: TextAlign.center, style: NeuText.title(c.ink, size: 27)),
+            Text('SDPPL Work', textAlign: TextAlign.center, style: NeuText.title(c.ink, size: 27)),
             const SizedBox(height: 6),
             Text(
               'Pickups, deliveries and job work',

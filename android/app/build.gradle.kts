@@ -58,13 +58,13 @@ android {
             // Renamed for the store launch: the staff app is "Sudi Work". The
             // flavor keeps its internal name `field` so entry points, schemes
             // and build commands stay as they were.
-            applicationId = "com.sudi.work"
-            resValue("string", "app_name", "Sudi Work")
+            applicationId = "com.sdppl.work"
+            resValue("string", "app_name", "SDPPL Work")
         }
         create("customer") {
             dimension = "app"
-            applicationId = "com.sudi.customer"
-            resValue("string", "app_name", "Sudi")
+            applicationId = "com.sdppl.customer"
+            resValue("string", "app_name", "SDPPL")
         }
     }
 

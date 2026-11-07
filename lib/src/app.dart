@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 
 import 'config/flavor.dart';
 import 'core/notices/notices.dart';
+import 'core/push/push_service.dart';
 import 'core/resume/resume_store.dart';
 import 'core/services.dart';
 import 'core/session.dart';
@@ -35,6 +36,10 @@ class SudiApp extends ConsumerStatefulWidget {
 class _SudiAppState extends ConsumerState<SudiApp> {
   late final GoRouter _router;
   late final _RouterRefresh _refresh;
+  late final PushService _push;
+
+  /// For the quiet in-app line a foreground push shows.
+  static final _messengerKey = GlobalKey<ScaffoldMessengerState>();
 
   /// Where the app was when it last went away, read before anything moved.
   late final ResumePoint _coldStart;
@@ -51,10 +56,13 @@ class _SudiAppState extends ConsumerState<SudiApp> {
     _router = sudiFlavor.isField ? _fieldRouter(_refresh, _redirect) : _customerRouter(_refresh, _redirect);
     _router.routerDelegate.addListener(_onRoute);
     NoticeAlerts.instance.onOpen = (route) => _router.push(route);
+    _push = PushService(ref.read(servicesProvider), _messengerKey);
+    unawaited(_push.boot());
   }
 
   @override
   void dispose() {
+    _push.dispose();
     _router.routerDelegate.removeListener(_onRoute);
     _refresh.dispose();
     _router.dispose();
@@ -90,9 +98,13 @@ class _SudiAppState extends ConsumerState<SudiApp> {
         // handset is running, which is otherwise only recorded at login and so
         // goes stale the first time the app is updated in place.
         unawaited(ref.read(servicesProvider).auth.reportThisDevice());
+        // And the notification token, asked for now that someone is signed in.
+        unawaited(_push.onSignedIn());
       }
       if (next.stage == SessionStage.signedOut || next.stage == SessionStage.revoked) {
         _resumePending = false;
+        // The unsubscribe: a deleted token can receive nothing.
+        unawaited(_push.onSignedOut());
       }
     });
 
@@ -123,6 +135,7 @@ class _SudiAppState extends ConsumerState<SudiApp> {
       colors: colors,
       child: MaterialApp.router(
         title: sudiFlavor.title,
+        scaffoldMessengerKey: _messengerKey,
         debugShowCheckedModeBanner: false,
         routerConfig: _router,
         themeMode: ThemeMode.light,

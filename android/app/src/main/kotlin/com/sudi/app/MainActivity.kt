@@ -1,6 +1,9 @@
 package com.sudi.app
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.os.Build
+import android.os.Bundle
 import android.os.SystemClock
 import android.provider.Settings
 import io.flutter.embedding.android.FlutterActivity
@@ -8,6 +11,22 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 
 class MainActivity : FlutterActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // The channel push notifications arrive on. Made natively so it exists
+        // before the first FCM message, even one that lands while the Flutter
+        // side has never run.
+        if (Build.VERSION.SDK_INT >= 26) {
+            val manager = getSystemService(NotificationManager::class.java)
+            manager.createNotificationChannel(
+                NotificationChannel(
+                    "sudi_updates", "Work and order updates",
+                    NotificationManager.IMPORTANCE_HIGH,
+                )
+            )
+        }
+    }
+
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         // The trusted clock (lib/src/core/clock/trusted_clock.dart): time since

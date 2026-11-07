@@ -53,6 +53,8 @@ dependencies:
   # In-app notices raised as phone notifications while the app is open (the
   # same plugin and channel setup as the Pahal app). Push comes later.
   flutter_local_notifications: ^22.3.0
+  firebase_core: ^4.2.1
+  firebase_messaging: ^16.0.4
 
 dev_dependencies:
   flutter_test:

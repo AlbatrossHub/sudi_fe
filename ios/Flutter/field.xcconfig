@@ -5,3 +5,5 @@ APP_DISPLAY_NAME = SDPPL Work
 FLUTTER_TARGET = lib/main_field.dart
 // Push notifications (FCM). The App Store export rewrites aps-environment to production.
 CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements
+// iPhone only: the field flows are phone flows, and iPad would demand its own screenshots.
+TARGETED_DEVICE_FAMILY = 1

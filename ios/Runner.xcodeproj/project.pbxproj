@@ -251,6 +251,7 @@
 				9705A1C41CF9048500538489 /* Embed Frameworks */,
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
 				CCE5F42E5D9F662B7A2F87EC /* [CP] Embed Pods Frameworks */,
+				BB90A3C3CF1648E891809D58 /* Copy GoogleService-Info */,
 			);
 			buildRules = (
 			);
@@ -329,6 +330,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		BB90A3C3CF1648E891809D58 /* Copy GoogleService-Info */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy GoogleService-Info";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "SRC=\"${PROJECT_DIR}/Firebase/${PRODUCT_BUNDLE_IDENTIFIER}/GoogleService-Info.plist\"; DST=\"${BUILT_PRODUCTS_DIR}/${FULL_PRODUCT_NAME}/GoogleService-Info.plist\"; if [ -f \"$SRC\" ]; then cp \"$SRC\" \"$DST\"; echo \"Firebase: copied plist\"; else echo \"Firebase: no plist for this flavor, push stays off\"; fi";
+		};
 		3B06AD1E1E4923F5004D2608 /* Thin Binary */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;

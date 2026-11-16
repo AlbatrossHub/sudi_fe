@@ -3,3 +3,5 @@ PRODUCT_BUNDLE_IDENTIFIER = com.sdppl.customer
 APP_DISPLAY_NAME = SDPPL
 // An archive made from Xcode builds the right entry point even without `flutter build -t`.
 FLUTTER_TARGET = lib/main_customer.dart
+// Push notifications (FCM). The App Store export rewrites aps-environment to production.
+CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements

@@ -181,7 +181,20 @@ void main() {
     await tester.tap(find.text('Send another jangad'));
     await _waitFor(tester, find.text('What should we do?'));
     await tester.tap(find.byTooltip('Account'));
-    await _settle(tester, 1200);
+    await _settle(tester, 1800);
     await shot('shot-6-account');
+
+    // 7: account deletion flow — show the dialog, then keep the account so the
+    // reviewer's test login stays alive.
+    if (find.text('Delete my account').evaluate().isNotEmpty) {
+      await tester.tap(find.text('Delete my account'));
+      await _waitFor(tester, find.text('Delete your account?'));
+      await _settle(tester, 2500);
+      await shot('shot-7-delete');
+      if (find.text('Keep my account').evaluate().isNotEmpty) {
+        await tester.tap(find.text('Keep my account'));
+        await _settle(tester, 1200);
+      }
+    }
   }, timeout: const Timeout(Duration(minutes: 8)));
 }

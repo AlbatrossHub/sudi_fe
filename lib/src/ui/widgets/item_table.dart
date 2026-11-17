@@ -16,6 +16,7 @@ class ItemRow {
     this.carats,
     this.service,
     this.remarks,
+    this.caratsRequired = false,
   });
 
   final int sr;
@@ -25,8 +26,12 @@ class ItemRow {
   final String? service;
   final String? remarks;
 
+  /// The service is billed per carat, so a zero in the Ct column is a problem.
+  final bool caratsRequired;
+
   bool get missingService => service == null || service!.trim().isEmpty;
   bool get missingPieces => (pcs ?? 0) <= 0;
+  bool get missingCarats => caratsRequired && (carats ?? 0) <= 0;
 
   factory ItemRow.fromLine(ItemLine line) => ItemRow(
         sr: line.sr,
@@ -37,13 +42,14 @@ class ItemRow {
         remarks: line.remarks,
       );
 
-  factory ItemRow.fromOffice(OfficeLine line, int index) => ItemRow(
+  factory ItemRow.fromOffice(OfficeLine line, int index, {bool caratsRequired = false}) => ItemRow(
         sr: index + 1,
         size: line.size,
         pcs: line.pcs,
         carats: line.carats,
         service: line.jobTypeName,
         remarks: line.remarks,
+        caratsRequired: caratsRequired,
       );
 }
 
@@ -60,8 +66,8 @@ enum ItemTableView { table, byService }
 ///   job-work receipt and the edit sheet in the office.
 ///
 /// [editable] draws each value in a sunk cell (the office's table is a form),
-/// and outlines the values READY would refuse: a line with no service, or no
-/// pieces.
+/// and outlines the values READY would refuse: a line with no service, no
+/// pieces, or no carats on a carat-billed service.
 class ItemTable extends StatefulWidget {
   const ItemTable({
     super.key,
@@ -252,7 +258,7 @@ class _ItemTableState extends State<ItemTable> {
           children: [
             cell(r.size.isEmpty ? '—' : r.size, width: _cols[0].$2, faint: r.size.isEmpty),
             cell(Fig.pcs(r.pcs ?? 0), width: _cols[1].$2, number: true, faint: r.missingPieces, flag: r.missingPieces),
-            cell(Fig.ct(r.carats ?? 0), width: _cols[2].$2, number: true, faint: (r.carats ?? 0) == 0),
+            cell(Fig.ct(r.carats ?? 0), width: _cols[2].$2, number: true, faint: (r.carats ?? 0) == 0 && !r.missingCarats, flag: r.missingCarats),
             cell(r.service ?? 'No service', width: _cols[3].$2, faint: r.missingService, flag: r.missingService),
             cell((r.remarks == null || r.remarks!.isEmpty) ? (widget.editable ? '—' : '') : r.remarks!,
                 width: _restWidthExtra + _cols[4].$2, faint: r.remarks == null || r.remarks!.isEmpty),

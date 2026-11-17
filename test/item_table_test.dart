@@ -98,6 +98,29 @@ void main() {
       expect(tapped, [1]);
     });
 
+    testWidgets('a carat-billed line without carats is outlined', (tester) async {
+      await pumpTable(
+        tester,
+        ItemTable(
+          editable: true,
+          showToggle: false,
+          rows: const [
+            // Carat-billed with carats entered: nothing flagged.
+            ItemRow(sr: 1, size: '+11', pcs: 10, carats: 6.2, service: 'Natts Process', caratsRequired: true),
+            // Carat-billed, carats still empty: the Ct cell is outlined.
+            ItemRow(sr: 2, size: 'Stars', pcs: 8, carats: 0, service: 'Export Boiling', caratsRequired: true),
+            // Piece-billed with no carats: fine.
+            ItemRow(sr: 3, size: '-2', pcs: 4, carats: 0, service: 'Laser Inscription'),
+          ],
+        ),
+      );
+      final outlined = tester
+          .widgetList<DecoratedBox>(find.byType(DecoratedBox))
+          .where((b) => b.decoration is BoxDecoration && (b.decoration as BoxDecoration).border != null)
+          .where((b) => ((b.decoration as BoxDecoration).border as Border).top.width == 2);
+      expect(outlined.length, 1);
+    });
+
     testWidgets('an empty table says what to do', (tester) async {
       await pumpTable(tester, const ItemTable(rows: [], editable: true, emptyText: 'No lines yet. Add the first one below.'));
       expect(find.text('No lines yet. Add the first one below.'), findsOneWidget);

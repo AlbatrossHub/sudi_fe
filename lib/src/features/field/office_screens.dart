@@ -43,6 +43,15 @@ final officeDraftIdsProvider = FutureProvider.autoDispose<Set<int>>((ref) async 
   };
 });
 
+/// The billing unit (`pcs`, `ct` or empty) per service: the catalog first,
+/// then whatever the receipt's own requests say, so an offline draft still
+/// knows which column a service bills from.
+Map<int, String> serviceUnits(WidgetRef ref, OfficeDoc doc) => {
+      for (final j in ref.watch(jobTypesProvider).value ?? const <JobTypeInfo>[]) j.id: j.unit,
+      for (final s in doc.services)
+        if (s.jobType != null && s.unit.isNotEmpty) s.jobType!.id: s.unit,
+    };
+
 // ------------------------------------------------------------- the table
 
 /// A server refusal pinned to rows of the table.
@@ -594,8 +603,16 @@ class _OfficeEntriesScreenState extends ConsumerState<OfficeEntriesScreen> {
         if (mounted) showOfficeLineSheet(context, ref, doc, null);
       });
     }
+    final units = serviceUnits(ref, doc);
     final requested = doc.requestedPcs;
-    final mismatch = requested > 0 && table.pcs != requested;
+    final requestedCt = doc.requestedCt;
+    // Each unit reconciles against its own lines: pieces of piece-billed
+    // services, carats of carat-billed ones.
+    final linePcs = table.lines.where((l) => units[l.jobTypeId] != 'ct').fold<double>(0, (a, l) => a + l.pcs);
+    final lineCt = table.lines.where((l) => units[l.jobTypeId] == 'ct').fold<double>(0, (a, l) => a + l.carats);
+    final pcsOk = requested <= 0 || linePcs == requested;
+    final ctOk = requestedCt <= 0 || lineCt == requestedCt;
+    final mismatch = !(pcsOk && ctOk);
     final changedUnder = table.hasDraft && doc.rev > table.baseRev;
 
     return NeuScaffold(
@@ -651,7 +668,11 @@ class _OfficeEntriesScreenState extends ConsumerState<OfficeEntriesScreen> {
                   Center(child: CircularProgressIndicator(color: c.accentInk))
                 else
                   ItemTable(
-                    rows: table.rows,
+                    rows: [
+                      for (var i = 0; i < table.lines.length; i++)
+                        ItemRow.fromOffice(table.lines[i], i,
+                            caratsRequired: units[table.lines[i].jobTypeId] == 'ct'),
+                    ],
                     editable: true,
                     showToggle: false,
                     problemRows: table.problems.rows,
@@ -683,7 +704,7 @@ class _OfficeEntriesScreenState extends ConsumerState<OfficeEntriesScreen> {
                     const SizedBox(width: 10),
                     Expanded(
                       flex: 13,
-                      child: requested <= 0
+                      child: requested <= 0 && requestedCt <= 0
                           ? const SizedBox.shrink()
                           : Container(
                               height: 48,
@@ -695,8 +716,16 @@ class _OfficeEntriesScreenState extends ConsumerState<OfficeEntriesScreen> {
                               ),
                               child: Text(
                                 mismatch
-                                    ? '${Fig.pcs(table.pcs)} pcs vs ${Fig.pcs(requested)} requested'
-                                    : 'Matches the ${Fig.pcs(requested)} pcs requested',
+                                    ? [
+                                        if (requested > 0 && !pcsOk)
+                                          '${Fig.pcs(linePcs)} pcs vs ${Fig.pcs(requested)} requested',
+                                        if (requestedCt > 0 && !ctOk)
+                                          '${Fig.ct(lineCt)} ct vs ${Fig.ct(requestedCt)} requested',
+                                      ].join('\n')
+                                    : 'Matches the requested ${[
+                                        if (requested > 0) '${Fig.pcs(requested)} pcs',
+                                        if (requestedCt > 0) '${Fig.ct(requestedCt)} ct',
+                                      ].join(' · ')}',
                                 textAlign: TextAlign.center,
                                 style: NeuText.label(mismatch ? c.queuedInk : c.syncedInk, size: 12),
                               ),
@@ -840,7 +869,13 @@ class _OfficeLineSheetState extends ConsumerState<_OfficeLineSheet> {
                     radius: 14,
                     onTap: () => Navigator.of(ctx).pop(Ref(id: j.id, name: j.name)),
                     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                    child: Text(j.name, style: NeuText.strong(c.ink, size: 14.5)),
+                    child: Row(
+                      children: [
+                        Expanded(child: Text(j.name, style: NeuText.strong(c.ink, size: 14.5))),
+                        if (j.unit.isNotEmpty)
+                          Text(j.unit, style: NeuText.label(c.inkMuted, size: 12.5)),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 8),
                 ],
@@ -861,6 +896,8 @@ class _OfficeLineSheetState extends ConsumerState<_OfficeLineSheet> {
   Widget build(BuildContext context) {
     final c = NeuTheme.of(context);
     final table = ref.watch(officeTableProvider(widget.doc.id));
+    final units = serviceUnits(ref, widget.doc);
+    final caratBilled = units[_jobTypeId] == 'ct';
     final seen = <int>{};
     final options = <Ref>[
       for (final s in widget.doc.services)
@@ -916,7 +953,7 @@ class _OfficeLineSheetState extends ConsumerState<_OfficeLineSheet> {
           children: [
             for (final o in options)
               PickChip(
-                label: o.name,
+                label: (units[o.id] ?? '').isEmpty ? o.name : '${o.name} · ${units[o.id]}',
                 selected: o.id == _jobTypeId,
                 onTap: () => setState(() {
                   _jobTypeId = o.id;
@@ -954,8 +991,10 @@ class _OfficeLineSheetState extends ConsumerState<_OfficeLineSheet> {
                 controller: _ct,
                 mono: true,
                 size: 16,
+                highlight: caratBilled && (double.tryParse(_ct.text) ?? 0) <= 0,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.]'))],
+                onChanged: (_) => setState(() {}),
               ),
             ),
           ],
@@ -1009,11 +1048,15 @@ class ReadyCheck {
 
 /// What the server checks before READY, checked here first so the button can
 /// say so before anyone taps it.
-List<ReadyCheck> readyChecks(OfficeDoc doc, List<OfficeLine> lines) {
+List<ReadyCheck> readyChecks(OfficeDoc doc, List<OfficeLine> lines, Map<int, String> units) {
   final noService = [for (var i = 0; i < lines.length; i++) if (!lines[i].hasService) i + 1];
   final noPieces = [for (var i = 0; i < lines.length; i++) if (!lines[i].hasPieces) i + 1];
-  final pcs = lines.fold<double>(0, (a, l) => a + l.pcs);
+  final caratLines = [for (var i = 0; i < lines.length; i++) if (units[lines[i].jobTypeId] == 'ct') i];
+  final noCarats = [for (final i in caratLines) if (lines[i].carats <= 0) i + 1];
+  final pcs = lines.where((l) => units[l.jobTypeId] != 'ct').fold<double>(0, (a, l) => a + l.pcs);
+  final ct = lines.where((l) => units[l.jobTypeId] == 'ct').fold<double>(0, (a, l) => a + l.carats);
   final requested = doc.requestedPcs;
+  final requestedCt = doc.requestedCt;
   return [
     ReadyCheck(
       doc.customer == null ? 'No customer on the receipt yet' : 'Customer is set — ${doc.customer!.name}',
@@ -1033,12 +1076,27 @@ List<ReadyCheck> readyChecks(OfficeDoc doc, List<OfficeLine> lines) {
           : 'Line ${noPieces.first} has no pieces${noPieces.length > 1 ? ' (and ${noPieces.length - 1} more)' : ''}',
       ok: lines.isNotEmpty && noPieces.isEmpty,
     ),
+    if (caratLines.isNotEmpty)
+      ReadyCheck(
+        noCarats.isEmpty
+            ? 'Every carat-billed line has carats'
+            : 'Line ${noCarats.first} needs carats${noCarats.length > 1 ? ' (and ${noCarats.length - 1} more)' : ''} — billed per carat',
+        ok: noCarats.isEmpty,
+      ),
     if (requested > 0)
       ReadyCheck(
         pcs == requested
             ? '${Fig.pcs(pcs)} pcs, as requested'
-            : '${Fig.pcs(pcs)} pcs on the lines, ${Fig.pcs(requested)} requested',
+            : '${Fig.pcs(pcs)} pcs on the piece-billed lines, ${Fig.pcs(requested)} requested',
         ok: pcs == requested,
+        blocking: false,
+      ),
+    if (requestedCt > 0)
+      ReadyCheck(
+        ct == requestedCt
+            ? '${Fig.ct(ct)} ct, as requested'
+            : '${Fig.ct(ct)} ct on the carat-billed lines, ${Fig.ct(requestedCt)} requested',
+        ok: ct == requestedCt,
         blocking: false,
       ),
   ];
@@ -1063,7 +1121,7 @@ class _OfficeReadyScreenState extends ConsumerState<OfficeReadyScreen> {
     final table = ref.watch(officeTableProvider(widget.id));
     final online = ref.watch(syncProvider.select((s) => s.online));
     if (doc == null) return _gone(context);
-    final checks = readyChecks(doc, table.lines);
+    final checks = readyChecks(doc, table.lines, serviceUnits(ref, doc));
     final blocked = checks.any((k) => k.blocking && !k.ok);
     final departments = {for (final l in table.lines) ?l.jobTypeName}.toList();
 

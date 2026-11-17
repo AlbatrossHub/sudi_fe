@@ -632,6 +632,9 @@ class OfficeDoc {
   double get requestedPcs =>
       services.where((s) => s.unit != 'ct').fold(0, (a, s) => a + s.quantity);
 
+  double get requestedCt =>
+      services.where((s) => s.unit == 'ct').fold(0, (a, s) => a + s.quantity);
+
   factory OfficeDoc.fromJson(Map<String, dynamic> j) => OfficeDoc(
         id: (j['id'] as num).toInt(),
         rev: (j['rev'] as num?)?.toInt() ?? 0,

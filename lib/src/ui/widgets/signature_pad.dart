@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as p;
 
@@ -13,10 +14,13 @@ import 'neu_box.dart';
 /// "Mark delivered" opens the capture screen, and only a successful capture
 /// completes the delivery.
 class SignaturePad extends StatefulWidget {
-  const SignaturePad({super.key, required this.controller, this.height = 150});
+  const SignaturePad({super.key, required this.controller, this.height});
 
   final SignatureController controller;
-  final double height;
+
+  /// Fixed height, or null for the default: the full width at a wide
+  /// signing ratio, so a client can sign with the whole hand.
+  final double? height;
 
   @override
   State<SignaturePad> createState() => _SignaturePadState();
@@ -83,11 +87,17 @@ class SignatureController extends ChangeNotifier {
       ..strokeCap = StrokeCap.round
       ..strokeJoin = StrokeJoin.round
       ..style = PaintingStyle.stroke;
+    Offset inside(Offset point) => Offset(
+          point.dx.clamp(0.0, size.width),
+          point.dy.clamp(0.0, size.height),
+        );
     for (final stroke in strokes) {
       if (stroke.length < 2) continue;
-      final path = Path()..moveTo(stroke.first.dx, stroke.first.dy);
+      final first = inside(stroke.first);
+      final path = Path()..moveTo(first.dx, first.dy);
       for (final point in stroke.skip(1)) {
-        path.lineTo(point.dx, point.dy);
+        final p = inside(point);
+        path.lineTo(p.dx, p.dy);
       }
       canvas.drawPath(path, paint);
     }
@@ -103,32 +113,70 @@ class SignatureController extends ChangeNotifier {
   }
 }
 
+/// Claims the pointer the moment it lands, so a stroke that happens to move
+/// vertically can never become a page scroll: on this pad, a touch is ink,
+/// and the page is scrolled from outside the pad.
+class _InkFirstPanRecognizer extends PanGestureRecognizer {
+  @override
+  void addAllowedPointer(PointerDownEvent event) {
+    super.addAllowedPointer(event);
+    resolve(GestureDisposition.accepted);
+  }
+
+  @override
+  void rejectGesture(int pointer) => acceptGesture(pointer);
+}
+
 class _SignaturePadState extends State<SignaturePad> {
+  /// A finger that wanders past the edge keeps drawing along it instead of
+  /// inking the rest of the screen: the stroke is clamped into the pad.
+  Offset _inside(Offset point, Size size) => Offset(
+        point.dx.clamp(0.0, size.width),
+        point.dy.clamp(0.0, size.height),
+      );
+
   @override
   Widget build(BuildContext context) {
     final c = NeuTheme.of(context);
-    return NeuBox(
+    final pad = NeuBox(
       style: NeuStyle.inset,
       radius: 20,
       height: widget.height,
       child: LayoutBuilder(
         builder: (context, constraints) {
-          widget.controller.size = Size(constraints.maxWidth, constraints.maxHeight);
-          return GestureDetector(
-            onPanStart: (d) => widget.controller.start(d.localPosition),
-            onPanUpdate: (d) => widget.controller.extend(d.localPosition),
+          final size = Size(constraints.maxWidth, constraints.maxHeight);
+          widget.controller.size = size;
+          return RawGestureDetector(
             behavior: HitTestBehavior.opaque,
-            child: AnimatedBuilder(
-              animation: widget.controller,
-              builder: (context, _) => CustomPaint(
-                painter: _SignaturePainter(widget.controller.strokes, c.ink),
-                size: Size.infinite,
+            gestures: {
+              _InkFirstPanRecognizer:
+                  GestureRecognizerFactoryWithHandlers<_InkFirstPanRecognizer>(
+                () => _InkFirstPanRecognizer(),
+                (recognizer) => recognizer
+                  ..onStart = ((d) {
+                    widget.controller.start(_inside(d.localPosition, size));
+                  })
+                  ..onUpdate = ((d) {
+                    widget.controller.extend(_inside(d.localPosition, size));
+                  }),
+              ),
+            },
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: AnimatedBuilder(
+                animation: widget.controller,
+                builder: (context, _) => CustomPaint(
+                  painter: _SignaturePainter(widget.controller.strokes, c.ink),
+                  size: Size.infinite,
+                ),
               ),
             ),
           );
         },
       ),
     );
+    if (widget.height != null) return pad;
+    return AspectRatio(aspectRatio: 1.2, child: pad);
   }
 }
 

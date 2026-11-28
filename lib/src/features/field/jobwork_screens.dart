@@ -65,6 +65,21 @@ List<Ref> servicesOf(JobWorkDoc doc) {
   ];
 }
 
+/// Every department a receipt can belong to for filtering: where it is now
+/// (including a queued move), plus every process on the jangad. A receipt
+/// nobody has started yet still files under its processes, so the chips show
+/// the whole queue, not just the started corner of it.
+List<Ref> departmentsOf(JobWorkDoc doc, List<OutboxItem> pending) {
+  final seen = <int>{};
+  return [
+    for (final dept in [
+      ?Projection.department(doc, pending),
+      ...doc.involvedDepartments,
+    ])
+      if (seen.add(dept.id)) dept,
+  ];
+}
+
 class JobWorkScreen extends ConsumerStatefulWidget {
   const JobWorkScreen({super.key});
 
@@ -74,6 +89,7 @@ class JobWorkScreen extends ConsumerStatefulWidget {
 
 class _JobWorkScreenState extends ConsumerState<JobWorkScreen> {
   Timer? _tick;
+  final _scroll = ScrollController();
   late int _filter = ref.read(servicesProvider).resume.segment('jobwork_department');
 
   @override
@@ -88,6 +104,7 @@ class _JobWorkScreenState extends ConsumerState<JobWorkScreen> {
   @override
   void dispose() {
     _tick?.cancel();
+    _scroll.dispose();
     super.dispose();
   }
 
@@ -100,20 +117,33 @@ class _JobWorkScreenState extends ConsumerState<JobWorkScreen> {
 
     final departments = <int, (String, int)>{};
     for (final doc in all) {
-      final dept = Projection.department(doc, pending[doc.id] ?? const []);
-      if (dept == null) continue;
-      final seen = departments[dept.id];
-      departments[dept.id] = (dept.name, (seen?.$2 ?? 0) + 1);
+      for (final dept in departmentsOf(doc, pending[doc.id] ?? const [])) {
+        final seen = departments[dept.id];
+        departments[dept.id] = (dept.name, (seen?.$2 ?? 0) + 1);
+      }
     }
     if (_filter != 0 && !departments.containsKey(_filter)) _filter = 0;
-    final shown = [
-      for (final doc in all)
-        if (_filter == 0 || Projection.department(doc, pending[doc.id] ?? const [])?.id == _filter) doc,
-    ];
+    bool matches(JobWorkDoc doc) =>
+        _filter == 0 ||
+        departmentsOf(doc, pending[doc.id] ?? const []).any((dept) => dept.id == _filter);
+    // A receipt is either being worked on (a strip, with its timer) or waiting
+    // (a card) - never both, so the list is the whole queue with no doubles.
     final running = [
       for (final doc in all)
-        if (Projection.timer(doc, pending[doc.id] ?? const []).running) doc,
+        if (matches(doc) && Projection.timer(doc, pending[doc.id] ?? const []).running) doc,
     ];
+    final queue = [
+      for (final doc in all)
+        if (matches(doc) && !Projection.timer(doc, pending[doc.id] ?? const []).running) doc,
+    ]..sort((a, b) {
+        // Oldest first: the top of the queue is the receipt waiting longest.
+        final da = a.scheduledDate;
+        final db = b.scheduledDate;
+        if (da != null && db != null && da != db) return da.compareTo(db);
+        if (da == null && db != null) return 1;
+        if (da != null && db == null) return -1;
+        return a.id.compareTo(b.id);
+      });
 
     return NeuScaffold(
       child: Column(
@@ -148,29 +178,35 @@ class _JobWorkScreenState extends ConsumerState<JobWorkScreen> {
             ),
             const SizedBox(height: 10),
           ],
-          for (final doc in running) ...[
-            _RunningStrip(doc: doc, timer: Projection.timer(doc, pending[doc.id] ?? const [])),
-            const SizedBox(height: 12),
-          ],
           Expanded(
             child: RefreshIndicator(
               color: c.accentInk,
               backgroundColor: c.ground,
               onRefresh: () => ref.read(syncProvider.notifier).syncNow(flushFirst: true),
-              child: shown.isEmpty
+              child: running.isEmpty && queue.isEmpty
                   ? const EmptyState(
                       message: 'Nothing ready for job work',
                       hint: 'The office marks receipts READY; they appear here',
                     )
-                  : ListView.separated(
+                  // The running strips scroll with the queue: five timers must
+                  // never pin the list into a one-card letterbox.
+                  : ListView(
+                      controller: _scroll,
                       padding: const EdgeInsets.only(bottom: 16),
-                      itemCount: shown.length,
-                      separatorBuilder: (_, _) => const SizedBox(height: 12),
-                      itemBuilder: (_, i) => _JobCard(
-                        doc: shown[i],
-                        pending: pending[shown[i].id] ?? const [],
-                        fresh: fresh.contains(shown[i].id),
-                      ),
+                      children: [
+                        for (final doc in running) ...[
+                          _RunningStrip(doc: doc, timer: Projection.timer(doc, pending[doc.id] ?? const [])),
+                          const SizedBox(height: 12),
+                        ],
+                        for (var i = 0; i < queue.length; i++) ...[
+                          if (i > 0) const SizedBox(height: 12),
+                          _JobCard(
+                            doc: queue[i],
+                            pending: pending[queue[i].id] ?? const [],
+                            fresh: fresh.contains(queue[i].id),
+                          ),
+                        ],
+                      ],
                     ),
             ),
           ),
@@ -181,6 +217,9 @@ class _JobWorkScreenState extends ConsumerState<JobWorkScreen> {
 
   void _setFilter(int id) {
     setState(() => _filter = id);
+    // A new filter is a new list: start it from the top, not wherever the
+    // last one was left.
+    if (_scroll.hasClients) _scroll.jumpTo(0);
     ref.read(servicesProvider).resume.setSegment('jobwork_department', id);
   }
 }
@@ -195,6 +234,10 @@ class _RunningStrip extends StatelessWidget {
     final c = NeuTheme.of(context);
     final started = timer.startedAt;
     final elapsed = started == null ? Duration.zero : DateTime.now().difference(started);
+    // Half a day on the clock is a forgotten timer, not a shift: say so, in
+    // the attention colour, so somebody opens it and stops it.
+    final forgotten = elapsed >= const Duration(hours: 12);
+    final tone = forgotten ? c.attentionInk : c.syncedInk;
     return NeuBox(
       style: NeuStyle.raised,
       radius: 20,
@@ -205,7 +248,7 @@ class _RunningStrip extends StatelessWidget {
           Container(
             width: 8,
             height: 8,
-            decoration: BoxDecoration(color: c.syncedInk, shape: BoxShape.circle),
+            decoration: BoxDecoration(color: tone, shape: BoxShape.circle),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -213,10 +256,12 @@ class _RunningStrip extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'RUNNING · ${doc.name}',
+                  forgotten
+                      ? 'STILL RUNNING · ${OdooTime.duration(elapsed).substring(0, OdooTime.duration(elapsed).indexOf(':'))} h · ${doc.name}'
+                      : 'RUNNING · ${doc.name}',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: NeuText.label(c.syncedInk, size: 12).copyWith(letterSpacing: 0.5),
+                  style: NeuText.label(tone, size: 12).copyWith(letterSpacing: 0.5),
                 ),
                 const SizedBox(height: 2),
                 Text(
@@ -229,7 +274,10 @@ class _RunningStrip extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 10),
-          Text(OdooTime.duration(elapsed).substring(0, 5), style: NeuText.data(c.ink, size: 20)),
+          Text(
+            OdooTime.duration(elapsed).substring(0, 5),
+            style: NeuText.data(forgotten ? c.attentionInk : c.ink, size: 20),
+          ),
         ],
       ),
     );
